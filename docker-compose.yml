@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+    db:
+        container_name: makinedb
+        image: postgres:latest
+        environment:
+            POSTGRES_DB: "makine"
+            POSTGRES_USER: "makine"
+            POSTGRES_PASSWORD: "makine"
+        volumes:
+            - "makinedb_app:/var/lib/postgresql/data"
+        ports:
+            - 5432:5432
+        networks:
+            - symfony
+    php:
+        container_name: makine_php
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+        volumes:
+            - ./:/var/www/
+        networks:
+            - symfony
+    nginx:
+        container_name: makine_nginx
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        volumes:
+            - ./:/var/www/
+        ports:
+            - 80:80
+        networks:
+            - symfony
+
+networks:
+    symfony:

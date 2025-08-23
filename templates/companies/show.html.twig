@@ -1,0 +1,106 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Companies{% endblock %}
+
+{% block body %}
+    <h1>Companies</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ company.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ company.name }}</td>
+            </tr>
+            <tr>
+                <th>About</th>
+                <td>{{ company.about }}</td>
+            </tr>
+            <tr>
+                <th>Short_name</th>
+                <td>{{ company.shortName }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ company.title }}</td>
+            </tr>
+            <tr>
+                <th>ActivityType</th>
+                <td>{{ company.activityType }}</td>
+            </tr>
+            <tr>
+                <th>FoundedYear</th>
+                <td>{{ company.foundedYear }}</td>
+            </tr>
+            <tr>
+                <th>TradeRegistryNo</th>
+                <td>{{ company.tradeRegistryNo }}</td>
+            </tr>
+            <tr>
+                <th>MersisNo</th>
+                <td>{{ company.mersisNo }}</td>
+            </tr>
+            <tr>
+                <th>Adress</th>
+                <td>{{ company.adress }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ company.phone }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ company.email }}</td>
+            </tr>
+            <tr>
+                <th>Website</th>
+                <td>{{ company.website }}</td>
+            </tr>
+            <tr>
+                <th>MapsUrl</th>
+                <td>{{ company.mapsUrl }}</td>
+            </tr>
+            <tr>
+                <th>LogoPath</th>
+                <td>{{ company.logoPath }}</td>
+            </tr>
+            <tr>
+                <th>BackgroundPhotoPath</th>
+                <td>{{ company.backgroundPhotoPath }}</td>
+            </tr>
+            <tr>
+                <th>CatalogPath</th>
+                <td>{{ company.catalogPath }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ company.createdAt ? company.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ company.updatedAt ? company.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedBy</th>
+                <td>{{ company.createdBy }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedBy</th>
+                <td>{{ company.updatedBy }}</td>
+            </tr>
+            <tr>
+                <th>DeletedAt</th>
+                <td>{{ company.deletedAt ? company.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_companies_index') }}">back to list</a>
+
+    <a href="{{ path('app_companies_edit', {'id': company.id}) }}">edit</a>
+
+    {{ include('companies/_delete_form.html.twig') }}
+{% endblock %}

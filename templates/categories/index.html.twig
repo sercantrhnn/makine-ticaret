@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories index{% endblock %}
+
+{% block body %}
+    <h1>Categories index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Slug</th>
+                <th>IsActive</th>
+                <th>SortOrder</th>
+                <th>Mpath</th>
+                <th>Level</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>CreatedBy</th>
+                <th>UpdatedBy</th>
+                <th>DeletedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+            <tr>
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>{{ category.description }}</td>
+                <td>{{ category.slug }}</td>
+                <td>{{ category.isActive ? 'Yes' : 'No' }}</td>
+                <td>{{ category.sortOrder }}</td>
+                <td>{{ category.mpath }}</td>
+                <td>{{ category.level }}</td>
+                <td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ category.createdBy }}</td>
+                <td>{{ category.updatedBy }}</td>
+                <td>{{ category.deletedAt ? category.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_categories_show', {'id': category.id}) }}">show</a>
+                    <a href="{{ path('app_categories_edit', {'id': category.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="14">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categories_new') }}">Create new</a>
+{% endblock %}

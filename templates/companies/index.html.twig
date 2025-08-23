@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Companies index{% endblock %}
+
+{% block body %}
+    <h1>Companies index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>About</th>
+                <th>Short_name</th>
+                <th>Title</th>
+                <th>ActivityType</th>
+                <th>FoundedYear</th>
+                <th>TradeRegistryNo</th>
+                <th>MersisNo</th>
+                <th>Adress</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>MapsUrl</th>
+                <th>LogoPath</th>
+                <th>BackgroundPhotoPath</th>
+                <th>CatalogPath</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>CreatedBy</th>
+                <th>UpdatedBy</th>
+                <th>DeletedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for company in companies %}
+            <tr>
+                <td>{{ company.id }}</td>
+                <td>{{ company.name }}</td>
+                <td>{{ company.about }}</td>
+                <td>{{ company.shortName }}</td>
+                <td>{{ company.title }}</td>
+                <td>{{ company.activityType }}</td>
+                <td>{{ company.foundedYear }}</td>
+                <td>{{ company.tradeRegistryNo }}</td>
+                <td>{{ company.mersisNo }}</td>
+                <td>{{ company.adress }}</td>
+                <td>{{ company.phone }}</td>
+                <td>{{ company.email }}</td>
+                <td>{{ company.website }}</td>
+                <td>{{ company.mapsUrl }}</td>
+                <td>{{ company.logoPath }}</td>
+                <td>{{ company.backgroundPhotoPath }}</td>
+                <td>{{ company.catalogPath }}</td>
+                <td>{{ company.createdAt ? company.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ company.updatedAt ? company.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ company.createdBy }}</td>
+                <td>{{ company.updatedBy }}</td>
+                <td>{{ company.deletedAt ? company.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_companies_show', {'id': company.id}) }}">show</a>
+                    <a href="{{ path('app_companies_edit', {'id': company.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="23">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_companies_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}{{ company.name }} Düzenle - Admin Panel{% endblock %}
+{% block page_title %}{{ company.name }} Düzenle{% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-lg font-semibold text-white">{{ company.name }} Düzenle</h3>
+                            <p class="text-indigo-100 text-sm">Firma bilgilerini güncelleyin</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="{{ path('companies_show', {'id': company.id}) }}" 
+                           class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 border border-white border-opacity-30 rounded-lg font-medium text-white transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            Görüntüle
+                        </a>
+                        <a href="{{ path('companies_index') }}" 
+                           class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 border border-white border-opacity-30 rounded-lg font-medium text-white transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Geri Dön
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                {{ form_start(form, {'attr': {'class': 'space-y-8'}}) }}
+                
+                <!-- Temel Bilgiler -->
+                <div class="bg-gray-50 rounded-lg p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Temel Bilgiler
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            {{ form_label(form.name, 'Firma Adı *', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'Firma adını giriniz'}}) }}
+                            {{ form_errors(form.name, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.short_name, 'Kısa Ad', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.short_name, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'Kısa ad giriniz'}}) }}
+                            {{ form_errors(form.short_name, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.title, 'Başlık', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'Firma başlığı giriniz'}}) }}
+                            {{ form_errors(form.title, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.activityType, 'Faaliyet Türü', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.activityType, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'Faaliyet türünü giriniz'}}) }}
+                            {{ form_errors(form.activityType, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- İletişim Bilgileri -->
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                        </svg>
+                        İletişim Bilgileri
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            {{ form_label(form.phone, 'Telefon', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.phone, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '+90 555 123 45 67'}}) }}
+                            {{ form_errors(form.phone, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.email, 'E-posta', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'info@firma.com'}}) }}
+                            {{ form_errors(form.email, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.website, 'Web Sitesi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.website, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'https://www.firma.com'}}) }}
+                            {{ form_errors(form.website, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.mapsUrl, 'Google Maps URL', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.mapsUrl, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'https://maps.google.com/...'}}) }}
+                            {{ form_errors(form.mapsUrl, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Yasal Bilgiler -->
+                <div class="bg-green-50 rounded-lg p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Yasal Bilgiler
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            {{ form_label(form.foundedYear, 'Kuruluş Yılı', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.foundedYear, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '2020'}}) }}
+                            {{ form_errors(form.foundedYear, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.tradeRegistryNo, 'Ticaret Sicil No', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.tradeRegistryNo, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '123456'}}) }}
+                            {{ form_errors(form.tradeRegistryNo, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.mersisNo, 'MERSİS No', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.mersisNo, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '1234567890123456'}}) }}
+                            {{ form_errors(form.mersisNo, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dosya Yolları -->
+                <div class="bg-purple-50 rounded-lg p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 text-purple-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                        Dosya Yolları
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            {{ form_label(form.logoPath, 'Logo Yolu', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.logoPath, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '/uploads/logos/logo.png'}}) }}
+                            {{ form_errors(form.logoPath, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.backgroundPhotoPath, 'Arka Plan Fotoğrafı', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.backgroundPhotoPath, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '/uploads/backgrounds/bg.jpg'}}) }}
+                            {{ form_errors(form.backgroundPhotoPath, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.catalogPath, 'Katalog Yolu', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.catalogPath, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': '/uploads/catalogs/catalog.pdf'}}) }}
+                            {{ form_errors(form.catalogPath, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Açıklama ve Adres -->
+                <div class="bg-yellow-50 rounded-lg p-6">
+                    <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
+                        <svg class="w-5 h-5 text-yellow-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                        Detay Bilgileri
+                    </h4>
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            {{ form_label(form.about, 'Hakkında', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.about, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'rows': '4', 'placeholder': 'Firma hakkında detaylı bilgi giriniz...'}}) }}
+                            {{ form_errors(form.about, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                        
+                        <div class="space-y-2">
+                            {{ form_label(form.adress, 'Adres', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.adress, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'rows': '3', 'placeholder': 'Firma adresini giriniz...'}}) }}
+                            {{ form_errors(form.adress, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <a href="{{ path('companies_show', {'id': company.id}) }}" 
+                       class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        İptal
+                    </a>
+                    <button type="submit" 
+                            class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 border border-transparent rounded-lg font-medium text-white hover:from-indigo-700 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:scale-105">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Güncelle
+                    </button>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
