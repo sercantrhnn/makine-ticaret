@@ -23,7 +23,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
     ]
 )]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-#[Gedmo\Tree(type: 'materializedPath')]
+#[Gedmo\Tree(type: 'materializedPath', activateLocking: false)]
 #[ORM\HasLifecycleCallbacks]
 class Categories
 {
@@ -43,7 +43,6 @@ class Categories
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    #[Gedmo\Slug(fields: ['name'])]
     private ?string $slug = null;
 
     #[ORM\Column(options: ['default' => true])]
@@ -93,7 +92,13 @@ class Categories
     public function getDescription(): ?string { return $this->description; }
     public function setDescription(?string $description): static { $this->description = $description; return $this; }
 
-    public function getSlug(): ?string { return $this->slug; }
+    public function getSlug(): ?string 
+    { 
+        if ($this->slug === null && $this->name !== null) {
+            $this->slug = $this->generateSlug($this->name);
+        }
+        return $this->slug; 
+    }
     public function setSlug(?string $slug): static { $this->slug = $slug; return $this; }
 
     public function isActive(): bool { return $this->isActive; }
@@ -177,6 +182,76 @@ class Categories
     {
         return $this->name ?? 'Kategori';
     }
+    
+    /**
+     * Türkçe karakterleri ve özel karakterleri temizleyerek slug oluşturur
+     */
+    private function generateSlug(string $text): string
+    {
+        // Türkçe karakterleri değiştir
+        $text = str_replace(
+            ['ç', 'ğ', 'ı', 'ö', 'ş', 'ü', 'Ç', 'Ğ', 'I', 'Ö', 'Ş', 'Ü'],
+            ['c', 'g', 'i', 'o', 's', 'u', 'c', 'g', 'i', 'o', 's', 'u'],
+            $text
+        );
+        
+        // Küçük harfe çevir
+        $text = strtolower($text);
+        
+        // Sadece harf, rakam ve boşluk bırak
+        $text = preg_replace('/[^a-z0-9\s]/', '', $text);
+        
+        // Boşlukları tire ile değiştir
+        $text = preg_replace('/\s+/', '-', $text);
+        
+        // Birden fazla tireyi tek tire yap
+        $text = preg_replace('/-+/', '-', $text);
+        
+        // Başta ve sonda tire varsa kaldır
+        $text = trim($text, '-');
+        
+        // Boş string ise 'kategori' döndür
+        return $text ?: 'kategori';
+    }
+    
+    /**
+     * Tree level hesaplar
+     */
+    private function calculateLevel(): int
+    {
+        if ($this->parent === null) {
+            return 0;
+        }
+        
+        $level = 0;
+        $parent = $this->parent;
+        while ($parent !== null) {
+            $level++;
+            $parent = $parent->getParent();
+        }
+        
+        return $level;
+    }
+    
+    /**
+     * Materialized path hesaplar
+     */
+    private function calculateMpath(): string
+    {
+        if ($this->parent === null) {
+            return '/' . $this->slug;
+        }
+        
+        $path = [];
+        $current = $this;
+        
+        while ($current !== null) {
+            array_unshift($path, $current->getSlug());
+            $current = $current->getParent();
+        }
+        
+        return '/' . implode('/', $path);
+    }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -187,11 +262,37 @@ class Categories
         if ($this->updatedAt === null) {
             $this->updatedAt = new \DateTime();
         }
+        
+        // Slug oluştur
+        if ($this->slug === null && $this->name !== null) {
+            $this->slug = $this->generateSlug($this->name);
+        }
+        
+        // Tree level hesapla
+        if ($this->level === null) {
+            $this->level = $this->calculateLevel();
+        }
+        
+        // Materialized path hesapla
+        if ($this->mpath === null) {
+            $this->mpath = $this->calculateMpath();
+        }
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTime();
+        
+        // Slug güncelle
+        if ($this->name !== null) {
+            $this->slug = $this->generateSlug($this->name);
+        }
+        
+        // Tree level güncelle
+        $this->level = $this->calculateLevel();
+        
+        // Materialized path güncelle
+        $this->mpath = $this->calculateMpath();
     }
 }

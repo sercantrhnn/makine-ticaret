@@ -18,7 +18,7 @@ class CategoriesController extends AbstractController
     public function index(CategoriesRepository $categoriesRepository): Response
     {
         return $this->render('admin/categories/index.html.twig', [
-            'categories' => $categoriesRepository->findAll(),
+            'categories' => $categoriesRepository->findBy([], ['sortOrder' => 'ASC', 'name' => 'ASC']),
         ]);
     }
 
