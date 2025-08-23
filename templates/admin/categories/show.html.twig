@@ -188,7 +188,53 @@
                     <div class="p-6 space-y-4">
                         <div class="text-center">
                             <div class="text-3xl font-bold text-indigo-600">{{ category.products|length }}</div>
-                            <div class="text-sm text-gray-500">Toplam Ürün</div>
+                            <div class="text-sm text-gray-500">Doğrudan Ürün</div>
+                        </div>
+                        
+                        <div class="text-center">
+                            {% set directProducts = category.products|length %}
+                            {% set totalProducts = directProducts %}
+                            
+                            {# Alt kategorilerdeki ürünleri say #}
+                            {% for child in category.children %}
+                                {% set totalProducts = totalProducts + child.products|length %}
+                                {% for grandChild in child.children %}
+                                    {% set totalProducts = totalProducts + grandChild.products|length %}
+                                    {% for greatGrandChild in grandChild.children %}
+                                        {% set totalProducts = totalProducts + greatGrandChild.products|length %}
+                                        {% for greatGreatGrandChild in greatGrandChild.children %}
+                                            {% set totalProducts = totalProducts + greatGreatGrandChild.products|length %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endfor %}
+                            
+                            <div class="text-3xl font-bold text-green-600">{{ totalProducts }}</div>
+                            <div class="text-sm text-gray-500">Toplam Ürün (Alt Kategoriler Dahil)</div>
+                        </div>
+                        
+                        <!-- Debug Bilgisi -->
+                        <div class="mt-4 text-xs text-gray-400 text-left">
+                            <div class="font-medium mb-2">Doğrudan Ürünler:</div>
+                            {% for product in category.products %}
+                                • {{ product.name }} ({{ product.id }})<br>
+                            {% else %}
+                                <span class="text-gray-500">Ürün yok</span>
+                            {% endfor %}
+                            
+                            {% if category.children|length > 0 %}
+                                <div class="font-medium mb-2 mt-3">Alt Kategorilerdeki Ürünler:</div>
+                                {% for child in category.children %}
+                                    <div class="ml-2 mb-1">
+                                        <strong>{{ child.name }}:</strong>
+                                        {% for product in child.products %}
+                                            • {{ product.name }} ({{ product.id }})<br>
+                                        {% else %}
+                                            <span class="text-gray-500">Ürün yok</span>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                         
                         <div class="text-center">

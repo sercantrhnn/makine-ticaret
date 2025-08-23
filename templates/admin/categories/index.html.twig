@@ -55,7 +55,33 @@
                                     <span class="text-gray-400">Kök Kategori</span>
                                 {% endif %}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ category.products|length }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {% set directProducts = category.products|length %}
+                                {% set totalProducts = directProducts %}
+                                
+                                {# Alt kategorilerdeki ürünleri say #}
+                                {% for child in category.children %}
+                                    {% set totalProducts = totalProducts + child.products|length %}
+                                    {% for grandChild in child.children %}
+                                        {% set totalProducts = totalProducts + grandChild.products|length %}
+                                        {% for greatGrandChild in grandChild.children %}
+                                            {% set totalProducts = totalProducts + greatGrandChild.products|length %}
+                                            {% for greatGreatGrandChild in greatGrandChild.children %}
+                                                {% set totalProducts = totalProducts + greatGreatGrandChild.products|length %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endfor %}
+                                
+                                <div class="text-center">
+                                    <div class="font-medium">{{ totalProducts }}</div>
+                                    {% if category.children|length > 0 %}
+                                        <div class="text-xs text-gray-500">
+                                            ({{ directProducts }} + {{ totalProducts - directProducts }} alt)
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 {% if category.isActive %}
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
