@@ -30,6 +30,9 @@ class CompaniesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Dosya yükleme işlemleri
+            $this->handleFileUploads($form, $company);
+            
             $entityManager->persist($company);
             $entityManager->flush();
 
@@ -58,6 +61,9 @@ class CompaniesController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Dosya yükleme işlemleri
+            $this->handleFileUploads($form, $company);
+            
             $entityManager->flush();
 
             $this->addFlash('success', 'Firma başarıyla güncellendi.');
@@ -80,5 +86,65 @@ class CompaniesController extends AbstractController
         }
 
         return $this->redirectToRoute('companies_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    /**
+     * Dosya yükleme işlemlerini gerçekleştir
+     */
+    private function handleFileUploads($form, Companies $company): void
+    {
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
+        
+        // Logo yükleme
+        $logoFile = $form->get('logoFile')->getData();
+        if ($logoFile) {
+            // Eski logo varsa sil
+            if ($company->getLogoPath() && file_exists($this->getParameter('kernel.project_dir') . '/public/' . $company->getLogoPath())) {
+                unlink($this->getParameter('kernel.project_dir') . '/public/' . $company->getLogoPath());
+            }
+            
+            $logoFileName = $this->generateUniqueFileName($logoFile, 'logo');
+            $logoFile->move($uploadDir . 'logos', $logoFileName);
+            $company->setLogoPath('uploads/logos/' . $logoFileName);
+        }
+        
+        // Arka plan fotoğrafı yükleme
+        $backgroundFile = $form->get('backgroundPhotoFile')->getData();
+        if ($backgroundFile) {
+            // Eski arka plan varsa sil
+            if ($company->getBackgroundPhotoPath() && file_exists($this->getParameter('kernel.project_dir') . '/public/' . $company->getBackgroundPhotoPath())) {
+                unlink($this->getParameter('kernel.project_dir') . '/public/' . $company->getBackgroundPhotoPath());
+            }
+            
+            $backgroundFileName = $this->generateUniqueFileName($backgroundFile, 'background');
+            $backgroundFile->move($uploadDir . 'backgrounds', $backgroundFileName);
+            $company->setBackgroundPhotoPath('uploads/backgrounds/' . $backgroundFileName);
+        }
+        
+        // Katalog yükleme
+        $catalogFile = $form->get('catalogFile')->getData();
+        if ($catalogFile) {
+            // Eski katalog varsa sil
+            if ($company->getCatalogPath() && file_exists($this->getParameter('kernel.project_dir') . '/public/' . $company->getCatalogPath())) {
+                unlink($this->getParameter('kernel.project_dir') . '/public/' . $company->getCatalogPath());
+            }
+            
+            $catalogFileName = $this->generateUniqueFileName($catalogFile, 'catalog');
+            $catalogFile->move($uploadDir . 'catalogs', $catalogFileName);
+            $company->setCatalogPath('uploads/catalogs/' . $catalogFileName);
+        }
+    }
+    
+    /**
+     * Unique dosya ismi oluştur
+     */
+    private function generateUniqueFileName($file, $prefix): string
+    {
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $timestamp = time();
+        $random = bin2hex(random_bytes(8));
+        
+        return $prefix . '_' . $timestamp . '_' . $random . '.' . $extension;
     }
 }

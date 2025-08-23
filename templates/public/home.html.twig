@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Makine Ticaret - Kategori Filtreleme Testi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-gray-900">🏭 Makine Ticaret</h1>
+                    <span class="ml-3 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                        Filtreleme Testi
+                    </span>
+                </div>
+                <a href="{{ path('admin_dashboard') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                    🔐 Admin Panel
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            
+            <!-- Sol Sidebar - Kategori Filtreleme -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">📂 Kategori Filtreleme</h2>
+                    
+                    <!-- Kategori Seçimi -->
+                    <div class="space-y-3">
+                        <a href="{{ path('public_home') }}" 
+                           class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium {% if not selectedCategory %}bg-indigo-100 text-indigo-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                            🏠 Tüm Kategoriler
+                        </a>
+                        
+                        {% for category in categories %}
+                            {% if category.parent is null %}
+                                <!-- Ana Kategori -->
+                                <div class="space-y-1">
+                                    <a href="{{ path('public_home', {category: category.id}) }}" 
+                                       class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium {% if selectedCategory and selectedCategory.id == category.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                                        📁 {{ category.name }}
+                                    </a>
+                                    
+                                    <!-- Alt Kategoriler -->
+                                    {% for child in category.children %}
+                                        <div class="ml-4 space-y-1">
+                                            <a href="{{ path('public_home', {category: child.id}) }}" 
+                                               class="block w-full text-left px-3 py-2 rounded-md text-sm {% if selectedCategory and selectedCategory.id == child.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-600 hover:bg-gray-100{% endif %}">
+                                                📂 {{ child.name }}
+                                            </a>
+                                            
+                                            <!-- 3. Seviye Kategoriler -->
+                                            {% for grandChild in child.children %}
+                                                <div class="ml-4 space-y-1">
+                                                    <a href="{{ path('public_home', {category: grandChild.id}) }}" 
+                                                       class="block w-full text-left px-3 py-2 rounded-md text-sm {% if selectedCategory and selectedCategory.id == grandChild.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-500 hover:bg-gray-100{% endif %}">
+                                                        📄 {{ grandChild.name }}
+                                                    </a>
+                                                    
+                                                    <!-- 4. Seviye Kategoriler -->
+                                                    {% for greatGrandChild in grandChild.children %}
+                                                        <div class="ml-4 space-y-1">
+                                                            <a href="{{ path('public_home', {category: greatGrandChild.id}) }}" 
+                                                               class="block w-full text-left px-3 py-2 rounded-md text-sm {% if selectedCategory and selectedCategory.id == greatGrandChild.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-400 hover:bg-gray-100{% endif %}">
+                                                                📋 {{ greatGrandChild.name }}
+                                                            </a>
+                                                        </div>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Test Bilgisi -->
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="text-sm font-medium text-blue-800 mb-2">🧪 Test Açıklaması</h3>
+                        <p class="text-xs text-blue-700">
+                            Üst kategori seçince o kategorideki <strong>tüm ürünler</strong> (alt kategoriler dahil) görünür. 
+                            Alt kategori seçince sadece o kategorideki ürünler görünür.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sağ Taraf - Ürün Listesi -->
+            <div class="lg:col-span-3">
+                <!-- Seçilen Kategori Bilgisi -->
+                {% if selectedCategory %}
+                    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-900">{{ selectedCategory.name }}</h2>
+                                <p class="text-gray-600 mt-1">
+                                    {% if selectedCategory.parent %}
+                                        📂 {{ selectedCategory.parent.name }} alt kategorisi
+                                    {% else %}
+                                        🏠 Ana kategori
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-indigo-600">{{ products|length }}</div>
+                                <div class="text-sm text-gray-500">Toplam Ürün</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Kategori Hiyerarşisi -->
+                        {% if selectedCategory.parent or selectedCategory.children|length > 0 %}
+                            <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                                <h3 class="text-sm font-medium text-gray-700 mb-2">🔗 Kategori Hiyerarşisi</h3>
+                                <div class="text-sm text-gray-600">
+                                    {% if selectedCategory.parent %}
+                                        <div class="mb-1">
+                                            <span class="text-gray-500">Üst Kategori:</span> 
+                                            <a href="{{ path('public_home', {category: selectedCategory.parent.id}) }}" class="text-indigo-600 hover:underline">
+                                                {{ selectedCategory.parent.name }}
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    {% if selectedCategory.children|length > 0 %}
+                                        <div>
+                                            <span class="text-gray-500">Alt Kategoriler:</span>
+                                            {% for child in selectedCategory.children %}
+                                                <a href="{{ path('public_home', {category: child.id}) }}" class="text-indigo-600 hover:underline ml-2">
+                                                    {{ child.name }}
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+                        <div class="text-center">
+                            <h2 class="text-2xl font-bold text-gray-900">🏠 Tüm Kategoriler</h2>
+                            <p class="text-gray-600 mt-2">Sol taraftan bir kategori seçerek ürünleri filtreleyebilirsiniz.</p>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <!-- Ürün Listesi -->
+                {% if products|length > 0 %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {% for product in products %}
+                            <div class="bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
+                                <div class="p-6">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="text-lg font-semibold text-gray-900">{{ product.name }}</h3>
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full {% if product.status %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                                            {{ product.status ? 'Aktif' : 'Pasif' }}
+                                        </h3>
+                                    </div>
+                                    
+                                    {% if product.description %}
+                                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ product.description }}</p>
+                                    {% endif %}
+                                    
+                                    <div class="space-y-2 text-sm text-gray-600">
+                                        {% if product.modelType %}
+                                            <div><span class="font-medium">Model:</span> {{ product.modelType }}</div>
+                                        {% endif %}
+                                        
+                                        {% if product.category %}
+                                            <div><span class="font-medium">Kategori:</span> 
+                                                <a href="{{ path('public_home', {category: product.category.id}) }}" class="text-indigo-600 hover:underline">
+                                                    {{ product.category.name }}
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        
+                                        {% if product.company %}
+                                            <div><span class="font-medium">Firma:</span> {{ product.company.name }}</div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <div class="mt-4 pt-3 border-t border-gray-200">
+                                        <div class="text-xs text-gray-500">
+                                            <span class="font-medium">Ürün ID:</span> #{{ product.id }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {% if selectedCategory %}
+                        <div class="bg-white rounded-lg shadow-sm border p-12 text-center">
+                            <div class="text-gray-400 mb-4">
+                                <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">Bu kategoride ürün bulunamadı</h3>
+                            <p class="text-gray-500">Seçilen kategoride henüz ürün eklenmemiş.</p>
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400">© 2024 Makine Ticaret - Kategori Filtreleme Test Sayfası</p>
+        </div>
+    </footer>
+</body>
+</html>
