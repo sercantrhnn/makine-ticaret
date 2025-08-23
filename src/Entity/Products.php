@@ -40,8 +40,8 @@ class Products
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $listingNo = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
+    #[ORM\Column(options: ['default' => true], nullable: true)]
+    private ?bool $status = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
@@ -74,6 +74,7 @@ class Products
     {
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->status = true; // Boolean alanı initialize et
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -143,14 +144,14 @@ class Products
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?bool
     {
-        return $this->status;
+        return $this->status ?? true; // Null ise true döndür
     }
 
-    public function setStatus(?string $status): static
+    public function setStatus(?bool $status): static
     {
-        $this->status = $status;
+        $this->status = $status ?? true; // Null ise true olarak set et
 
         return $this;
     }

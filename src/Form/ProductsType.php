@@ -20,7 +20,9 @@ class ProductsType extends AbstractType
             ->add('brand')
             ->add('modelType')
             ->add('listingNo')
-            ->add('status')
+            ->add('status', null, [
+                'required' => false,
+            ])
             ->add('type')
             ->add('origin')
             ->add('detail')
