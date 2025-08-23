@@ -11,6 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: ProductImagesRepository::class)]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
+#[ORM\HasLifecycleCallbacks]
 class ProductImages
 {
     use TimestampableEntity;
@@ -92,4 +93,23 @@ class ProductImages
 
     public function getProduct(): ?Products { return $this->product; }
     public function setProduct(?Products $product): static { $this->product = $product; return $this; }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
 }

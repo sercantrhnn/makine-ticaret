@@ -30,6 +30,9 @@ class ProductsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Dosya yükleme işlemleri
+            $this->handleFileUploads($form, $product, $entityManager);
+            
             $entityManager->persist($product);
             $entityManager->flush();
 
@@ -58,6 +61,9 @@ class ProductsController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Dosya yükleme işlemleri
+            $this->handleFileUploads($form, $product, $entityManager);
+            
             $entityManager->flush();
 
             $this->addFlash('success', 'Ürün başarıyla güncellendi.');
@@ -80,5 +86,58 @@ class ProductsController extends AbstractController
         }
 
         return $this->redirectToRoute('products_index', [], Response::HTTP_SEE_OTHER);
+    }
+    
+    /**
+     * Dosya yükleme işlemlerini gerçekleştir
+     */
+    private function handleFileUploads($form, Products $product, EntityManagerInterface $entityManager): void
+    {
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/';
+        
+        // Fotoğraf yüklemeleri
+        $imageFiles = $form->get('imageFiles')->getData();
+        if ($imageFiles) {
+            foreach ($imageFiles as $imageFile) {
+                $imageFileName = $this->generateUniqueFileName($imageFile, 'product_image');
+                $imageFile->move($uploadDir . 'product_images', $imageFileName);
+                
+                // ProductImages entity oluştur
+                $productImage = new \App\Entity\ProductImages();
+                $productImage->setImagePath('uploads/product_images/' . $imageFileName);
+                $productImage->setProduct($product);
+                
+                $entityManager->persist($productImage);
+            }
+        }
+        
+        // Video yüklemeleri
+        $videoFiles = $form->get('videoFiles')->getData();
+        if ($videoFiles) {
+            foreach ($videoFiles as $videoFile) {
+                $videoFileName = $this->generateUniqueFileName($videoFile, 'product_video');
+                $videoFile->move($uploadDir . 'product_videos', $videoFileName);
+                
+                // ProductVideos entity oluştur
+                $productVideo = new \App\Entity\ProductVideos();
+                $productVideo->setVideoPath('uploads/product_videos/' . $videoFileName);
+                $productVideo->setProduct($product);
+                
+                $entityManager->persist($productVideo);
+            }
+        }
+    }
+    
+    /**
+     * Unique dosya ismi oluştur
+     */
+    private function generateUniqueFileName($file, $prefix): string
+    {
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $extension = $file->getClientOriginalExtension();
+        $timestamp = time();
+        $random = bin2hex(random_bytes(8));
+        
+        return $prefix . '_' . $timestamp . '_' . $random . '.' . $extension;
     }
 }
