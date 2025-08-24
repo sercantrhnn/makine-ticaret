@@ -15,10 +15,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class CategoriesController extends AbstractController
 {
     #[Route('/', name: 'categories_index', methods: ['GET'])]
-    public function index(CategoriesRepository $categoriesRepository): Response
+    public function index(Request $request, CategoriesRepository $categoriesRepository): Response
     {
+        $page = $request->query->getInt('page', 1);
+        $limit = 15; // Sayfa başına kayıt sayısı
+        $search = $request->query->get('search', '');
+        
+        $categories = $categoriesRepository->findWithPaginationAndSearch($page, $limit, $search);
+        $totalCategories = $categoriesRepository->countWithSearch($search);
+        $totalPages = ceil($totalCategories / $limit);
+        
         return $this->render('admin/categories/index.html.twig', [
-            'categories' => $categoriesRepository->findBy([], ['sortOrder' => 'ASC', 'name' => 'ASC']),
+            'categories' => $categories,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalCategories' => $totalCategories,
+            'search' => $search,
+            'limit' => $limit,
         ]);
     }
 

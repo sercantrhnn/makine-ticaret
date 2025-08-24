@@ -5,15 +5,55 @@
 
 {% block body %}
     <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-            <h3 class="text-lg font-medium text-gray-900">Kategori Listesi</h3>
-            <a href="{{ path('categories_new') }}" 
-               class="inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-700 focus:bg-primary-700 active:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                Yeni Kategori
-            </a>
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium text-gray-900">Kategori Listesi</h3>
+                <a href="{{ path('categories_new') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-primary-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-primary-700 focus:bg-primary-700 active:bg-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Yeni Kategori
+                </a>
+            </div>
+            
+            <!-- Search ve Filtreler -->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                    <form method="GET" class="flex">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <input type="text" 
+                                   name="search" 
+                                   value="{{ search }}" 
+                                   placeholder="Kategori adı, açıklama, slug ara..." 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500 sm:text-sm">
+                        </div>
+                        <button type="submit" 
+                                class="ml-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                            Ara
+                        </button>
+                        {% if search %}
+                            <a href="{{ path('categories_index') }}" 
+                               class="ml-2 inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                                Temizle
+                            </a>
+                        {% endif %}
+                    </form>
+                </div>
+                
+                <!-- Sonuç Bilgisi -->
+                <div class="text-sm text-gray-500">
+                    Toplam {{ totalCategories }} kategori bulundu
+                    {% if search %}
+                        ({{ search }} için arama sonucu)
+                    {% endif %}
+                </div>
+            </div>
         </div>
         
         <div class="overflow-x-auto">
@@ -130,4 +170,77 @@
             </table>
         </div>
     </div>
+    
+    <!-- Pagination -->
+    {% if totalPages > 1 %}
+        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-700">
+                    <span class="font-medium">{{ ((currentPage - 1) * limit) + 1 }}</span>
+                    -
+                    <span class="font-medium">{{ min(currentPage * limit, totalCategories) }}</span>
+                    / {{ totalCategories }} sonuç
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <!-- İlk Sayfa -->
+                    {% if currentPage > 1 %}
+                        <a href="{{ path('categories_index', {'page': 1, 'search': search}) }}" 
+                           class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    
+                    <!-- Önceki Sayfa -->
+                    {% if currentPage > 1 %}
+                        <a href="{{ path('categories_index', {'page': currentPage - 1, 'search': search}) }}" 
+                           class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    
+                    <!-- Sayfa Numaraları -->
+                    {% set startPage = max(1, currentPage - 2) %}
+                    {% set endPage = min(totalPages, currentPage + 2) %}
+                    
+                    {% for page in startPage..endPage %}
+                        {% if page == currentPage %}
+                            <span class="inline-flex items-center px-3 py-2 border border-primary-500 text-sm font-medium rounded-md text-primary-600 bg-primary-50">
+                                {{ page }}
+                            </span>
+                        {% else %}
+                            <a href="{{ path('categories_index', {'page': page, 'search': search}) }}" 
+                               class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                                {{ page }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    <!-- Sonraki Sayfa -->
+                    {% if currentPage < totalPages %}
+                        <a href="{{ path('categories_index', {'page': currentPage + 1, 'search': search}) }}" 
+                           class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    {% endif %}
+                    
+                    <!-- Son Sayfa -->
+                    {% if currentPage < totalPages %}
+                        <a href="{{ path('categories_index', {'page': totalPages, 'search': search}) }}" 
+                           class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

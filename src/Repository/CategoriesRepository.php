@@ -99,6 +99,42 @@ class CategoriesRepository extends ServiceEntityRepository
     }
 
     /**
+     * Pagination ve search ile kategorileri getir
+     */
+    public function findWithPaginationAndSearch(int $page, int $limit, string $search = ''): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->orderBy('c.sortOrder', 'ASC')
+            ->addOrderBy('c.name', 'ASC');
+        
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(c.name) LIKE LOWER(:search) OR LOWER(c.description) LIKE LOWER(:search) OR LOWER(c.slug) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+        
+        return $qb->setFirstResult(($page - 1) * $limit)
+                 ->setMaxResults($limit)
+                 ->getQuery()
+                 ->getResult();
+    }
+    
+    /**
+     * Search ile toplam kategori sayısını getir
+     */
+    public function countWithSearch(string $search = ''): int
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)');
+        
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(c.name) LIKE LOWER(:search) OR LOWER(c.description) LIKE LOWER(:search) OR LOWER(c.slug) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+        
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
      * mpath kullanarak kategori + tüm alt kategorilerinin id'lerini getirir
      * (Materialized Path ile tek sorgu)
      */

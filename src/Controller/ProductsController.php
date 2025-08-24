@@ -15,10 +15,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class ProductsController extends AbstractController
 {
     #[Route('/', name: 'products_index', methods: ['GET'])]
-    public function index(ProductsRepository $productsRepository): Response
+    public function index(Request $request, ProductsRepository $productsRepository): Response
     {
+        $page = $request->query->getInt('page', 1);
+        $limit = 15; // Sayfa başına kayıt sayısı
+        $search = $request->query->get('search', '');
+        
+        $products = $productsRepository->findWithPaginationAndSearch($page, $limit, $search);
+        $totalProducts = $productsRepository->countWithSearch($search);
+        $totalPages = ceil($totalProducts / $limit);
+        
         return $this->render('admin/products/index.html.twig', [
-            'products' => $productsRepository->findAll(),
+            'products' => $products,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalProducts' => $totalProducts,
+            'search' => $search,
+            'limit' => $limit,
         ]);
     }
 

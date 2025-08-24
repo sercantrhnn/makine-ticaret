@@ -15,10 +15,23 @@ use Symfony\Component\Routing\Attribute\Route;
 class CompaniesController extends AbstractController
 {
     #[Route('/', name: 'companies_index', methods: ['GET'])]
-    public function index(CompaniesRepository $companiesRepository): Response
+    public function index(Request $request, CompaniesRepository $companiesRepository): Response
     {
+        $page = $request->query->getInt('page', 1);
+        $limit = 15; // Sayfa başına kayıt sayısı
+        $search = $request->query->get('search', '');
+        
+        $companies = $companiesRepository->findWithPaginationAndSearch($page, $limit, $search);
+        $totalCompanies = $companiesRepository->countWithSearch($search);
+        $totalPages = ceil($totalCompanies / $limit);
+        
         return $this->render('admin/companies/index.html.twig', [
-            'companies' => $companiesRepository->findAll(),
+            'companies' => $companies,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalCompanies' => $totalCompanies,
+            'search' => $search,
+            'limit' => $limit,
         ]);
     }
 
