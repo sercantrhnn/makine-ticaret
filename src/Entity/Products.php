@@ -40,8 +40,11 @@ class Products
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $listingNo = null;
 
-    #[ORM\Column(options: ['default' => true], nullable: true)]
-    private ?bool $status = true;
+    #[ORM\Column(length: 50, options: ['default' => 'satilik'], nullable: true)]
+    private ?string $productStatus = 'satilik';
+
+    #[ORM\Column(length: 50, options: ['default' => 'sifir'], nullable: true)]
+    private ?string $productType = 'sifir';
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $type = null;
@@ -74,7 +77,8 @@ class Products
     {
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
-        $this->status = true; // Boolean alanı initialize et
+        $this->productStatus = 'satilik'; // Ürün durumu varsayılan olarak satılık
+        $this->productType = 'sifir'; // Ürün türü varsayılan olarak sıfır
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -144,14 +148,26 @@ class Products
         return $this;
     }
 
-    public function getStatus(): ?bool
+    public function getProductStatus(): ?string
     {
-        return $this->status ?? true; // Null ise true döndür
+        return $this->productStatus ?? 'satilik'; // Null ise satılık döndür
     }
 
-    public function setStatus(?bool $status): static
+    public function setProductStatus(?string $productStatus): static
     {
-        $this->status = $status ?? true; // Null ise true olarak set et
+        $this->productStatus = $productStatus ?? 'satilik'; // Null ise satılık olarak set et
+
+        return $this;
+    }
+
+    public function getProductType(): ?string
+    {
+        return $this->productType ?? 'sifir'; // Null ise sıfır döndür
+    }
+
+    public function setProductType(?string $productType): static
+    {
+        $this->productType = $productType ?? 'sifir'; // Null ise sıfır olarak set et
 
         return $this;
     }
@@ -273,5 +289,14 @@ class Products
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PrePersist]
+    public function setListingNoValue(): void
+    {
+        if ($this->listingNo === null) {
+            // Yıl + Ay + Gün + Saat + Dakika + Saniye + Mikrosaniye formatında benzersiz liste no oluştur
+            $this->listingNo = 'LN' . date('YmdHis') . substr(microtime(), 2, 3);
+        }
     }
 }

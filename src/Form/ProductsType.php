@@ -22,11 +22,33 @@ class ProductsType extends AbstractType
             ->add('description')
             ->add('brand')
             ->add('modelType')
-            ->add('listingNo')
-            ->add('status', null, [
-                'required' => false,
+
+            ->add('productType', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                'label' => 'Ürün Türü',
+                'choices' => [
+                    'Sıfır' => 'sifir',
+                    'İkinci El' => 'ikinci_el',
+                ],
+                'required' => true,
+                'placeholder' => 'Ürün türünü seçiniz',
+                'attr' => [
+                    'class' => 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md'
+                ]
             ])
-            ->add('type')
+            ->add('productStatus', \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class, [
+                'label' => 'Ürün Durumu',
+                'choices' => [
+                    'Satılık' => 'satilik',
+                    'Kiralık' => 'kiralik',
+                ],
+                'required' => true,
+                'placeholder' => 'Ürün durumunu seçiniz',
+                'attr' => [
+                    'class' => 'mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md'
+                ]
+            ])
+
+
             ->add('origin')
             ->add('detail')
             ->add('company', EntityType::class, [
