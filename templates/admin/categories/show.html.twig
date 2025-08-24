@@ -213,29 +213,7 @@
                             <div class="text-sm text-gray-500">Toplam Ürün (Alt Kategoriler Dahil)</div>
                         </div>
                         
-                        <!-- Debug Bilgisi -->
-                        <div class="mt-4 text-xs text-gray-400 text-left">
-                            <div class="font-medium mb-2">Doğrudan Ürünler:</div>
-                            {% for product in category.products %}
-                                • {{ product.name }} ({{ product.id }})<br>
-                            {% else %}
-                                <span class="text-gray-500">Ürün yok</span>
-                            {% endfor %}
-                            
-                            {% if category.children|length > 0 %}
-                                <div class="font-medium mb-2 mt-3">Alt Kategorilerdeki Ürünler:</div>
-                                {% for child in category.children %}
-                                    <div class="ml-2 mb-1">
-                                        <strong>{{ child.name }}:</strong>
-                                        {% for product in child.products %}
-                                            • {{ product.name }} ({{ product.id }})<br>
-                                        {% else %}
-                                            <span class="text-gray-500">Ürün yok</span>
-                                        {% endfor %}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
+
                         
                         <div class="text-center">
                             <div class="text-3xl font-bold text-green-600">{{ category.children|length }}</div>

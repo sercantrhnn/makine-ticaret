@@ -58,12 +58,7 @@
                             {{ form_errors(form.name, {'attr': {'class': 'text-sm text-red-600'}}) }}
                         </div>
                         
-                        <div class="space-y-2">
-                            {{ form_label(form.sortOrder, 'Sıralama', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                            {{ form_widget(form.sortOrder, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors', 'placeholder': '0', 'min': '0'}}) }}
-                            {{ form_errors(form.sortOrder, {'attr': {'class': 'text-sm text-red-600'}}) }}
-                            <p class="text-xs text-gray-500">Düşük sayı = üstte görünür</p>
-                        </div>
+
                     </div>
                 </div>
 
@@ -120,23 +115,7 @@
                     </div>
                 </div>
 
-                <!-- Durum -->
-                <div class="bg-indigo-50 rounded-lg p-6">
-                    <h4 class="text-lg font-medium text-gray-900 mb-4 flex items-center">
-                        <svg class="w-5 h-5 text-indigo-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Durum Ayarları
-                    </h4>
-                    <div class="space-y-2">
-                        <div class="flex items-center">
-                            {{ form_widget(form.isActive, {'attr': {'class': 'h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded'}}) }}
-                            {{ form_label(form.isActive, 'Kategori Aktif', {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
-                        </div>
-                        {{ form_errors(form.isActive, {'attr': {'class': 'text-sm text-red-600'}}) }}
-                        <p class="text-xs text-gray-500">Pasif kategoriler ürün listelerinde görünmez</p>
-                    </div>
-                </div>
+
                 
                 <!-- Form Actions -->
                 <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">

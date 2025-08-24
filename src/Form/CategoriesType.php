@@ -15,8 +15,7 @@ class CategoriesType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
-            ->add('isActive')
-            ->add('sortOrder')
+
             ->add('parent', EntityType::class, [
                 'class' => Categories::class,
                 'choice_label' => 'name',

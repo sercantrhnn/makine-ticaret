@@ -45,19 +45,7 @@
                             {{ form_errors(form.parent, {'attr': {'class': 'text-sm text-red-600'}}) }}
                         </div>
                         
-                        <div class="space-y-2">
-                            {{ form_label(form.sortOrder, 'Sıralama', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
-                            {{ form_widget(form.sortOrder, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors', 'placeholder': '0'}}) }}
-                            {{ form_errors(form.sortOrder, {'attr': {'class': 'text-sm text-red-600'}}) }}
-                        </div>
-                        
-                        <div class="flex items-center space-y-2">
-                            <div class="flex items-center h-12">
-                                {{ form_widget(form.isActive, {'attr': {'class': 'h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded'}}) }}
-                                {{ form_label(form.isActive, 'Aktif', {'label_attr': {'class': 'ml-3 block text-sm text-gray-900'}}) }}
-                                {{ form_errors(form.isActive, {'attr': {'class': 'text-sm text-red-600'}}) }}
-                            </div>
-                        </div>
+
                     </div>
                 </div>
 

@@ -79,6 +79,8 @@ class Categories
     {
         $this->children = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->isActive = true; // Varsayılan olarak aktif
+        $this->sortOrder = 0;   // Varsayılan sıralama
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -261,6 +263,14 @@ class Categories
         }
         if ($this->updatedAt === null) {
             $this->updatedAt = new \DateTime();
+        }
+        
+        // Varsayılan değerler
+        if ($this->isActive === null) {
+            $this->isActive = true;
+        }
+        if ($this->sortOrder === null) {
+            $this->sortOrder = 0;
         }
         
         // Slug oluştur
