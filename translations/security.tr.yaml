@@ -1,0 +1,7 @@
+security:
+  Invalid credentials.: 'Bilgileriniz hatalı! E-posta veya şifrenizi kontrol edin.'
+  User account is disabled.: 'Hesabınız devre dışı bırakılmış. Lütfen yönetici ile iletişime geçin.'
+  User account is locked.: 'Hesabınız kilitlenmiş. Lütfen daha sonra tekrar deneyin.'
+  Too many failed login attempts.: 'Çok fazla başarısız giriş denemesi. Lütfen bir süre bekleyip tekrar deneyin.'
+  Account is locked.: 'Hesabınız kilitlenmiş. Lütfen daha sonra tekrar deneyin.'
+  Bad credentials.: 'Bilgileriniz hatalı! E-posta veya şifrenizi kontrol edin.'

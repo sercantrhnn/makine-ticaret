@@ -19,15 +19,39 @@
                     </span>
                 </div>
                 <div class="flex items-center space-x-3">
-                    <a href="{{ path('app_login') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
-                        🔑 Giriş Yap
-                    </a>
-                    <a href="{{ path('app_register') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        📝 Kayıt Ol
-                    </a>
-                    <a href="{{ path('admin_dashboard') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
-                        🔐 Admin Panel
-                    </a>
+                    {% if app.user %}
+                        <!-- Kullanıcı giriş yapmış -->
+                        <div class="flex items-center space-x-3">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
+                                    <span class="text-sm font-medium text-indigo-600">
+                                        {{ app.user.name|first|upper }}{{ app.user.surname|first|upper }}
+                                    </span>
+                                </div>
+                                <span class="text-sm font-medium text-gray-700">{{ app.user.name }} {{ app.user.surname }}</span>
+                            </div>
+                            
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <a href="{{ path('admin_dashboard') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
+                                    🔐 Admin Panel
+                                </a>
+                            {% endif %}
+                            
+                            <form method="post" action="{{ path('app_logout') }}" class="inline">
+                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                                    🚪 Çıkış Yap
+                                </button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <!-- Kullanıcı giriş yapmamış -->
+                        <a href="{{ path('app_login') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
+                            🔑 Giriş Yap
+                        </a>
+                        <a href="{{ path('app_register') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            📝 Kayıt Ol
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -9,55 +9,124 @@
     
     <!-- Toast Component -->
     {% include 'components/toast.html.twig' %}
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add red border to form fields if there's an error
+        const errorElement = document.querySelector('[data-flash-type="error"]');
+        if (errorElement) {
+            const emailField = document.getElementById('inputEmail');
+            const passwordField = document.getElementById('inputPassword');
+            
+            if (emailField) {
+                emailField.classList.remove('border-gray-300', 'focus:border-indigo-500', 'focus:ring-indigo-500');
+                emailField.classList.add('border-red-300', 'focus:border-red-500', 'focus:ring-red-500');
+            }
+            
+            if (passwordField) {
+                passwordField.classList.remove('border-gray-300', 'focus:border-indigo-500', 'focus:ring-indigo-500');
+                passwordField.classList.add('border-red-300', 'focus:border-red-500', 'focus:ring-red-500');
+            }
+        }
+    });
+    </script>
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <!-- Header -->
             <div class="text-center">
-                <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center">
-                    <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                </div>
-                <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
-                    Giriş Yap
-                </h2>
-                <p class="mt-2 text-sm text-gray-600">
-                    Hesabınıza giriş yapın
-                </p>
+                {% if app.user %}
+                    <!-- Kullanıcı zaten giriş yapmış -->
+                    <div class="mx-auto h-16 w-16 bg-green-600 rounded-full flex items-center justify-center">
+                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                        Zaten Giriş Yapmışsınız
+                    </h2>
+                    <p class="mt-2 text-sm text-gray-600">
+                        Merhaba {{ app.user.name }}! Zaten giriş yapmış durumdasınız.
+                    </p>
+                {% else %}
+                    <!-- Normal giriş sayfası -->
+                    <div class="mx-auto h-16 w-16 bg-indigo-600 rounded-full flex items-center justify-center">
+                        <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+                        Giriş Yap
+                    </h2>
+                    <p class="mt-2 text-sm text-gray-600">
+                        Hesabınıza giriş yapın
+                    </p>
+                {% endif %}
             </div>
 
             <!-- Login Form -->
             <div class="bg-white rounded-lg shadow-xl p-8">
-                <!-- Flash Messages as Hidden Elements for Toast -->
-                {% for message in app.flashes('success') %}
-                    <div data-flash-message="{{ message }}" data-flash-type="success" style="display: none;"></div>
-                {% endfor %}
-                
-                {% for message in app.flashes('error') %}
-                    <div data-flash-message="{{ message }}" data-flash-type="error" style="display: none;"></div>
-                {% endfor %}
-
-                {% if error %}
-                    <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-                        <div class="flex">
-                            <svg class="h-5 w-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <div>
-                                <p class="font-medium">Giriş Hatası</p>
-                                <p class="text-sm">{{ error.messageKey|trans(error.messageData, 'security') }}</p>
+                {% if app.user %}
+                    <!-- Kullanıcı zaten giriş yapmış -->
+                    <div class="text-center space-y-4">
+                        <div class="p-4 bg-green-50 border border-green-200 rounded-lg">
+                            <div class="flex items-center justify-center">
+                                <svg class="h-8 w-8 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <span class="text-green-800 font-medium">Başarıyla giriş yapmışsınız!</span>
                             </div>
                         </div>
+                        
+                        <div class="space-y-3">
+                            <a href="{{ path('public_home') }}" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                                </svg>
+                                Ana Sayfaya Git
+                            </a>
+                            
+                            {% if 'ROLE_ADMIN' in app.user.roles %}
+                                <a href="{{ path('admin_dashboard') }}" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
+                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                    </svg>
+                                    Admin Panel
+                                </a>
+                            {% endif %}
+                            
+                            <form method="post" action="{{ path('app_logout') }}">
+                                <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                    </svg>
+                                    Çıkış Yap
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                {% endif %}
+                {% else %}
+                    <!-- Normal giriş formu -->
+                    <!-- Flash Messages as Hidden Elements for Toast -->
+                    {% for message in app.flashes('success') %}
+                        <div data-flash-message="{{ message }}" data-flash-type="success" style="display: none;"></div>
+                    {% endfor %}
+                    
+                    {% for message in app.flashes('error') %}
+                        <div data-flash-message="{{ message }}" data-flash-type="error" style="display: none;"></div>
+                    {% endfor %}
 
-                <form method="post" class="space-y-6">
+                    {% if error %}
+                        <div data-flash-message="{{ error.messageKey|trans(error.messageData, 'security') }}" data-flash-type="error" style="display: none;"></div>
+                    {% endif %}
+
+                    <form method="post" class="space-y-6">
                     <div>
                         <label for="inputEmail" class="block text-sm font-medium text-gray-700">
                             E-posta Adresi
                         </label>
+                        <p class="text-xs text-gray-500 mt-1">Kayıt olurken kullandığınız e-posta adresini girin</p>
                         <div class="mt-1 relative">
                                                     <input 
                             type="email" 
@@ -81,6 +150,7 @@
                         <label for="inputPassword" class="block text-sm font-medium text-gray-700">
                             Şifre
                         </label>
+                        <p class="text-xs text-gray-500 mt-1">Hesabınızın şifresini girin</p>
                         <div class="mt-1 relative">
                             <input 
                                 type="password" 
@@ -112,8 +182,8 @@
                         </div>
 
                         <div class="text-sm">
-                            <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
-                                Şifremi unuttum
+                            <a href="{{ path('app_register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                                Hesabınız yok mu? Kayıt olun
                             </a>
                         </div>
                     </div>
@@ -133,31 +203,49 @@
                             Giriş Yap
                         </button>
                     </div>
-                </form>
+                    </form>
 
-                <!-- Register Link -->
-                <div class="mt-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 flex items-center">
-                            <div class="w-full border-t border-gray-300"></div>
-                        </div>
-                        <div class="relative flex justify-center text-sm">
-                            <span class="px-2 bg-white text-gray-500">Hesabınız yok mu?</span>
-                        </div>
-                    </div>
-
-                    <div class="mt-6">
-                        <a 
-                            href="{{ path('app_register') }}" 
-                            class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
-                        >
-                            <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                    <!-- Help Message -->
+                    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <div class="flex">
+                            <svg class="h-5 w-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
-                            Hesap Oluştur
-                        </a>
+                            <div>
+                                <p class="text-sm text-blue-800">
+                                    <strong>Giriş yaparken sorun mu yaşıyorsunuz?</strong><br>
+                                    • E-posta adresinizi doğru yazdığınızdan emin olun<br>
+                                    • Şifrenizin doğru olduğunu kontrol edin<br>
+                                    • Hesabınız yoksa "Kayıt Ol" butonuna tıklayın
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+
+                    <!-- Register Link -->
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-white text-gray-500">Hesabınız yok mu?</span>
+                            </div>
+                        </div>
+
+                        <div class="mt-6">
+                            <a 
+                                href="{{ path('app_register') }}" 
+                                class="w-full flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+                            >
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                                </svg>
+                                Hesap Oluştur
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
             </div>
 
             <!-- Back to Home -->
