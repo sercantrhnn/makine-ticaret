@@ -1,0 +1,216 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Abonelikler - Admin Panel{% endblock %}
+{% block page_title %}Abonelik Yönetimi{% endblock %}
+
+{% block body %}
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo-600 to-indigo-700 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-lg font-semibold text-white">Abonelik Yönetimi</h3>
+                            <p class="text-indigo-100 text-sm">Kullanıcı aboneliklerini yönetin</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <a href="{{ path('subscriptions_stats') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            </svg>
+                            İstatistikler
+                        </a>
+                        <a href="{{ path('subscriptions_new') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Yeni Abonelik
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Search and Filters -->
+            <div class="px-6 py-4 border-b border-gray-200">
+                <form method="GET" class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <input type="text" name="search" value="{{ search }}" 
+                                   placeholder="Kullanıcı adı, email veya abonelik tipi ile ara..." 
+                                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        </div>
+                    </div>
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        Ara
+                    </button>
+                </form>
+                
+                <div class="mt-4">
+                    <div class="text-sm text-gray-500">
+                        Toplam {{ totalSubscriptions }} abonelik bulundu
+                        {% if search %}
+                            ({{ search }} için arama sonucu)
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subscriptions Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kullanıcı</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tip</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Başlangıç</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bitiş</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fiyat</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for subscription in subscriptions %}
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ subscription.id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                                            <span class="text-xs font-medium text-indigo-600">
+                                                {{ subscription.user.name|first|upper }}{{ subscription.user.surname|first|upper }}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900">{{ subscription.user.name }} {{ subscription.user.surname }}</div>
+                                            <div class="text-sm text-gray-500">{{ subscription.user.email }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {% if subscription.type == 'monthly' %}bg-blue-100 text-blue-800
+                                        {% elseif subscription.type == 'yearly' %}bg-green-100 text-green-800
+                                        {% elseif subscription.type == 'lifetime' %}bg-purple-100 text-purple-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ subscription.getTypeLabel() }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                        {% if subscription.status == 'active' %}bg-green-100 text-green-800
+                                        {% elseif subscription.status == 'expired' %}bg-red-100 text-red-800
+                                        {% elseif subscription.status == 'cancelled' %}bg-gray-100 text-gray-800
+                                        {% elseif subscription.status == 'pending' %}bg-yellow-100 text-yellow-800
+                                        {% else %}bg-gray-100 text-gray-800{% endif %}">
+                                        {{ subscription.getStatusLabel() }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ subscription.startDate|date('d.m.Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ subscription.endDate|date('d.m.Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    {{ subscription.price }} {{ subscription.currency }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <div class="flex space-x-3">
+                                        <a href="{{ path('subscriptions_show', {'id': subscription.id}) }}" 
+                                           class="inline-flex items-center text-indigo-600 hover:text-indigo-900 transition-colors">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                            </svg>
+                                            Görüntüle
+                                        </a>
+                                        <a href="{{ path('subscriptions_edit', {'id': subscription.id}) }}" 
+                                           class="inline-flex items-center text-yellow-600 hover:text-yellow-900 transition-colors">
+                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                            </svg>
+                                            Düzenle
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="8" class="px-6 py-12 text-center text-gray-500">
+                                    <div class="flex flex-col items-center">
+                                        <svg class="w-12 h-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <p class="text-lg font-medium">Henüz abonelik eklenmemiş</p>
+                                        <p class="text-sm">İlk aboneliği eklemek için yukarıdaki "Yeni Abonelik" butonunu kullanın.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Pagination -->
+        {% if totalPages > 1 %}
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-700">
+                        <span class="font-medium">{{ ((currentPage - 1) * limit) + 1 }}</span>
+                        -
+                        <span class="font-medium">{{ min(currentPage * limit, totalSubscriptions) }}</span>
+                        arası, toplam
+                        <span class="font-medium">{{ totalSubscriptions }}</span>
+                        sonuçtan
+                    </div>
+                    
+                    <div class="flex items-center space-x-2">
+                        {% if currentPage > 1 %}
+                            <a href="{{ path('subscriptions_index', {'page': currentPage - 1, 'search': search}) }}" 
+                               class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                Önceki
+                            </a>
+                        {% endif %}
+                        
+                        {% for page in 1..totalPages %}
+                            {% if page == currentPage %}
+                                <span class="px-3 py-2 text-sm font-medium text-white bg-indigo-600 border border-indigo-600 rounded-md">
+                                    {{ page }}
+                                </span>
+                            {% else %}
+                                <a href="{{ path('subscriptions_index', {'page': page, 'search': search}) }}" 
+                                   class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                    {{ page }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if currentPage < totalPages %}
+                            <a href="{{ path('subscriptions_index', {'page': currentPage + 1, 'search': search}) }}" 
+                               class="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                                Sonraki
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
