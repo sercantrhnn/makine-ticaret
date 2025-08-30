@@ -73,6 +73,10 @@ class Companies
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $catalogPath = null;
 
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $owner = null;
+
     /** @var Collection<int, Products> */
     #[ORM\OneToMany(mappedBy: 'company', targetEntity: Products::class)]
     #[ORM\OrderBy(['id' => 'DESC'])]
@@ -322,5 +326,17 @@ class Companies
     public function setUpdatedAtValue(): void
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): static
+    {
+        $this->owner = $owner;
+
+        return $this;
     }
 }

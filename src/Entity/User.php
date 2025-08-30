@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -36,6 +38,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    /** @var Collection<int, Companies> */
+    #[ORM\OneToMany(mappedBy: 'owner', targetEntity: Companies::class)]
+    private Collection $companies;
+
+    public function __construct()
+    {
+        $this->companies = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -127,5 +138,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Companies>
+     */
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
+    }
+
+    public function addCompany(Companies $company): static
+    {
+        if (!$this->companies->contains($company)) {
+            $this->companies->add($company);
+            $company->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompany(Companies $company): static
+    {
+        if ($this->companies->removeElement($company)) {
+            // set the owning side to null (unless already changed)
+            if ($company->getOwner() === $this) {
+                $company->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }

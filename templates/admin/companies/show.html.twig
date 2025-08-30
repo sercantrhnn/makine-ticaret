@@ -60,6 +60,26 @@
                                 <dd class="mt-1 text-sm text-gray-900">{{ company.name ?? 'Belirtilmemiş' }}</dd>
                             </div>
                             <div>
+                                <dt class="text-sm font-medium text-gray-500">Firma Sahibi</dt>
+                                <dd class="mt-1">
+                                    {% if company.owner %}
+                                        <div class="flex items-center">
+                                            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
+                                                <span class="text-xs font-medium text-indigo-600">
+                                                    {{ company.owner.name|first|upper }}{{ company.owner.surname|first|upper }}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <div class="text-sm font-medium text-gray-900">{{ company.owner.name }} {{ company.owner.surname }}</div>
+                                                <div class="text-sm text-gray-500">{{ company.owner.email }}</div>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <span class="text-sm text-gray-400">Belirtilmemiş</span>
+                                    {% endif %}
+                                </dd>
+                            </div>
+                            <div>
                                 <dt class="text-sm font-medium text-gray-500">Kısa Ad</dt>
                                 <dd class="mt-1 text-sm text-gray-900">{{ company.shortName ?? 'Belirtilmemiş' }}</dd>
                             </div>

@@ -64,6 +64,15 @@
                             {{ form_errors(form.short_name, {'attr': {'class': 'text-sm text-red-600'}}) }}
                         </div>
                         
+                        <div class="space-y-2 md:col-span-2">
+                            <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                                {{ form_label(form.owner, 'Firma Sahibi', {'label_attr': {'class': 'block text-sm font-medium text-indigo-700'}}) }}
+                                <p class="text-xs text-indigo-600 mt-1">Bu firmanın sahibi olan kullanıcıyı seçin</p>
+                                {{ form_widget(form.owner, {'attr': {'class': 'w-full px-4 py-3 border border-indigo-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors mt-2'}}) }}
+                                {{ form_errors(form.owner, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                            </div>
+                        </div>
+                        
                         <div class="space-y-2">
                             {{ form_label(form.title, 'Başlık', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
                             {{ form_widget(form.title, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors', 'placeholder': 'Firma başlığı giriniz'}}) }}

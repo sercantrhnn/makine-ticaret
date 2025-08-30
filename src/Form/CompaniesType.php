@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\Companies;
+use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +18,16 @@ class CompaniesType extends AbstractType
         $builder
             ->add('name', null, [
                 'label' => 'Firma Adı',
+                'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']
+            ])
+            ->add('owner', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => function(User $user) {
+                    return $user->getName() . ' ' . $user->getSurname() . ' (' . $user->getEmail() . ')';
+                },
+                'label' => 'Firma Sahibi',
+                'placeholder' => 'Firma sahibini seçin...',
+                'required' => false,
                 'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']
             ])
             ->add('about', null, [
