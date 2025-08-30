@@ -1,0 +1,181 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Kullanıcı Düzenle - Admin Panel{% endblock %}
+{% block page_title %}Kullanıcı Düzenle{% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <div class="mb-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Kullanıcı Düzenle</h1>
+                    <p class="text-gray-600 mt-1">{{ user.name }} {{ user.surname }} kullanıcısını düzenleyin</p>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <a href="{{ path('users_show', {'id': user.id}) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        Görüntüle
+                    </a>
+                    <a href="{{ path('users_index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Geri Dön
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900">Kullanıcı Bilgileri</h3>
+            </div>
+            
+            <div class="p-6">
+                {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+                
+                    <!-- Name and Surname Row -->
+                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                        <div>
+                            {{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="mt-1">
+                                {{ form_widget(form.name, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                            </div>
+                            {% if form.name.vars.errors|length > 0 %}
+                                <div class="mt-1 text-sm text-red-600">
+                                    {% for error in form.name.vars.errors %}
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-red-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            {{ error.message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            {{ form_label(form.surname, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            <div class="mt-1">
+                                {{ form_widget(form.surname, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                            </div>
+                            {% if form.surname.vars.errors|length > 0 %}
+                                <div class="mt-1 text-sm text-red-600">
+                                    {% for error in form.surname.vars.errors %}
+                                        <div class="flex items-center">
+                                            <svg class="h-4 w-4 text-red-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            {{ error.message }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        {{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        <div class="mt-1">
+                            {{ form_widget(form.email, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                        </div>
+                        {% if form.email.vars.errors|length > 0 %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.email.vars.errors %}
+                                    <div class="flex items-center">
+                                        <svg class="h-4 w-4 text-red-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ error.message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Phone -->
+                    <div>
+                        {{ form_label(form.phone, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        <div class="mt-1">
+                            {{ form_widget(form.phone, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                        </div>
+                        {% if form.phone.vars.errors|length > 0 %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.phone.vars.errors %}
+                                    <div class="flex items-center">
+                                        <svg class="h-4 w-4 text-red-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ error.message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Roles -->
+                    <div>
+                        {{ form_label(form.roles, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        <div class="mt-1">
+                            {{ form_widget(form.roles, {'attr': {'class': 'space-y-2'}}) }}
+                        </div>
+                        {% if form.roles.vars.errors|length > 0 %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.roles.vars.errors %}
+                                    <div class="flex items-center">
+                                        <svg class="h-4 w-4 text-red-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ error.message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        {{ form_label(form.plainPassword, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                        <div class="mt-1">
+                            {{ form_widget(form.plainPassword, {'attr': {'class': 'appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'}}) }}
+                        </div>
+                        {% if form.plainPassword.vars.errors|length > 0 %}
+                            <div class="mt-1 text-sm text-red-600">
+                                {% for error in form.plainPassword.vars.errors %}
+                                    <div class="flex items-center">
+                                        <svg class="h-4 w-4 text-red-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        {{ error.message }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <p class="mt-1 text-sm text-gray-500">Şifreyi değiştirmek için yeni şifre girin. Değiştirmek istemiyorsanız boş bırakın.</p>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
+                        <a href="{{ path('users_index') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            İptal
+                        </a>
+                        <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Güncelle
+                        </button>
+                    </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

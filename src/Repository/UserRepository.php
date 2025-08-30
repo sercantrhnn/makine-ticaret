@@ -58,4 +58,40 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * Find users with pagination and search
+     */
+    public function findWithPaginationAndSearch(int $page, int $limit, string $search = ''): array
+    {
+        $offset = ($page - 1) * $limit;
+        
+        $qb = $this->createQueryBuilder('u')
+            ->orderBy('u.id', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        if (!empty($search)) {
+            $qb->andWhere('u.name LIKE :search OR u.surname LIKE :search OR u.email LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Count users with search
+     */
+    public function countWithSearch(string $search = ''): int
+    {
+        $qb = $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)');
+
+        if (!empty($search)) {
+            $qb->andWhere('u.name LIKE :search OR u.surname LIKE :search OR u.email LIKE :search')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }
