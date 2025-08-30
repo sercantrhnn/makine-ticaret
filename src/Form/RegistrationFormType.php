@@ -14,6 +14,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 class RegistrationFormType extends AbstractType
 {
@@ -43,6 +44,11 @@ class RegistrationFormType extends AbstractType
                     'placeholder' => 'ornek@email.com'
                 ],
                 'required' => true,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Lütfen e-posta adresinizi girin',
+                    ]),
+                ],
             ])
             ->add('phone', TextType::class, [
                 'label' => 'Telefon (Opsiyonel)',

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AuthController extends AbstractController
 {
@@ -33,31 +34,46 @@ class AuthController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
-                )
-            );
+        if ($form->isSubmitted()) {
+            // Form validation
+            $errors = $validator->validate($user);
+            
+            if (count($errors) > 0) {
+                foreach ($errors as $error) {
+                    $this->addFlash('error', $error->getMessage());
+                }
+            } elseif ($form->isValid()) {
+                // Check if email already exists
+                $existingUser = $entityManager->getRepository(User::class)->findOneBy(['email' => $user->getEmail()]);
+                
+                if ($existingUser) {
+                    $this->addFlash('error', 'Bu e-posta adresi zaten kullanılıyor. Lütfen farklı bir e-posta adresi deneyin.');
+                } else {
+                    // encode the plain password
+                    $user->setPassword(
+                        $userPasswordHasher->hashPassword(
+                            $user,
+                            $form->get('plainPassword')->getData()
+                        )
+                    );
 
-            // Set default role
-            $user->setRoles(['ROLE_USER']);
+                    // Set default role
+                    $user->setRoles(['ROLE_USER']);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
-            // do anything else you need here, like send an email
+                    $entityManager->persist($user);
+                    $entityManager->flush();
 
-            $this->addFlash('success', 'Hesabınız başarıyla oluşturuldu! Giriş yapabilirsiniz.');
+                    $this->addFlash('success', 'Hesabınız başarıyla oluşturuldu! Giriş yapabilirsiniz.');
 
-            return $this->redirectToRoute('app_login');
+                    return $this->redirectToRoute('app_login');
+                }
+            }
         }
 
         return $this->render('auth/register.html.twig', [

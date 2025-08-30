@@ -6,6 +6,9 @@
     <title>Giriş Yap - Makine Ticaret</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- Toast Component -->
+    {% include 'components/toast.html.twig' %}
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
     <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -27,6 +30,15 @@
 
             <!-- Login Form -->
             <div class="bg-white rounded-lg shadow-xl p-8">
+                <!-- Flash Messages as Hidden Elements for Toast -->
+                {% for message in app.flashes('success') %}
+                    <div data-flash-message="{{ message }}" data-flash-type="success" style="display: none;"></div>
+                {% endfor %}
+                
+                {% for message in app.flashes('error') %}
+                    <div data-flash-message="{{ message }}" data-flash-type="error" style="display: none;"></div>
+                {% endfor %}
+
                 {% if error %}
                     <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
                         <div class="flex">
