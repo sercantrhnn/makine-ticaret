@@ -55,6 +55,7 @@ class UserType extends AbstractType
                 'choices' => [
                     'Kullanıcı' => 'ROLE_USER',
                     'Admin' => 'ROLE_ADMIN',
+                    'Abone' => 'ROLE_SUBSCRIBER',
                 ],
                 'multiple' => true,
                 'expanded' => true,
