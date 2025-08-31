@@ -1,264 +1,561 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Makine Ticaret - Kategori Filtreleme Testi</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-</head>
-<body class="bg-gray-50">
-    <!-- Header -->
-    <header class="bg-white shadow-sm border-b">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
-                <div class="flex items-center">
-                    <h1 class="text-2xl font-bold text-gray-900">🏭 Makine Ticaret</h1>
-                    <span class="ml-3 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
-                        Filtreleme Testi
-                    </span>
+{% extends 'public/base.html.twig' %}
+
+{% block title %}Makine Ticaret - Ana Sayfa{% endblock %}
+{% block description %}Türkiye'nin en büyük makine ve sanayi ürünleri platformu. Binlerce firma, on binlerce ürün.{% endblock %}
+
+{% block body %}
+<!-- Hero Section with Slider -->
+<section class="relative overflow-hidden">
+    <!-- Background Slider -->
+    <div x-data="{ 
+        currentSlide: 0,
+        slides: [
+            {
+                image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+                title: 'Endüstriyel Çözümler',
+                subtitle: 'Modern fabrika ve üretim teknolojileri'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1559941954-cdc4dc0ad75e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+                title: 'İnşaat Makineleri',
+                subtitle: 'Güçlü ve dayanıklı inşaat ekipmanları'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1565793298595-6a879b1d9492?ixlib=rb-4.0.3&auto=format&fit=crop&w=2071&q=80',
+                title: 'Tarım Teknolojileri',
+                subtitle: 'Verimli tarım için modern çözümler'
+            }
+        ]
+    }"
+    x-init="setInterval(() => { currentSlide = (currentSlide + 1) % slides.length }, 5000)"
+    class="relative h-screen">
+        
+        <!-- Slide Images -->
+        <template x-for="(slide, index) in slides" :key="index">
+            <div x-show="currentSlide === index"
+                 x-transition:enter="transition-opacity duration-1000"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="transition-opacity duration-1000"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="absolute inset-0">
+                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                     :style="`background-image: url('${slide.image}')`"></div>
+                <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            </div>
+        </template>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 flex items-center justify-center h-full">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+                <div class="mb-8">
+                    <div class="inline-flex items-center px-4 py-2 bg-white bg-opacity-20 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Türkiye'nin En Güvenilir Platformu
+                    </div>
                 </div>
-                <div class="flex items-center space-x-3">
-                    {% if app.user %}
-                        <!-- Kullanıcı giriş yapmış -->
-                        <div class="flex items-center space-x-3">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                                    <span class="text-sm font-medium text-indigo-600">
-                                        {{ app.user.name|first|upper }}{{ app.user.surname|first|upper }}
+                
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                    <span class="block">Türkiye'nin En Büyük</span>
+                    <span class="block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                        Makine Ticaret
+                    </span>
+                    <span class="block">Platformu</span>
+                </h1>
+                
+                <p class="text-xl md:text-2xl mb-12 text-gray-200 max-w-4xl mx-auto leading-relaxed">
+                    Binlerce güvenilir firma, on binlerce kaliteli ürün. Sanayi sektöründe aradığınız her şey burada.
+                    <span class="block mt-2 text-lg">
+                        🏭 Endüstri • 🚜 Tarım • 🏗️ İnşaat • ⚙️ Makine
                                     </span>
-                                </div>
-                                <span class="text-sm font-medium text-gray-700">{{ app.user.name }} {{ app.user.surname }}</span>
+                </p>
+                
+                <!-- Search Bar -->
+                <form action="{{ path('public_products') }}" method="GET" class="max-w-3xl mx-auto mb-8">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1 relative">
+                            <input type="text" 
+                                   name="search" 
+                                   placeholder="🔍 Makine, ürün, firma veya kategori arayın..." 
+                                   value="{{ search }}"
+                                   class="w-full px-8 py-5 text-gray-900 text-lg rounded-xl border-0 focus:ring-4 focus:ring-yellow-300 shadow-2xl backdrop-blur-sm bg-white bg-opacity-95 placeholder-gray-500">
+                            <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
+                                <svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
                             </div>
-                            
-                            {% if 'ROLE_ADMIN' in app.user.roles %}
-                                <a href="{{ path('admin_dashboard') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700">
-                                    🔐 Admin Panel
-                                </a>
-                            {% endif %}
-                            
-                            <form method="post" action="{{ path('app_logout') }}" class="inline">
-                                <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
-                                    🚪 Çıkış Yap
-                                </button>
-                            </form>
                         </div>
-                    {% else %}
-                        <!-- Kullanıcı giriş yapmamış -->
-                        <a href="{{ path('app_login') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50">
-                            🔑 Giriş Yap
-                        </a>
-                        <a href="{{ path('app_register') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                            📝 Kayıt Ol
-                        </a>
-                    {% endif %}
+                        <button type="submit" class="px-10 py-5 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 font-bold rounded-xl hover:from-yellow-300 hover:to-orange-400 transition-all duration-300 shadow-2xl transform hover:scale-105">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                Ara
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                
+                <!-- Quick Action Buttons -->
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="{{ path('public_products') }}" 
+                       class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                        Ürünler
+                    </a>
+                    <a href="{{ path('public_companies') }}" 
+                       class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        Firmalar
+                    </a>
+                    <a href="{{ path('public_categories') }}" 
+                       class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                        Kategoriler
+                    </a>
                 </div>
             </div>
         </div>
-    </header>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            
-            <!-- Sol Sidebar - Kategori Filtreleme -->
-            <div class="lg:col-span-1">
-                <div class="bg-white rounded-lg shadow-sm border p-6 sticky top-8">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">📂 Kategori Filtreleme</h2>
-                    
-                    <!-- Kategori Seçimi -->
-                    <div class="space-y-3">
-                        <a href="{{ path('public_home') }}" 
-                           class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium {% if not selectedCategory %}bg-indigo-100 text-indigo-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-                            🏠 Tüm Kategoriler
-                        </a>
-                        
-                        {% for category in categories %}
-                            {% if category.parent is null %}
-                                <!-- Ana Kategori -->
-                                <div class="space-y-1">
-                                    <a href="{{ path('public_home', {category: category.id}) }}" 
-                                       class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium {% if selectedCategory and selectedCategory.id == category.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-                                        📁 {{ category.name }}
-                                    </a>
-                                    
-                                    <!-- Alt Kategoriler -->
-                                    {% for child in category.children %}
-                                        <div class="ml-4 space-y-1">
-                                            <a href="{{ path('public_home', {category: child.id}) }}" 
-                                               class="block w-full text-left px-3 py-2 rounded-md text-sm {% if selectedCategory and selectedCategory.id == child.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-600 hover:bg-gray-100{% endif %}">
-                                                📂 {{ child.name }}
-                                            </a>
-                                            
-                                            <!-- 3. Seviye Kategoriler -->
-                                            {% for grandChild in child.children %}
-                                                <div class="ml-4 space-y-1">
-                                                    <a href="{{ path('public_home', {category: grandChild.id}) }}" 
-                                                       class="block w-full text-left px-3 py-2 rounded-md text-sm {% if selectedCategory and selectedCategory.id == grandChild.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-500 hover:bg-gray-100{% endif %}">
-                                                        📄 {{ grandChild.name }}
-                                                    </a>
-                                                    
-                                                    <!-- 4. Seviye Kategoriler -->
-                                                    {% for greatGrandChild in grandChild.children %}
-                                                        <div class="ml-4 space-y-1">
-                                                            <a href="{{ path('public_home', {category: greatGrandChild.id}) }}" 
-                                                               class="block w-full text-left px-3 py-2 rounded-md text-sm {% if selectedCategory and selectedCategory.id == greatGrandChild.id %}bg-indigo-100 text-indigo-700{% else %}text-gray-400 hover:bg-gray-100{% endif %}">
-                                                                📋 {{ greatGrandChild.name }}
-                                                            </a>
-                                                        </div>
-                                                    {% endfor %}
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    
-                    <!-- Test Bilgisi -->
-                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
-                        <h3 class="text-sm font-medium text-blue-800 mb-2">🧪 Test Açıklaması</h3>
-                        <p class="text-xs text-blue-700">
-                            Üst kategori seçince o kategorideki <strong>tüm ürünler</strong> (alt kategoriler dahil) görünür. 
-                            Alt kategori seçince sadece o kategorideki ürünler görünür.
-                        </p>
-                    </div>
-                </div>
+        
+        <!-- Slide Indicators -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+            <div class="flex space-x-2">
+                <template x-for="(slide, index) in slides" :key="index">
+                    <button @click="currentSlide = index"
+                            :class="currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'"
+                            class="w-3 h-3 rounded-full transition-all duration-300"></button>
+                </template>
             </div>
-            
-            <!-- Sağ Taraf - Ürün Listesi -->
-            <div class="lg:col-span-3">
-                <!-- Seçilen Kategori Bilgisi -->
-                {% if selectedCategory %}
-                    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h2 class="text-2xl font-bold text-gray-900">{{ selectedCategory.name }}</h2>
-                                <p class="text-gray-600 mt-1">
-                                    {% if selectedCategory.parent %}
-                                        📂 {{ selectedCategory.parent.name }} alt kategorisi
-                                    {% else %}
-                                        🏠 Ana kategori
-                                    {% endif %}
-                                </p>
-                            </div>
-                            <div class="text-right">
-                                <div class="text-3xl font-bold text-indigo-600">{{ products|length }}</div>
-                                <div class="text-sm text-gray-500">Toplam Ürün</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Kategori Hiyerarşisi -->
-                        {% if selectedCategory.parent or selectedCategory.children|length > 0 %}
-                            <div class="mt-4 p-4 bg-gray-50 rounded-lg">
-                                <h3 class="text-sm font-medium text-gray-700 mb-2">🔗 Kategori Hiyerarşisi</h3>
-                                <div class="text-sm text-gray-600">
-                                    {% if selectedCategory.parent %}
-                                        <div class="mb-1">
-                                            <span class="text-gray-500">Üst Kategori:</span> 
-                                            <a href="{{ path('public_home', {category: selectedCategory.parent.id}) }}" class="text-indigo-600 hover:underline">
-                                                {{ selectedCategory.parent.name }}
-                                            </a>
-                                        </div>
-                                    {% endif %}
-                                    
-                                    {% if selectedCategory.children|length > 0 %}
-                                        <div>
-                                            <span class="text-gray-500">Alt Kategoriler:</span>
-                                            {% for child in selectedCategory.children %}
-                                                <a href="{{ path('public_home', {category: child.id}) }}" class="text-indigo-600 hover:underline ml-2">
-                                                    {{ child.name }}
-                                                </a>
-                                            {% endfor %}
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                {% else %}
-                    <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
-                        <div class="text-center">
-                            <h2 class="text-2xl font-bold text-gray-900">🏠 Tüm Kategoriler</h2>
-                            <p class="text-gray-600 mt-2">Sol taraftan bir kategori seçerek ürünleri filtreleyebilirsiniz.</p>
-                        </div>
-                    </div>
-                {% endif %}
-                
-                <!-- Ürün Listesi -->
-                {% if products|length > 0 %}
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {% for product in products %}
-                            <div class="bg-white rounded-lg shadow-sm border overflow-hidden hover:shadow-md transition-shadow">
-                                <div class="p-6">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <h3 class="text-lg font-semibold text-gray-900">{{ product.name }}</h3>
-                                        <span class="px-2 py-1 text-xs font-medium rounded-full {% if product.productStatus == 'satilik' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %}">
-                                            {{ product.productStatus == 'satilik' ? 'Satılık' : 'Kiralık' }}
-                                        </span>
-                                    </div>
-                                    
-                                    {% if product.description %}
-                                        <p class="text-gray-600 text-sm mb-3 line-clamp-2">{{ product.description }}</p>
-                                    {% endif %}
-                                    
-                                    <div class="space-y-2 text-sm text-gray-600">
-                                        {% if product.modelType %}
-                                            <div><span class="font-medium">Model:</span> {{ product.modelType }}</div>
-                                        {% endif %}
-                                        
-                                        {% if product.productType %}
-                                            <div><span class="font-medium">Ürün Türü:</span> 
-                                                <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium rounded-full {% if product.productType == 'sifir' %}bg-yellow-100 text-yellow-800{% else %}bg-orange-100 text-orange-800{% endif %}">
-                                                    {{ product.productType == 'sifir' ? 'Sıfır' : 'İkinci El' }}
-                                                </span>
-                                            </div>
-                                        {% endif %}
-                                        
-                                        {% if product.category %}
-                                            <div><span class="font-medium">Kategori:</span> 
-                                                <a href="{{ path('public_home', {category: product.category.id}) }}" class="text-indigo-600 hover:underline">
-                                                    {{ product.category.name }}
-                                                </a>
-                                            </div>
-                                        {% endif %}
-                                        
-                                        {% if product.company %}
-                                            <div><span class="font-medium">Firma:</span> {{ product.company.name }}</div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <div class="mt-4 pt-3 border-t border-gray-200">
-                                        <div class="text-xs text-gray-500">
-                                            <span class="font-medium">Ürün ID:</span> #{{ product.id }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {% if selectedCategory %}
-                        <div class="bg-white rounded-lg shadow-sm border p-12 text-center">
-                            <div class="text-gray-400 mb-4">
-                                <svg class="mx-auto h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                                </svg>
-                            </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">Bu kategoride ürün bulunamadı</h3>
-                            <p class="text-gray-500">Seçilen kategoride henüz ürün eklenmemiş.</p>
-                        </div>
-                    {% endif %}
-                {% endif %}
+        </div>
+        
+        <!-- Slide Navigation Arrows -->
+        <button @click="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1"
+                class="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all backdrop-blur-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        <button @click="currentSlide = (currentSlide + 1) % slides.length"
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 z-20 p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all backdrop-blur-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="absolute bottom-8 right-8 z-20 animate-bounce">
+            <div class="flex flex-col items-center text-white">
+                <span class="text-sm mb-2">Keşfet</span>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+                </svg>
             </div>
         </div>
     </div>
-    
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-gray-400">© 2024 Makine Ticaret - Kategori Filtreleme Test Sayfası</p>
+</section>
+
+<!-- Stats Section -->
+<section class="bg-gradient-to-b from-gray-50 to-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                🏆 Türkiye'nin Lider Platformu
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Binlerce firma ve müşterimizin güvendiği platform. Sanayi sektöründe fark yaratan rakamlarımız.
+            </p>
         </div>
-    </footer>
-</body>
-</html>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Companies Stat -->
+            <div class="text-center group">
+                <div class="relative">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <!-- Glow Effect -->
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-blue-400 rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300 blur-xl"></div>
+                </div>
+                <div class="text-4xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    {{ featuredCompanies|length }}+
+                </div>
+                <div class="text-gray-600 font-medium">Güvenilir Firma</div>
+                <div class="text-sm text-gray-500 mt-1">🏭 Sanayi & Endüstri</div>
+            </div>
+
+            <!-- Products Stat -->
+            <div class="text-center group">
+                <div class="relative">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <!-- Glow Effect -->
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-green-400 rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300 blur-xl"></div>
+                </div>
+                <div class="text-4xl font-bold text-gray-900 mb-2 group-hover:text-green-600 transition-colors">
+                    {{ featuredProducts|length }}K+
+                </div>
+                <div class="text-gray-600 font-medium">Kaliteli Ürün</div>
+                <div class="text-sm text-gray-500 mt-1">⚙️ Makine & Ekipman</div>
+            </div>
+
+            <!-- Categories Stat -->
+            <div class="text-center group">
+                <div class="relative">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                                                        </div>
+                    <!-- Glow Effect -->
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-purple-400 rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300 blur-xl"></div>
+                                                </div>
+                <div class="text-4xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">
+                    {{ categories|length }}+
+                                        </div>
+                <div class="text-gray-600 font-medium">Farklı Kategori</div>
+                <div class="text-sm text-gray-500 mt-1">🏗️ Kapsamlı Çeşitlilik</div>
+                                </div>
+
+            <!-- Experience Stat -->
+            <div class="text-center group">
+                <div class="relative">
+                    <div class="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-6 transform group-hover:scale-110 transition-all duration-300 shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <!-- Glow Effect -->
+                    <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-orange-400 rounded-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-300 blur-xl"></div>
+                </div>
+                <div class="text-4xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
+                    15+
+                </div>
+                <div class="text-gray-600 font-medium">Yıl Deneyim</div>
+                <div class="text-sm text-gray-500 mt-1">🎯 Uzman Kadro</div>
+            </div>
+                    </div>
+                    
+        <!-- Trust Indicators -->
+        <div class="mt-16 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 text-center">
+            <h3 class="text-2xl font-bold text-white mb-6">
+                ✨ Güvenilirlik & Kalite Garantisi
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold">SSL Güvenlik</div>
+                        <div class="text-sm text-gray-300">256-bit Şifreleme</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold">7/24 Destek</div>
+                        <div class="text-sm text-gray-300">Uzman Ekip</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-center space-x-3">
+                    <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold">Hızlı İşlem</div>
+                        <div class="text-sm text-gray-300">Anında Sonuç</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Categories -->
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                🏭 Popüler Kategoriler
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                En çok aranan sanayi kategorilerinde binlerce kaliteli ürün. İhtiyacınıza uygun kategoriyi seçin.
+                                </p>
+                            </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% set categoryIcons = [
+                '🏭', '⚙️', '🚜', '🏗️', '🔧', '⚡', '🚛', '💡'
+            ] %}
+            {% for category in categories %}
+                <a href="{{ path('public_products', {category: category.id}) }}" 
+                   class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-primary-300 transition-all duration-300 group transform hover:-translate-y-2">
+                    <!-- Category Icon with Gradient -->
+                    <div class="relative mb-4">
+                        <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-all duration-300 shadow-lg">
+                            <span class="text-2xl">{{ categoryIcons[loop.index0 % categoryIcons|length] }}</span>
+                        </div>
+                        <!-- Glow Effect -->
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-primary-400 rounded-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-xl"></div>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors text-center">
+                        {{ category.name }}
+                    </h3>
+                    
+                    {% if category.description %}
+                        <p class="text-gray-600 text-sm text-center mb-4">
+                            {{ category.description|slice(0, 80) }}{% if category.description|length > 80 %}...{% endif %}
+                        </p>
+                                    {% endif %}
+                                    
+                    <div class="text-center">
+                        <div class="inline-flex items-center text-primary-600 text-sm font-medium group-hover:text-primary-700 transition-colors">
+                            <span>Ürünleri Keşfet</span>
+                            <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Hover Border Effect -->
+                    <div class="absolute inset-0 border-2 border-primary-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                                                </a>
+                                            {% endfor %}
+                                        </div>
+        
+        <div class="text-center mt-8">
+            <a href="{{ path('public_categories') }}" 
+               class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
+                Tüm Kategoriler
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+                                </div>
+                            </div>
+</section>
+
+<!-- Featured Products -->
+<section class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-12">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Öne Çıkan Ürünler</h2>
+                <p class="text-lg text-gray-600">En yeni ve kaliteli ürünler</p>
+            </div>
+            <a href="{{ path('public_products') }}" 
+               class="hidden sm:flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
+                Tüm Ürünler
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {% for product in featuredProducts %}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <!-- Product Image Placeholder -->
+                    <div class="h-48 bg-gray-100 flex items-center justify-center">
+                        {% if product.images|length > 0 %}
+                            <img src="{{ asset(product.images.first.imagePath) }}" 
+                                 alt="{{ product.name }}" 
+                                 class="w-full h-full object-cover">
+                        {% else %}
+                            <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
+                        {% endif %}
+                    </div>
+                    
+                                <div class="p-6">
+                        <div class="flex items-center justify-between mb-2">
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full {% if product.productStatus == 'satilik' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %}">
+                                            {{ product.productStatus == 'satilik' ? 'Satılık' : 'Kiralık' }}
+                                        </span>
+                                        {% if product.productType %}
+                                <span class="px-2 py-1 text-xs font-medium rounded-full {% if product.productType == 'sifir' %}bg-yellow-100 text-yellow-800{% else %}bg-orange-100 text-orange-800{% endif %}">
+                                                    {{ product.productType == 'sifir' ? 'Sıfır' : 'İkinci El' }}
+                                                </span>
+                            {% endif %}
+                                            </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                            <a href="{{ path('public_product_detail', {id: product.id}) }}" 
+                               class="hover:text-primary-600 transition-colors">
+                                {{ product.name }}
+                            </a>
+                        </h3>
+                        
+                        {% if product.brand %}
+                            <p class="text-gray-600 text-sm mb-2">
+                                <span class="font-medium">Marka:</span> {{ product.brand }}
+                                {% if product.modelType %} - {{ product.modelType }}{% endif %}
+                            </p>
+                                        {% endif %}
+                                        
+                                        {% if product.company %}
+                            <p class="text-gray-600 text-sm mb-3">
+                                <span class="font-medium">Firma:</span> 
+                                <a href="{{ path('public_company_detail', {id: product.company.id}) }}" 
+                                   class="text-primary-600 hover:text-primary-700">
+                                    {{ product.company.name }}
+                                </a>
+                            </p>
+                                        {% endif %}
+                        
+                        <a href="{{ path('public_product_detail', {id: product.id}) }}" 
+                           class="inline-flex items-center text-primary-600 font-medium text-sm hover:text-primary-700 transition-colors">
+                            Detayları Gör
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+        
+        <div class="text-center mt-8 sm:hidden">
+            <a href="{{ path('public_products') }}" 
+               class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
+                Tüm Ürünler
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Companies -->
+<section class="bg-gray-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-12">
+            <div>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Güvenilir Firmalar</h2>
+                <p class="text-lg text-gray-600">Sektöründe öncü firmalar</p>
+            </div>
+            <a href="{{ path('public_companies') }}" 
+               class="hidden sm:flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
+                Tüm Firmalar
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for company in featuredCompanies %}
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-center mb-4">
+                        {% if company.logoPath %}
+                            <img src="{{ asset(company.logoPath) }}" 
+                                 alt="{{ company.name }}" 
+                                 class="w-12 h-12 rounded-lg object-cover mr-4">
+                {% else %}
+                            <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
+                                <span class="text-lg font-bold text-primary-600">
+                                    {{ company.name|slice(0,1)|upper }}
+                                </span>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">
+                                <a href="{{ path('public_company_detail', {id: company.id}) }}" 
+                                   class="hover:text-primary-600 transition-colors">
+                                    {{ company.name }}
+                                </a>
+                            </h3>
+                            {% if company.activityType %}
+                                <p class="text-gray-600 text-sm">{{ company.activityType }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if company.about %}
+                        <p class="text-gray-600 text-sm mb-4">
+                            {{ company.about|slice(0, 120) }}{% if company.about|length > 120 %}...{% endif %}
+                        </p>
+                    {% endif %}
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-500">
+                            {% if company.foundedYear %}
+                                <span class="font-medium">Kuruluş:</span> {{ company.foundedYear }}
+                {% endif %}
+            </div>
+                        <a href="{{ path('public_company_detail', {id: company.id}) }}" 
+                           class="inline-flex items-center text-primary-600 font-medium text-sm hover:text-primary-700 transition-colors">
+                            Detaylar
+                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-8 sm:hidden">
+            <a href="{{ path('public_companies') }}" 
+               class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
+                Tüm Firmalar
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+    
+<!-- CTA Section -->
+<section class="bg-primary-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">Firmanızı Büyütmek İçin Hazır mısınız?</h2>
+        <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">
+            Binlerce potansiyel müşteriye ulaşın. Ürünlerinizi sergileyip satışlarınızı artırın.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="{{ path('app_register') }}" 
+               class="inline-flex items-center px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+                </svg>
+                Ücretsiz Kayıt Ol
+            </a>
+            <a href="{{ path('public_companies') }}" 
+               class="inline-flex items-center px-8 py-4 border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+                Firmaları Keşfet
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -42,7 +42,7 @@ class ProductsRepository extends ServiceEntityRepository
             ->orderBy('p.id', 'DESC');
         
         if (!empty($search)) {
-            $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(p.type) LIKE LOWER(:search) OR LOWER(p.origin) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search) OR LOWER(cat.name) LIKE LOWER(:search)')
+            $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.description) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search)')
                ->setParameter('search', '%' . $search . '%');
         }
         
@@ -59,14 +59,77 @@ class ProductsRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.company', 'c')
-            ->leftJoin('p.category', 'cat')
             ->select('COUNT(p.id)');
         
         if (!empty($search)) {
-            $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(p.type) LIKE LOWER(:search) OR LOWER(p.origin) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search) OR LOWER(cat.name) LIKE LOWER(:search)')
+            $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.description) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search)')
                ->setParameter('search', '%' . $search . '%');
         }
         
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Filtrelerle ürünleri getir
+     */
+    public function findWithFilters(int $page, int $limit, string $search = '', $category = null): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.company', 'c')
+            ->leftJoin('p.category', 'cat')
+            ->orderBy('p.createdAt', 'DESC');
+        
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.description) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+        
+        if ($category) {
+            $qb->andWhere('p.category = :category')
+               ->setParameter('category', $category);
+        }
+        
+        return $qb->setFirstResult(($page - 1) * $limit)
+                 ->setMaxResults($limit)
+                 ->getQuery()
+                 ->getResult();
+    }
+    
+    /**
+     * Filtrelerle toplam ürün sayısını getir
+     */
+    public function countWithFilters(string $search = '', $category = null): int
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->leftJoin('p.company', 'c')
+            ->select('COUNT(p.id)');
+        
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.description) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+        
+        if ($category) {
+            $qb->andWhere('p.category = :category')
+               ->setParameter('category', $category);
+        }
+        
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Ürün arama
+     */
+    public function searchProducts(string $search): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.company', 'c')
+            ->leftJoin('p.category', 'cat')
+            ->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.description) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search)')
+            ->setParameter('search', '%' . $search . '%')
+            ->orderBy('p.createdAt', 'DESC')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
     }
 }
