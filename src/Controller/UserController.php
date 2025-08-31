@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/users')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_ADMIN', message: 'Bu sayfaya erişim için admin yetkisi gereklidir.')]
 class UserController extends AbstractController
 {
     #[Route('/', name: 'users_index', methods: ['GET'])]

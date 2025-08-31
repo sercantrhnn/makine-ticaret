@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/subscriptions')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_ADMIN', message: 'Bu sayfaya erişim için admin yetkisi gereklidir.')]
 class SubscriptionController extends AbstractController
 {
     public function __construct(

@@ -4,191 +4,264 @@
 {% block page_title %}Dashboard{% endblock %}
 
 {% block body %}
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <!-- Companies Stats -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                    </svg>
+    {% if 'ROLE_ADMIN' in app.user.roles %}
+        <!-- Admin Dashboard - Tüm istatistikler -->
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- Companies Stats -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Toplam Firma</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ stats.companies }}</p>
+                    </div>
                 </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Toplam Firma</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ stats.companies }}</p>
+            </div>
+
+            <!-- Categories Stats -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Toplam Kategori</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ stats.categories }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Products Stats -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-600">Toplam Ürün</p>
+                        <p class="text-2xl font-semibold text-gray-900">{{ stats.products }}</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Categories Stats -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 rounded-full bg-green-100 text-green-600">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
+        <!-- Recent Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Products -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900">Son Eklenen Ürünler</h3>
                 </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Toplam Kategori</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ stats.categories }}</p>
+                <div class="p-6">
+                    {% if recentProducts|length > 0 %}
+                        <div class="space-y-4">
+                            {% for product in recentProducts %}
+                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ product.name }}</p>
+                                        <p class="text-sm text-gray-500">
+                                            {% if product.company %}
+                                                {{ product.company.name }}
+                                            {% else %}
+                                                Firma belirtilmemiş
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <a href="{{ path('products_show', {'id': product.id}) }}" 
+                                       class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                        Görüntüle
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ path('products_index') }}" 
+                               class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                Tüm ürünleri görüntüle →
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500 text-center py-8">Henüz ürün eklenmemiş</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Recent Companies -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900">Son Eklenen Firmalar</h3>
+                </div>
+                <div class="p-6">
+                    {% if recentCompanies|length > 0 %}
+                        <div class="space-y-4">
+                            {% for company in recentCompanies %}
+                                <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
+                                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-900 truncate">{{ company.name }}</p>
+                                        <p class="text-sm text-gray-500">
+                                            {% if company.activityType %}
+                                                {{ company.activityType }}
+                                            {% else %}
+                                                Faaliyet türü belirtilmemiş
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <a href="{{ path('companies_show', {'id': company.id}) }}" 
+                                       class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                        Görüntüle
+                                    </a>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ path('companies_index') }}" 
+                               class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                                Tüm firmaları görüntüle →
+                            </a>
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500 text-center py-8">Henüz firma eklenmemiş</p>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <!-- Products Stats -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <div class="flex items-center">
-                <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                    </svg>
-                </div>
-                <div class="ml-4">
-                    <p class="text-sm font-medium text-gray-600">Toplam Ürün</p>
-                    <p class="text-2xl font-semibold text-gray-900">{{ stats.products }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Content -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Recent Products -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+        <!-- Quick Actions -->
+        <div class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
             <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Son Eklenen Ürünler</h3>
+                <h3 class="text-lg font-medium text-gray-900">Hızlı İşlemler</h3>
             </div>
             <div class="p-6">
-                {% if recentProducts|length > 0 %}
-                    <div class="space-y-4">
-                        {% for product in recentProducts %}
-                            <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                                    </svg>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 truncate">{{ product.name }}</p>
-                                    <p class="text-sm text-gray-500">
-                                        {% if product.company %}
-                                            {{ product.company.name }}
-                                        {% else %}
-                                            Firma belirtilmemiş
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                <a href="{{ path('products_show', {'id': product.id}) }}" 
-                                   class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                                    Görüntüle
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="mt-4">
-                        <a href="{{ path('products_index') }}" 
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            Tüm ürünleri görüntüle →
-                        </a>
-                    </div>
-                {% else %}
-                    <p class="text-gray-500 text-center py-8">Henüz ürün eklenmemiş</p>
-                {% endif %}
-            </div>
-        </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <a href="{{ path('companies_new') }}" 
+                       class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors">
+                        <div class="p-2 bg-blue-100 rounded-lg">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Yeni Firma Ekle</p>
+                            <p class="text-sm text-gray-500">Sisteme yeni firma kaydı</p>
+                        </div>
+                    </a>
 
-        <!-- Recent Companies -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <div class="px-6 py-4 border-b border-gray-200">
-                <h3 class="text-lg font-medium text-gray-900">Son Eklenen Firmalar</h3>
-            </div>
-            <div class="p-6">
-                {% if recentCompanies|length > 0 %}
-                    <div class="space-y-4">
-                        {% for company in recentCompanies %}
-                            <div class="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                                <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                                    </svg>
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <p class="text-sm font-medium text-gray-900 truncate">{{ company.name }}</p>
-                                    <p class="text-sm text-gray-500">
-                                        {% if company.activityType %}
-                                            {{ company.activityType }}
-                                        {% else %}
-                                            Faaliyet türü belirtilmemiş
-                                        {% endif %}
-                                    </p>
-                                </div>
-                                <a href="{{ path('companies_show', {'id': company.id}) }}" 
-                                   class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                                    Görüntüle
-                                </a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="mt-4">
-                        <a href="{{ path('companies_index') }}" 
-                           class="text-primary-600 hover:text-primary-700 text-sm font-medium">
-                            Tüm firmaları görüntüle →
-                        </a>
-                    </div>
-                {% else %}
-                    <p class="text-gray-500 text-center py-8">Henüz firma eklenmemiş</p>
-                {% endif %}
-            </div>
-        </div>
-    </div>
+                    <a href="{{ path('categories_new') }}" 
+                       class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors">
+                        <div class="p-2 bg-green-100 rounded-lg">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Yeni Kategori Ekle</p>
+                            <p class="text-sm text-gray-500">Ürün kategorisi oluştur</p>
+                        </div>
+                    </a>
 
-    <!-- Quick Actions -->
-    <div class="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-medium text-gray-900">Hızlı İşlemler</h3>
+                    <a href="{{ path('products_new') }}" 
+                       class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors">
+                        <div class="p-2 bg-purple-100 rounded-lg">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900">Yeni Ürün Ekle</p>
+                            <p class="text-sm text-gray-500">Ürün kataloğuna ekle</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="p-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <a href="{{ path('companies_new') }}" 
-                   class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors">
-                    <div class="p-2 bg-blue-100 rounded-lg">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+    {% else %}
+        <!-- Subscriber Dashboard - Sadece İhaleler -->
+        <div class="max-w-4xl mx-auto">
+            <!-- Welcome Message -->
+            <div class="bg-gradient-to-r from-orange-600 to-orange-700 rounded-lg p-6 mb-8 text-white">
+                <div class="flex items-center">
+                    <div class="p-3 bg-white bg-opacity-20 rounded-lg">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                         </svg>
                     </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-900">Yeni Firma Ekle</p>
-                        <p class="text-sm text-gray-500">Sisteme yeni firma kaydı</p>
+                    <div class="ml-4">
+                        <h2 class="text-2xl font-bold">İhale Yönetim Paneli</h2>
+                        <p class="text-orange-100">İhalelerinizi yönetin ve takip edin</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <a href="{{ path('app_bids_new') }}" 
+                   class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:border-orange-300 hover:bg-orange-50 transition-colors">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-orange-100 rounded-lg">
+                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">Yeni İhale Oluştur</h3>
+                            <p class="text-sm text-gray-600">Yeni bir ihale başlatın</p>
+                        </div>
                     </div>
                 </a>
 
-                <a href="{{ path('categories_new') }}" 
-                   class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors">
-                    <div class="p-2 bg-green-100 rounded-lg">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-900">Yeni Kategori Ekle</p>
-                        <p class="text-sm text-gray-500">Ürün kategorisi oluştur</p>
-                    </div>
-                </a>
-
-                <a href="{{ path('products_new') }}" 
-                   class="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors">
-                    <div class="p-2 bg-purple-100 rounded-lg">
-                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-900">Yeni Ürün Ekle</p>
-                        <p class="text-sm text-gray-500">Ürün kataloğuna ekle</p>
+                <a href="{{ path('app_bids_index') }}" 
+                   class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:border-orange-300 hover:bg-orange-50 transition-colors">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-orange-100 rounded-lg">
+                            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                            </svg>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-lg font-semibold text-gray-900">İhalelerimi Görüntüle</h3>
+                            <p class="text-sm text-gray-600">Mevcut ihalelerinizi yönetin</p>
+                        </div>
                     </div>
                 </a>
             </div>
+
+            <!-- Info Card -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h4 class="text-lg font-medium text-blue-800">İhale Yönetimi</h4>
+                        <p class="mt-2 text-sm text-blue-700">
+                            Bu panelde sadece ihalelerinizi yönetebilirsiniz. Yeni ihale oluşturabilir, 
+                            mevcut ihalelerinizi görüntüleyebilir ve düzenleyebilirsiniz. 
+                            Firma, kategori ve ürün yönetimi için admin yetkisi gereklidir.
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}

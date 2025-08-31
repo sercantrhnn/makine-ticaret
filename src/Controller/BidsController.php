@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin/bids')]
-#[IsGranted('ROLE_ADMIN')]
+#[IsGranted('ROLE_SUBSCRIBER')]
 class BidsController extends AbstractController
 {
     public function __construct(
