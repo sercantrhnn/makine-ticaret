@@ -34,15 +34,21 @@ class BidsController extends AbstractController
         $user = $this->getUser();
         $bids = [];
 
-        // Kullanıcının şirketlerindeki tüm ihaleleri getir
-        foreach ($user->getCompanies() as $company) {
-            foreach ($company->getBids() as $bid) {
-                $bids[] = $bid;
+        // Admin kullanıcıları tüm ihaleleri görebilir
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            $bids = $this->bidsRepository->findAll();
+        } else {
+            // Normal kullanıcılar sadece kendi şirketlerindeki ihaleleri görebilir
+            foreach ($user->getCompanies() as $company) {
+                foreach ($company->getBids() as $bid) {
+                    $bids[] = $bid;
+                }
             }
         }
 
         return $this->render('admin/bids/index.html.twig', [
             'bids' => $bids,
+            'isAdmin' => in_array('ROLE_ADMIN', $user->getRoles()),
         ]);
     }
 
@@ -80,24 +86,39 @@ class BidsController extends AbstractController
     #[Route('/{id}', name: 'app_bids_show', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function show(Bids $bid): Response
     {
-        // Kullanıcının bu ihale üzerinde yetkisi var mı kontrol et
         $user = $this->getUser();
-        if (!$this->isUserAuthorizedForBid($bid, $user)) {
-            throw $this->createAccessDeniedException('Bu ihale için yetkiniz bulunmamaktadır.');
+        
+        // Admin kullanıcıları tüm ihaleleri görebilir
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            // Normal kullanıcılar sadece kendi şirketlerindeki ihaleleri görebilir
+            if (!$this->isUserAuthorizedForBid($bid, $user)) {
+                throw $this->createAccessDeniedException('Bu ihale için yetkiniz bulunmamaktadır.');
+            }
         }
 
         return $this->render('admin/bids/show.html.twig', [
             'bid' => $bid,
+            'isAdmin' => in_array('ROLE_ADMIN', $user->getRoles()),
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_bids_edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, Bids $bid): Response
     {
-        // Kullanıcının bu ihale üzerinde yetkisi var mı kontrol et
         $user = $this->getUser();
-        if (!$this->isUserAuthorizedForBid($bid, $user)) {
-            throw $this->createAccessDeniedException('Bu ihale için yetkiniz bulunmamaktadır.');
+        
+        // Admin kullanıcıları tüm ihaleleri düzenleyebilir
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            // Normal kullanıcılar sadece kendi şirketlerindeki ihaleleri düzenleyebilir
+            if (!$this->isUserAuthorizedForBid($bid, $user)) {
+                throw $this->createAccessDeniedException('Bu ihale için yetkiniz bulunmamaktadır.');
+            }
+            
+            // Normal kullanıcılar sadece 'pending' durumundaki ihaleleri düzenleyebilir
+            if ($bid->getStatus() !== 'pending') {
+                $this->addFlash('error', 'Onaylanmış veya reddedilmiş ihaleler düzenlenemez.');
+                return $this->redirectToRoute('app_bids_show', ['id' => $bid->getId()], Response::HTTP_SEE_OTHER);
+            }
         }
 
         $form = $this->createForm(BidsType::class, $bid);
@@ -117,16 +138,21 @@ class BidsController extends AbstractController
         return $this->render('admin/bids/edit.html.twig', [
             'bid' => $bid,
             'form' => $form,
+            'isAdmin' => in_array('ROLE_ADMIN', $user->getRoles()),
         ]);
     }
 
     #[Route('/{id}', name: 'app_bids_delete', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function delete(Request $request, Bids $bid): Response
     {
-        // Kullanıcının bu ihale üzerinde yetkisi var mı kontrol et
         $user = $this->getUser();
-        if (!$this->isUserAuthorizedForBid($bid, $user)) {
-            throw $this->createAccessDeniedException('Bu ihale için yetkiniz bulunmamaktadır.');
+        
+        // Admin kullanıcıları tüm ihaleleri silebilir
+        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+            // Normal kullanıcılar sadece kendi şirketlerindeki ihaleleri silebilir
+            if (!$this->isUserAuthorizedForBid($bid, $user)) {
+                throw $this->createAccessDeniedException('Bu ihale için yetkiniz bulunmamaktadır.');
+            }
         }
 
         if ($this->isCsrfTokenValid('delete'.$bid->getId(), $request->request->get('_token'))) {
@@ -137,6 +163,30 @@ class BidsController extends AbstractController
         }
 
         return $this->redirectToRoute('app_bids_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/approve', name: 'app_bids_approve', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function approve(Bids $bid): Response
+    {
+        $bid->setStatus('approved');
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'İhale başarıyla onaylandı.');
+
+        return $this->redirectToRoute('app_bids_show', ['id' => $bid->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/reject', name: 'app_bids_reject', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[IsGranted('ROLE_ADMIN')]
+    public function reject(Bids $bid): Response
+    {
+        $bid->setStatus('rejected');
+        $this->entityManager->flush();
+
+        $this->addFlash('success', 'İhale reddedildi.');
+
+        return $this->redirectToRoute('app_bids_show', ['id' => $bid->getId()], Response::HTTP_SEE_OTHER);
     }
 
     #[Route('/api/products-by-company/{companyId}', name: 'app_bids_products_by_company', methods: ['GET'], requirements: ['companyId' => '\d+'])]

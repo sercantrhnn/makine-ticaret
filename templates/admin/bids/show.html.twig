@@ -45,12 +45,16 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Durum</label>
                             {% set statusClasses = {
                                 'pending': 'bg-yellow-100 text-yellow-800',
-                                'active': 'bg-green-100 text-green-800',
-                                'completed': 'bg-blue-100 text-blue-800',
+                                'approved': 'bg-green-100 text-green-800',
+                                'rejected': 'bg-red-100 text-red-800',
+                                'active': 'bg-blue-100 text-blue-800',
+                                'completed': 'bg-gray-100 text-gray-800',
                                 'cancelled': 'bg-red-100 text-red-800'
                             } %}
                             <span class="inline-flex px-3 py-1 text-sm font-semibold rounded-full {{ statusClasses[bid.status] ?? 'bg-gray-100 text-gray-800' }}">
                                 {% if bid.status == 'pending' %}Beklemede
+                                {% elseif bid.status == 'approved' %}Onaylandı
+                                {% elseif bid.status == 'rejected' %}Reddedildi
                                 {% elseif bid.status == 'active' %}Aktif
                                 {% elseif bid.status == 'completed' %}Tamamlandı
                                 {% elseif bid.status == 'cancelled' %}İptal Edildi
@@ -160,12 +164,41 @@
                     <h3 class="text-lg font-medium text-gray-900">İşlemler</h3>
                 </div>
                 <div class="p-6 space-y-3">
-                    <a href="{{ path('app_bids_edit', {'id': bid.id}) }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                        İhaleyi Düzenle
-                    </a>
+                    {% if isAdmin %}
+                        <!-- Admin işlemleri -->
+                        {% if bid.status == 'pending' %}
+                            <button onclick="approveBid({{ bid.id }})" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-green-700 bg-green-100 hover:bg-green-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                İhaleyi Onayla
+                            </button>
+                            <button onclick="rejectBid({{ bid.id }})" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                İhaleyi Reddet
+                            </button>
+                        {% endif %}
+                    {% else %}
+                        <!-- Normal kullanıcı işlemleri -->
+                        {% if bid.status == 'pending' %}
+                            <a href="{{ path('app_bids_edit', {'id': bid.id}) }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                                İhaleyi Düzenle
+                            </a>
+                        {% else %}
+                            <div class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-500 bg-gray-100 cursor-not-allowed">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                                Düzenleme Kilitli
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                    
                     <a href="{{ path('app_bids_index') }}" class="w-full inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -213,6 +246,40 @@ function deleteBid(bidId) {
         const form = document.getElementById('delete-form');
         form.action = `/admin/bids/${bidId}`;
         form.querySelector('input[name="_token"]').value = '{{ csrf_token('delete') }}';
+        form.submit();
+    }
+}
+
+function approveBid(bidId) {
+    if (confirm('Bu ihale onaylanacak. Emin misiniz?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/bids/${bidId}/approve`;
+        
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '_token';
+        tokenInput.value = '{{ csrf_token('approve') }}';
+        
+        form.appendChild(tokenInput);
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+
+function rejectBid(bidId) {
+    if (confirm('Bu ihale reddedilecek. Emin misiniz?')) {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/admin/bids/${bidId}/reject`;
+        
+        const tokenInput = document.createElement('input');
+        tokenInput.type = 'hidden';
+        tokenInput.name = '_token';
+        tokenInput.value = '{{ csrf_token('reject') }}';
+        
+        form.appendChild(tokenInput);
+        document.body.appendChild(form);
         form.submit();
     }
 }
