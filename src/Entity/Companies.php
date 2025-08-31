@@ -82,9 +82,15 @@ class Companies
     #[ORM\OrderBy(['id' => 'DESC'])]
     private Collection $products;
 
+    /** @var Collection<int, Bids> */
+    #[ORM\OneToMany(mappedBy: 'company', targetEntity: Bids::class)]
+    #[ORM\OrderBy(['id' => 'DESC'])]
+    private Collection $bids;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->bids = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -337,6 +343,31 @@ class Companies
     {
         $this->owner = $owner;
 
+        return $this;
+    }
+
+    /** @return Collection<int, Bids> */
+    public function getBids(): Collection
+    {
+        return $this->bids;
+    }
+
+    public function addBid(Bids $bid): static
+    {
+        if (!$this->bids->contains($bid)) {
+            $this->bids->add($bid);
+            $bid->setCompany($this);
+        }
+        return $this;
+    }
+
+    public function removeBid(Bids $bid): static
+    {
+        if ($this->bids->removeElement($bid)) {
+            if ($bid->getCompany() === $this) {
+                $bid->setCompany(null);
+            }
+        }
         return $this;
     }
 }

@@ -73,10 +73,16 @@ class Products
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Categories $category = null;
 
+    /** @var Collection<int, Bids> */
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Bids::class)]
+    #[ORM\OrderBy(['id' => 'DESC'])]
+    private Collection $bids;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->bids = new ArrayCollection();
         $this->productStatus = 'satilik'; // Ürün durumu varsayılan olarak satılık
         $this->productType = 'sifir'; // Ürün türü varsayılan olarak sıfır
         $this->createdAt = new \DateTime();
@@ -298,5 +304,30 @@ class Products
             // Yıl + Ay + Gün + Saat + Dakika + Saniye + Mikrosaniye formatında benzersiz liste no oluştur
             $this->listingNo = 'LN' . date('YmdHis') . substr(microtime(), 2, 3);
         }
+    }
+
+    /** @return Collection<int, Bids> */
+    public function getBids(): Collection
+    {
+        return $this->bids;
+    }
+
+    public function addBid(Bids $bid): static
+    {
+        if (!$this->bids->contains($bid)) {
+            $this->bids->add($bid);
+            $bid->setProduct($this);
+        }
+        return $this;
+    }
+
+    public function removeBid(Bids $bid): static
+    {
+        if ($this->bids->removeElement($bid)) {
+            if ($bid->getProduct() === $this) {
+                $bid->setProduct(null);
+            }
+        }
+        return $this;
     }
 }
