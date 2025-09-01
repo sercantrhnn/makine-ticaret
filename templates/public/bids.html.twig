@@ -1,0 +1,199 @@
+{% extends 'public/base.html.twig' %}
+
+{% block title %}İhaleler - Makine Ticaret{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">
+                    İhaleler
+                </h1>
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+                    Onaylanan ve aktif durumda olan tüm ihaleleri keşfedin
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search & Filter Section -->
+    <section class="bg-white shadow-sm border-b border-gray-200 py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <form method="GET" class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="flex-1 w-full">
+                    <div class="relative">
+                        <input type="text" 
+                               name="search" 
+                               value="{{ search }}"
+                               placeholder="İhale, ürün, firma adında arayın..."
+                               class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg">
+                    <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Ara
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Results Info -->
+    <section class="py-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">İhaleler</h2>
+                    <p class="text-gray-600">
+                        {% if search %}
+                            "{{ search }}" için <strong>{{ totalBids }}</strong> ihale bulundu
+                        {% else %}
+                            Toplam <strong>{{ totalBids }}</strong> onaylı ihale
+                        {% endif %}
+                    </p>
+                </div>
+                {% if search %}
+                    <a href="{{ path('public_bids') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        Aramayı Temizle
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Bids Grid -->
+    <section class="pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {% if bids|length > 0 %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {% for bid in bids %}
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100 group">
+                            <!-- Status Badge -->
+                            {% set now = date() %}
+                            {% set endTime = bid.endTime %}
+                            {% if endTime > now %}
+                                <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2 text-sm font-medium">
+                                    Aktif İhale
+                                </div>
+                            {% else %}
+                                <div class="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-4 py-2 text-sm font-medium">
+                                    Onaylı İhale
+                                </div>
+                            {% endif %}
+                            
+                            <div class="p-5">
+                                <!-- Product Info -->
+                                <div class="mb-4">
+                                    <h3 class="text-md font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                        {{ bid.product.name }}
+                                    </h3>
+                                    <div class="space-y-1">
+                                        <p class="text-sm text-gray-600">{{ bid.product.brand }} - {{ bid.product.modelType }}</p>
+                                        <p class="text-xs text-blue-600 font-medium">{{ bid.company.name }}</p>
+                                        {% if bid.product.category %}
+                                            <span class="inline-block bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded mt-1">
+                                                {{ bid.product.category.name }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                                <!-- Price & Time Info -->
+                                <div class="mb-4 space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-500">Başlangıç Fiyatı</span>
+                                        <span class="text-lg font-bold text-emerald-600">₺{{ bid.startingPrice|number_format }}</span>
+                                    </div>
+                                    {% if endTime > now %}
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs text-gray-500">Bitiş Tarihi</span>
+                                            <span class="text-xs font-medium text-orange-600">{{ endTime|date('d.m.Y') }}</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-xs text-gray-500">İhale Tarihi</span>
+                                            <span class="text-xs font-medium text-gray-600">{{ bid.createdAt|date('d.m.Y') }}</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <!-- Action Button -->
+                                <a href="{{ path('public_bid_detail', {'id': bid.id}) }}" 
+                                   class="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2.5 px-4 rounded-md text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 group-hover:shadow-md">
+                                    İhale Detayı
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                {% if totalPages > 1 %}
+                    <div class="mt-12 flex justify-center">
+                        <div class="flex items-center space-x-2">
+                            {% if currentPage > 1 %}
+                                <a href="{{ path('public_bids', {page: currentPage - 1, search: search}) }}" class="px-3 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </a>
+                            {% endif %}
+
+                            {% for page in 1..totalPages %}
+                                                            {% if page == currentPage %}
+                                <span class="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold">{{ page }}</span>
+                                {% elseif page == 1 or page == totalPages or (page >= currentPage - 2 and page <= currentPage + 2) %}
+                                    <a href="{{ path('public_bids', {page: page, search: search}) }}" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors">{{ page }}</a>
+                                {% elseif page == currentPage - 3 or page == currentPage + 3 %}
+                                    <span class="px-2 py-2 text-gray-400">...</span>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if currentPage < totalPages %}
+                                <a href="{{ path('public_bids', {page: currentPage + 1, search: search}) }}" class="px-3 py-2 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% else %}
+                <!-- Empty State -->
+                <div class="text-center py-16">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    {% if search %}
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Arama Sonucu Bulunamadı</h3>
+                        <p class="text-gray-600 mb-6">"{{ search }}" araması için hiçbir ihale bulunamadı.</p>
+                        <a href="{{ path('public_bids') }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300">
+                            Tüm İhaleleri Görüntüle
+                        </a>
+                    {% else %}
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Henüz İhale Bulunmuyor</h3>
+                        <p class="text-gray-600 mb-6">Şu anda onaylanmış ihale bulunmamaktadır.</p>
+                        <a href="{{ path('public_home') }}" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300">
+                            Ana Sayfaya Dön
+                        </a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

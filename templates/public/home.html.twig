@@ -7,16 +7,16 @@
 <!-- Hero Section with Slider -->
 <section class="relative overflow-hidden">
     <!-- Background Slider -->
-    <div x-data="{ 
+    <div x-data="{
         currentSlide: 0,
         slides: [
             {
-                image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+                image: 'https://images.unsplash.com/photo-1496247749665-49cf5b1022e9?q=80&w=2673&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                 title: 'Endüstriyel Çözümler',
                 subtitle: 'Modern fabrika ve üretim teknolojileri'
             },
             {
-                image: 'https://images.unsplash.com/photo-1559941954-cdc4dc0ad75e?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80',
+                image: 'https://images.unsplash.com/photo-1522322512347-a0e57fd1744c?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
                 title: 'İnşaat Makineleri',
                 subtitle: 'Güçlü ve dayanıklı inşaat ekipmanları'
             },
@@ -27,9 +27,9 @@
             }
         ]
     }"
-    x-init="setInterval(() => { currentSlide = (currentSlide + 1) % slides.length }, 5000)"
+    x-init="setInterval(() => { currentSlide = (currentSlide + 1) % slides.length }, 8000)"
     class="relative h-screen">
-        
+
         <!-- Slide Images -->
         <template x-for="(slide, index) in slides" :key="index">
             <div x-show="currentSlide === index"
@@ -45,7 +45,7 @@
                 <div class="absolute inset-0 bg-black bg-opacity-50"></div>
             </div>
         </template>
-        
+
         <!-- Hero Content -->
         <div class="relative z-10 flex items-center justify-center h-full">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
@@ -57,7 +57,7 @@
                         Türkiye'nin En Güvenilir Platformu
                     </div>
                 </div>
-                
+
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
                     <span class="block">Türkiye'nin En Büyük</span>
                     <span class="block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
@@ -65,21 +65,21 @@
                     </span>
                     <span class="block">Platformu</span>
                 </h1>
-                
+
                 <p class="text-xl md:text-2xl mb-12 text-gray-200 max-w-4xl mx-auto leading-relaxed">
                     Binlerce güvenilir firma, on binlerce kaliteli ürün. Sanayi sektöründe aradığınız her şey burada.
                     <span class="block mt-2 text-lg">
                         🏭 Endüstri • 🚜 Tarım • 🏗️ İnşaat • ⚙️ Makine
                                     </span>
                 </p>
-                
+
                 <!-- Search Bar -->
                 <form action="{{ path('public_products') }}" method="GET" class="max-w-3xl mx-auto mb-8">
                     <div class="flex flex-col sm:flex-row gap-4">
                         <div class="flex-1 relative">
-                            <input type="text" 
-                                   name="search" 
-                                   placeholder="🔍 Makine, ürün, firma veya kategori arayın..." 
+                            <input type="text"
+                                   name="search"
+                                   placeholder="🔍 Makine, ürün, firma veya kategori arayın..."
                                    value="{{ search }}"
                                    class="w-full px-8 py-5 text-gray-900 text-lg rounded-xl border-0 focus:ring-4 focus:ring-yellow-300 shadow-2xl backdrop-blur-sm bg-white bg-opacity-95 placeholder-gray-500">
                             <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
@@ -98,24 +98,24 @@
                         </button>
                     </div>
                 </form>
-                
+
                 <!-- Quick Action Buttons -->
                 <div class="flex flex-wrap justify-center gap-4">
-                    <a href="{{ path('public_products') }}" 
+                    <a href="{{ path('public_products') }}"
                        class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
                         Ürünler
                     </a>
-                    <a href="{{ path('public_companies') }}" 
+                    <a href="{{ path('public_companies') }}"
                        class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                         Firmalar
                     </a>
-                    <a href="{{ path('public_categories') }}" 
+                    <a href="{{ path('public_categories') }}"
                        class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
@@ -125,7 +125,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Slide Indicators -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
             <div class="flex space-x-2">
@@ -136,7 +136,7 @@
                 </template>
             </div>
         </div>
-        
+
         <!-- Slide Navigation Arrows -->
         <button @click="currentSlide = currentSlide === 0 ? slides.length - 1 : currentSlide - 1"
                 class="absolute left-4 top-1/2 transform -translate-y-1/2 z-20 p-2 bg-white bg-opacity-20 rounded-full hover:bg-opacity-30 transition-all backdrop-blur-sm">
@@ -150,7 +150,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
         </button>
-        
+
         <!-- Scroll Down Indicator -->
         <div class="absolute bottom-8 right-8 z-20 animate-bounce">
             <div class="flex flex-col items-center text-white">
@@ -164,7 +164,7 @@
 </section>
 
 <!-- Stats Section -->
-<section class="bg-gradient-to-b from-gray-50 to-white py-20">
+<section class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Section Header -->
         <div class="text-center mb-16">
@@ -249,7 +249,7 @@
                 <div class="text-sm text-gray-500 mt-1">🎯 Uzman Kadro</div>
             </div>
                     </div>
-                    
+
         <!-- Trust Indicators -->
         <div class="mt-16 bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-8 text-center">
             <h3 class="text-2xl font-bold text-white mb-6">
@@ -295,7 +295,7 @@
 </section>
 
 <!-- Featured Categories -->
-<section class="bg-gray-50 py-16">
+<section class="bg-gradient-to-br from-gray-50 via-slate-50 to-zinc-50 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -305,13 +305,13 @@
                 En çok aranan sanayi kategorilerinde binlerce kaliteli ürün. İhtiyacınıza uygun kategoriyi seçin.
                                 </p>
                             </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% set categoryIcons = [
                 '🏭', '⚙️', '🚜', '🏗️', '🔧', '⚡', '🚛', '💡'
             ] %}
             {% for category in categories %}
-                <a href="{{ path('public_products', {category: category.id}) }}" 
+                <a href="{{ path('public_products', {category: category.id}) }}"
                    class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-xl hover:border-primary-300 transition-all duration-300 group transform hover:-translate-y-2">
                     <!-- Category Icon with Gradient -->
                     <div class="relative mb-4">
@@ -321,17 +321,17 @@
                         <!-- Glow Effect -->
                         <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-16 h-16 bg-primary-400 rounded-2xl opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-xl"></div>
                     </div>
-                    
+
                     <h3 class="text-lg font-semibold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors text-center">
                         {{ category.name }}
                     </h3>
-                    
+
                     {% if category.description %}
                         <p class="text-gray-600 text-sm text-center mb-4">
                             {{ category.description|slice(0, 80) }}{% if category.description|length > 80 %}...{% endif %}
                         </p>
                                     {% endif %}
-                                    
+
                     <div class="text-center">
                         <div class="inline-flex items-center text-primary-600 text-sm font-medium group-hover:text-primary-700 transition-colors">
                             <span>Ürünleri Keşfet</span>
@@ -340,15 +340,15 @@
                             </svg>
                         </div>
                     </div>
-                    
+
                     <!-- Hover Border Effect -->
                     <div class="absolute inset-0 border-2 border-primary-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                                                 </a>
                                             {% endfor %}
                                         </div>
-        
+
         <div class="text-center mt-8">
-            <a href="{{ path('public_categories') }}" 
+            <a href="{{ path('public_categories') }}"
                class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
                 Tüm Kategoriler
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -360,14 +360,14 @@
 </section>
 
 <!-- Featured Products -->
-<section class="bg-white py-16">
+<section class="bg-gradient-to-br from-white via-blue-50 to-slate-50 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-12">
             <div>
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Öne Çıkan Ürünler</h2>
                 <p class="text-lg text-gray-600">En yeni ve kaliteli ürünler</p>
             </div>
-            <a href="{{ path('public_products') }}" 
+            <a href="{{ path('public_products') }}"
                class="hidden sm:flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
                 Tüm Ürünler
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -375,15 +375,15 @@
                 </svg>
             </a>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {% for product in featuredProducts %}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                     <!-- Product Image Placeholder -->
                     <div class="h-48 bg-gray-100 flex items-center justify-center">
                         {% if product.images|length > 0 %}
-                            <img src="{{ asset(product.images.first.imagePath) }}" 
-                                 alt="{{ product.name }}" 
+                            <img src="{{ asset(product.images.first.imagePath) }}"
+                                 alt="{{ product.name }}"
                                  class="w-full h-full object-cover">
                         {% else %}
                             <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -391,7 +391,7 @@
                             </svg>
                         {% endif %}
                     </div>
-                    
+
                                 <div class="p-6">
                         <div class="flex items-center justify-between mb-2">
                                         <span class="px-2 py-1 text-xs font-medium rounded-full {% if product.productStatus == 'satilik' %}bg-green-100 text-green-800{% else %}bg-blue-100 text-blue-800{% endif %}">
@@ -403,32 +403,32 @@
                                                 </span>
                             {% endif %}
                                             </div>
-                        
+
                         <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                            <a href="{{ path('public_product_detail', {id: product.id}) }}" 
+                            <a href="{{ path('public_product_detail', {id: product.id}) }}"
                                class="hover:text-primary-600 transition-colors">
                                 {{ product.name }}
                             </a>
                         </h3>
-                        
+
                         {% if product.brand %}
                             <p class="text-gray-600 text-sm mb-2">
                                 <span class="font-medium">Marka:</span> {{ product.brand }}
                                 {% if product.modelType %} - {{ product.modelType }}{% endif %}
                             </p>
                                         {% endif %}
-                                        
+
                                         {% if product.company %}
                             <p class="text-gray-600 text-sm mb-3">
-                                <span class="font-medium">Firma:</span> 
-                                <a href="{{ path('public_company_detail', {id: product.company.id}) }}" 
+                                <span class="font-medium">Firma:</span>
+                                <a href="{{ path('public_company_detail', {id: product.company.id}) }}"
                                    class="text-primary-600 hover:text-primary-700">
                                     {{ product.company.name }}
                                 </a>
                             </p>
                                         {% endif %}
-                        
-                        <a href="{{ path('public_product_detail', {id: product.id}) }}" 
+
+                        <a href="{{ path('public_product_detail', {id: product.id}) }}"
                            class="inline-flex items-center text-primary-600 font-medium text-sm hover:text-primary-700 transition-colors">
                             Detayları Gör
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -439,9 +439,9 @@
                             </div>
                         {% endfor %}
                     </div>
-        
+
         <div class="text-center mt-8 sm:hidden">
-            <a href="{{ path('public_products') }}" 
+            <a href="{{ path('public_products') }}"
                class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
                 Tüm Ürünler
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -453,14 +453,14 @@
 </section>
 
 <!-- Featured Companies -->
-<section class="bg-gray-50 py-16">
+<section class="bg-gradient-to-br from-slate-50 via-gray-50 to-blue-50 py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-12">
             <div>
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Güvenilir Firmalar</h2>
                 <p class="text-lg text-gray-600">Sektöründe öncü firmalar</p>
             </div>
-            <a href="{{ path('public_companies') }}" 
+            <a href="{{ path('public_companies') }}"
                class="hidden sm:flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
                 Tüm Firmalar
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -468,14 +468,14 @@
                 </svg>
             </a>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for company in featuredCompanies %}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
                     <div class="flex items-center mb-4">
                         {% if company.logoPath %}
-                            <img src="{{ asset(company.logoPath) }}" 
-                                 alt="{{ company.name }}" 
+                            <img src="{{ asset(company.logoPath) }}"
+                                 alt="{{ company.name }}"
                                  class="w-12 h-12 rounded-lg object-cover mr-4">
                 {% else %}
                             <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4">
@@ -486,7 +486,7 @@
                         {% endif %}
                         <div>
                             <h3 class="text-lg font-semibold text-gray-900">
-                                <a href="{{ path('public_company_detail', {id: company.id}) }}" 
+                                <a href="{{ path('public_company_detail', {id: company.id}) }}"
                                    class="hover:text-primary-600 transition-colors">
                                     {{ company.name }}
                                 </a>
@@ -496,20 +496,20 @@
                             {% endif %}
                         </div>
                     </div>
-                    
+
                     {% if company.about %}
                         <p class="text-gray-600 text-sm mb-4">
                             {{ company.about|slice(0, 120) }}{% if company.about|length > 120 %}...{% endif %}
                         </p>
                     {% endif %}
-                    
+
                     <div class="flex items-center justify-between">
                         <div class="text-sm text-gray-500">
                             {% if company.foundedYear %}
                                 <span class="font-medium">Kuruluş:</span> {{ company.foundedYear }}
                 {% endif %}
             </div>
-                        <a href="{{ path('public_company_detail', {id: company.id}) }}" 
+                        <a href="{{ path('public_company_detail', {id: company.id}) }}"
                            class="inline-flex items-center text-primary-600 font-medium text-sm hover:text-primary-700 transition-colors">
                             Detaylar
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -520,9 +520,9 @@
                 </div>
             {% endfor %}
         </div>
-        
+
         <div class="text-center mt-8 sm:hidden">
-            <a href="{{ path('public_companies') }}" 
+            <a href="{{ path('public_companies') }}"
                class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-lg hover:bg-primary-50 transition-colors">
                 Tüm Firmalar
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -532,7 +532,101 @@
         </div>
     </div>
 </section>
-    
+
+<!-- Bids Section -->
+<section class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                İhaleler
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Onaylanan ve aktif durumda olan ihaleler
+            </p>
+        </div>
+
+        {% set allBids = activeBids|merge(recentBids)|slice(0, 8) %}
+        {% if allBids|length > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for bid in allBids %}
+                    <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100 group">
+                        <!-- Status Badge -->
+                        {% set now = date() %}
+                        {% set endTime = bid.endTime %}
+                        {% if endTime > now %}
+                            <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2 text-sm font-medium">
+                                Aktif İhale
+                            </div>
+                        {% else %}
+                            <div class="bg-gradient-to-r from-gray-500 to-gray-600 text-white px-4 py-2 text-sm font-medium">
+                                Onaylı İhale
+                            </div>
+                        {% endif %}
+                        
+                        <div class="p-5">
+                            <!-- Product Info -->
+                            <div class="mb-4">
+                                <h3 class="text-md font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                    {{ bid.product.name }}
+                                </h3>
+                                <div class="space-y-1">
+                                    <p class="text-sm text-gray-600">{{ bid.product.brand }} - {{ bid.product.modelType }}</p>
+                                    <p class="text-xs text-blue-600 font-medium">{{ bid.company.name }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Price & Time Info -->
+                            <div class="mb-4 space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-gray-500">Başlangıç Fiyatı</span>
+                                    <span class="text-lg font-bold text-emerald-600">₺{{ bid.startingPrice|number_format }}</span>
+                                </div>
+                                {% if endTime > now %}
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-500">Bitiş Tarihi</span>
+                                        <span class="text-xs font-medium text-orange-600">{{ endTime|date('d.m.Y') }}</span>
+                                    </div>
+                                {% else %}
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-xs text-gray-500">İhale Tarihi</span>
+                                        <span class="text-xs font-medium text-gray-600">{{ bid.createdAt|date('d.m.Y') }}</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Action Button -->
+                            <a href="{{ path('public_bid_detail', {'id': bid.id}) }}" 
+                               class="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2.5 px-4 rounded-md text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 group-hover:shadow-md">
+                                İhale Detayı
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-10">
+                <a href="{{ path('public_bids') }}" 
+                   class="inline-flex items-center px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg border-2 border-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-300 shadow-sm hover:shadow-md">
+                    <span>Tüm İhaleleri Görüntüle</span>
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Henüz İhale Bulunmuyor</h3>
+                <p class="text-gray-600">Şu anda onaylanmış ihale bulunmamaktadır.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
 <!-- CTA Section -->
 <section class="bg-primary-600 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -541,14 +635,14 @@
             Binlerce potansiyel müşteriye ulaşın. Ürünlerinizi sergileyip satışlarınızı artırın.
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{{ path('app_register') }}" 
+            <a href="{{ path('app_register') }}"
                class="inline-flex items-center px-8 py-4 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                 </svg>
                 Ücretsiz Kayıt Ol
             </a>
-            <a href="{{ path('public_companies') }}" 
+            <a href="{{ path('public_companies') }}"
                class="inline-flex items-center px-8 py-4 border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>

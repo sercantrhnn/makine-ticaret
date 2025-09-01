@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Bids;
 use App\Entity\Categories;
 use App\Entity\Companies;
 use App\Entity\Products;
+use App\Repository\BidsRepository;
 use App\Repository\CategoriesRepository;
 use App\Repository\CompaniesRepository;
 use App\Repository\ProductsRepository;
@@ -16,12 +18,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class PublicController extends AbstractController
 {
     #[Route('/', name: 'public_home')]
-    public function home(Request $request, CategoriesRepository $categoriesRepository, ProductsRepository $productsRepository, CompaniesRepository $companiesRepository): Response
+    public function home(Request $request, CategoriesRepository $categoriesRepository, ProductsRepository $productsRepository, CompaniesRepository $companiesRepository, BidsRepository $bidsRepository): Response
     {
         // Ana sayfa için featured ürünler ve şirketler
         $featuredProducts = $productsRepository->findBy([], ['createdAt' => 'DESC'], 8);
         $featuredCompanies = $companiesRepository->findBy([], ['createdAt' => 'DESC'], 6);
         $categories = $categoriesRepository->findBy(['parent' => null, 'isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC'], 8);
+        
+        // Aktif ihaleler (onaylanan ve henüz bitmemiş)
+        $activeBids = $bidsRepository->findActiveBids(6);
+        $recentBids = $bidsRepository->findApprovedBids(8);
         
         // Arama işlemi
         $search = $request->query->get('search', '');
@@ -35,6 +41,8 @@ class PublicController extends AbstractController
             'featuredProducts' => $featuredProducts,
             'featuredCompanies' => $featuredCompanies,
             'categories' => $categories,
+            'activeBids' => $activeBids,
+            'recentBids' => $recentBids,
             'search' => $search,
             'searchResults' => $searchResults,
         ]);
@@ -117,6 +125,40 @@ class PublicController extends AbstractController
         
         return $this->render('public/categories.html.twig', [
             'categories' => $categories,
+        ]);
+    }
+
+    #[Route('/bids', name: 'public_bids')]
+    public function bids(Request $request, BidsRepository $bidsRepository): Response
+    {
+        $page = $request->query->getInt('page', 1);
+        $limit = 12;
+        $search = $request->query->get('search', '');
+        
+        // Onaylanan ihaleleri getir (pagination ile)
+        $bids = $bidsRepository->findApprovedWithFilters($page, $limit, $search);
+        $totalBids = $bidsRepository->countApprovedWithFilters($search);
+        $totalPages = ceil($totalBids / $limit);
+        
+        return $this->render('public/bids.html.twig', [
+            'bids' => $bids,
+            'currentPage' => $page,
+            'totalPages' => $totalPages,
+            'totalBids' => $totalBids,
+            'search' => $search,
+        ]);
+    }
+
+    #[Route('/bid/{id}', name: 'public_bid_detail', requirements: ['id' => '\d+'])]
+    public function bidDetail(Bids $bid): Response
+    {
+        // Sadece onaylanan ihaleleri göster
+        if ($bid->getStatus() !== 'approved') {
+            throw $this->createNotFoundException('İhale bulunamadı.');
+        }
+        
+        return $this->render('public/bid_detail.html.twig', [
+            'bid' => $bid,
         ]);
     }
     

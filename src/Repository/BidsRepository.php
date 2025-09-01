@@ -16,28 +16,104 @@ class BidsRepository extends ServiceEntityRepository
         parent::__construct($registry, Bids::class);
     }
 
-    //    /**
-    //     * @return Bids[] Returns an array of Bids objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Onaylanan ihaleleri getir (en yeni önce)
+     *
+     * @return Bids[] Returns an array of approved Bids objects
+     */
+    public function findApprovedBids(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.company', 'c')
+            ->leftJoin('b.product', 'p')
+            ->addSelect('c', 'p')
+            ->andWhere('b.status = :status')
+            ->setParameter('status', 'approved')
+            ->orderBy('b.createdAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
-    //    public function findOneBySomeField($value): ?Bids
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    /**
+     * Aktif ihaleleri getir (onaylanan + henüz bitmemiş)
+     *
+     * @return Bids[] Returns an array of active Bids objects
+     */
+    public function findActiveBids(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('b')
+            ->leftJoin('b.company', 'c')
+            ->leftJoin('b.product', 'p')
+            ->addSelect('c', 'p')
+            ->andWhere('b.status = :status')
+            ->andWhere('b.end_time > :now')
+            ->setParameter('status', 'approved')
+            ->setParameter('now', new \DateTime())
+            ->orderBy('b.end_time', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * Onaylanan ihaleler için pagination ve search
+     */
+    public function findApprovedWithFilters(int $page = 1, int $limit = 12, string $search = ''): array
+    {
+        $offset = ($page - 1) * $limit;
+        
+        $qb = $this->createQueryBuilder('b')
+            ->leftJoin('b.company', 'c')
+            ->leftJoin('b.product', 'p')
+            ->leftJoin('p.category', 'cat')
+            ->addSelect('c', 'p', 'cat')
+            ->andWhere('b.status = :status')
+            ->setParameter('status', 'approved');
+
+        if (!empty($search)) {
+            $qb->andWhere('
+                b.description LIKE :search OR 
+                p.name LIKE :search OR 
+                p.brand LIKE :search OR 
+                p.modelType LIKE :search OR 
+                c.name LIKE :search
+            ')
+            ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->orderBy('b.createdAt', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Onaylanan ihaleler sayısını getir
+     */
+    public function countApprovedWithFilters(string $search = ''): int
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('COUNT(b.id)')
+            ->leftJoin('b.product', 'p')
+            ->leftJoin('b.company', 'c')
+            ->andWhere('b.status = :status')
+            ->setParameter('status', 'approved');
+
+        if (!empty($search)) {
+            $qb->andWhere('
+                b.description LIKE :search OR 
+                p.name LIKE :search OR 
+                p.brand LIKE :search OR 
+                p.modelType LIKE :search OR 
+                c.name LIKE :search
+            ')
+            ->setParameter('search', '%' . $search . '%');
+        }
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }
