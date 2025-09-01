@@ -85,8 +85,10 @@ class ProductsRepository extends ServiceEntityRepository
         }
         
         if ($category) {
-            $qb->andWhere('p.category = :category')
-               ->setParameter('category', $category);
+            // Seçilen kategori ve tüm alt kategorilerini dahil et
+            $categoryIds = $this->getAllCategoryIds($category);
+            $qb->andWhere('p.category IN (:categoryIds)')
+               ->setParameter('categoryIds', $categoryIds);
         }
         
         return $qb->setFirstResult(($page - 1) * $limit)
@@ -110,8 +112,10 @@ class ProductsRepository extends ServiceEntityRepository
         }
         
         if ($category) {
-            $qb->andWhere('p.category = :category')
-               ->setParameter('category', $category);
+            // Seçilen kategori ve tüm alt kategorilerini dahil et
+            $categoryIds = $this->getAllCategoryIds($category);
+            $qb->andWhere('p.category IN (:categoryIds)')
+               ->setParameter('categoryIds', $categoryIds);
         }
         
         return $qb->getQuery()->getSingleScalarResult();
@@ -131,5 +135,22 @@ class ProductsRepository extends ServiceEntityRepository
             ->setMaxResults(20)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Bir kategorinin kendisi ve tüm alt kategorilerinin ID'lerini getir (recursive)
+     */
+    private function getAllCategoryIds($category): array
+    {
+        $categoryIds = [$category->getId()];
+        
+        // Alt kategorileri recursive olarak ekle
+        foreach ($category->getChildren() as $child) {
+            if ($child->isActive()) {
+                $categoryIds = array_merge($categoryIds, $this->getAllCategoryIds($child));
+            }
+        }
+        
+        return $categoryIds;
     }
 }

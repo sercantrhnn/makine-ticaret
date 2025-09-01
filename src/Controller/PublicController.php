@@ -23,6 +23,8 @@ class PublicController extends AbstractController
         // Ana sayfa için featured ürünler ve şirketler
         $featuredProducts = $productsRepository->findBy([], ['createdAt' => 'DESC'], 8);
         $featuredCompanies = $companiesRepository->findBy([], ['createdAt' => 'DESC'], 6);
+        
+        // Ana kategorileri entity olarak al (ilk 8 ana kategori)
         $categories = $categoriesRepository->findBy(['parent' => null, 'isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC'], 8);
         
         // Aktif ihaleler (onaylanan ve henüz bitmemiş)
@@ -121,6 +123,7 @@ class PublicController extends AbstractController
     #[Route('/categories', name: 'public_categories')]
     public function categories(CategoriesRepository $categoriesRepository): Response
     {
+        // Ana kategorileri entity olarak al (children relationship'ler otomatik yüklenecek)
         $categories = $categoriesRepository->findBy(['parent' => null, 'isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC']);
         
         return $this->render('public/categories.html.twig', [

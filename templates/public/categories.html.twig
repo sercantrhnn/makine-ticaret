@@ -32,6 +32,8 @@
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     {% if categories|length > 0 %}
+
+
         <!-- Categories Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for category in categories %}
@@ -63,23 +65,46 @@
                     {% if category.children|length > 0 %}
                         <div class="p-6">
                             <h4 class="text-sm font-medium text-gray-900 mb-3">Alt Kategoriler</h4>
-                            <div class="space-y-2">
-                                {% for child in category.children|slice(0, 5) %}
-                                    <a href="{{ path('public_products', {category: child.id}) }}" 
-                                       class="block text-sm text-gray-600 hover:text-primary-600 transition-colors">
-                                        <div class="flex items-center">
-                                            <svg class="w-3 h-3 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                            </svg>
-                                            {{ child.name }}
+                            <div class="space-y-3">
+                                {% for child in category.children %}
+                                    {% if child.isActive %}
+                                        <div class="border-l-2 border-gray-100 pl-3">
+                                            <a href="{{ path('public_products', {category: child.id}) }}" 
+                                               class="block text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors mb-1">
+                                                <div class="flex items-center">
+                                                    <svg class="w-3 h-3 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                    </svg>
+                                                    {{ child.name }}
+                                                </div>
+                                            </a>
+                                            
+                                            <!-- Second level subcategories -->
+                                            {% set activeGrandchildren = [] %}
+                                            {% for grandchild in child.children %}
+                                                {% if grandchild.isActive %}
+                                                    {% set activeGrandchildren = activeGrandchildren|merge([grandchild]) %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            
+                                            {% if activeGrandchildren|length > 0 %}
+                                                <div class="ml-4 mt-1 space-y-1">
+                                                    {% for grandchild in activeGrandchildren %}
+                                                        <a href="{{ path('public_products', {category: grandchild.id}) }}" 
+                                                           class="block text-xs text-gray-600 hover:text-primary-600 transition-colors">
+                                                            <div class="flex items-center">
+                                                                <svg class="w-2 h-2 mr-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                                                </svg>
+                                                                {{ grandchild.name }}
+                                                            </div>
+                                                        </a>
+                                                    {% endfor %}
+                                                </div>
+                                            {% endif %}
                                         </div>
-                                    </a>
+                                    {% endif %}
                                 {% endfor %}
-                                {% if category.children|length > 5 %}
-                                    <div class="text-xs text-gray-500 pt-1">
-                                        +{{ category.children|length - 5 }} tane daha...
-                                    </div>
-                                {% endif %}
                             </div>
                         </div>
                     {% else %}
@@ -115,6 +140,9 @@
                         {% set subcategory_count = 0 %}
                         {% for category in categories %}
                             {% set subcategory_count = subcategory_count + category.children|length %}
+                            {% for child in category.children %}
+                                {% set subcategory_count = subcategory_count + child.children|length %}
+                            {% endfor %}
                         {% endfor %}
                         {{ subcategory_count }}
                     </div>
@@ -142,6 +170,9 @@
                         <h3 class="text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
                             {{ category.name }}
                         </h3>
+                        {% if category.children|length > 0 %}
+                            <p class="text-xs text-gray-500 mt-1">{{ category.children|length }} alt kategori</p>
+                        {% endif %}
                     </a>
                 {% endfor %}
             </div>

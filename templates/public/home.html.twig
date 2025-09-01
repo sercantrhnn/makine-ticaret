@@ -330,7 +330,16 @@
                         <p class="text-gray-600 text-sm text-center mb-4">
                             {{ category.description|slice(0, 80) }}{% if category.description|length > 80 %}...{% endif %}
                         </p>
-                                    {% endif %}
+                    {% endif %}
+                    
+                    <!-- Show subcategories count if any -->
+                    {% if category.children|length > 0 %}
+                        <div class="text-center mb-2">
+                            <span class="inline-block bg-primary-100 text-primary-700 text-xs px-2 py-1 rounded-full">
+                                {{ category.children|length }} alt kategori
+                            </span>
+                        </div>
+                    {% endif %}
 
                     <div class="text-center">
                         <div class="inline-flex items-center text-primary-600 text-sm font-medium group-hover:text-primary-700 transition-colors">
