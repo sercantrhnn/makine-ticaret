@@ -1,0 +1,335 @@
+{% extends 'public/base.html.twig' %}
+
+{% block title %}Ana Sayfa 2{% endblock %}
+
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home2') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">Yeni Deneyim</div>
+      </div>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Modeller</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Araç Alımı</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Hizmetler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Deneyim</a>
+      <a href="{{ path('public_home') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Hakkında</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Shop</a>
+      <a href="{{ path('public_companies') }}" style="padding:8px 12px;border:1px solid #2b2b2b;border-radius:6px;color:#e5e5e5;text-decoration:none;font-size:13px;">Merkez Bul</a>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block body %}
+<style>
+  .hero-video {
+    position: relative;
+    width: 100%;
+    height: 72vh;
+    overflow: hidden;
+    background: #000;
+  }
+  .hero-video video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 24px 32px;
+    background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 60%);
+    color: #fff;
+  }
+  .category-section {
+    background: #ffffff;
+    color: #fff;
+    padding: 48px 0 80px;
+    transition: background-color .35s ease;
+  }
+  .category-section.is-dark { background: #0a0a0a; }
+  .container {
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 0 16px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+  @media (max-width: 720px) { .cards-grid { grid-template-columns: 1fr; gap: 16px; } }
+  .model-card {
+    position: relative;
+    background: #111;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    isolation: isolate;
+  }
+  .model-card img,
+  .model-card video {
+    display: block;
+    width: 100%;
+    height: 680px;
+    object-fit: cover;
+    transition: opacity .35s ease;
+  }
+  @media (max-width: 1280px) {
+    .model-card img,
+    .model-card video { height: 620px; }
+  }
+  @media (max-width: 1024px) {
+    .model-card img,
+    .model-card video { height: 560px; }
+  }
+  @media (max-width: 720px) {
+    .model-card img,
+    .model-card video { height: 360px; }
+  }
+  .model-card video { position: absolute; inset: 0; opacity: 0; }
+  .model-card:hover video { opacity: 1; }
+  .model-card:hover img { opacity: 0; }
+
+  .model-info {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 24px;
+    color: #fff;
+    background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 60%);
+    pointer-events: none;
+  }
+  .badge {
+    align-self: flex-start;
+    background: rgba(255,255,255,.16);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .model-title {
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans";
+    font-weight: 800;
+    font-style: italic;
+    font-size: 42px;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.5);
+  }
+  .model-desc {
+    font-size: 14px;
+    opacity: .9;
+    max-width: 640px;
+  }
+  .arrow {
+    font-size: 20px;
+  }
+</style>
+
+<section class="hero-video">
+  <video src="/catVideo.35.19.mp4" autoplay muted loop playsinline></video>
+  <div class="hero-overlay">
+    <div>
+      <div class="badge">mineindestries</div>
+{#      <h2 style="margin:8px 0 0;font-size:28px;font-weight:600">Porsche yolculuğunuz şimdi başlıyor.</h2>#}
+    </div>
+  </div>
+  </section>
+
+<style>
+  .refs-section { background:#edf1f7; padding:64px 0 68px; }
+  .refs-shell { max-width:1600px; margin:0 auto; padding:0 20px; }
+  .refs-heading { text-align:center; color:#334155; font-size:14px; font-weight:900; letter-spacing:.2px; margin-bottom:22px; }
+  .refs-row { display:flex; align-items:center; justify-content:space-between; gap:44px; filter:grayscale(1); opacity:.9; }
+  .refs-logo { height:32px; display:flex; align-items:center; }
+  .refs-logo svg { height:100%; width:auto; fill:#6b7280; }
+  .refs-row:hover { filter:grayscale(.2); opacity:1; }
+  @media (max-width: 1024px) { .refs-row { gap:28px; } }
+  @media (max-width: 900px) { .refs-row { overflow-x:auto; justify-content:flex-start; padding-bottom:8px; } }
+</style>
+
+<section class="refs-section">
+  <div class="refs-shell">
+      <div class="refs-heading">Trusted by 2,800+ Leading Industry Companies</div>
+      <div class="refs-row">
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="800" letter-spacing=".5">aperam</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="700" letter-spacing=".4">SQM</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="700" letter-spacing=".4">ArcelorMittal</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="800" letter-spacing=".6">GMH</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="800" letter-spacing=".6">greenlion</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="18" font-weight="900" letter-spacing="1">Metso</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="700" letter-spacing=".3">outokumpu</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 160 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="800" letter-spacing=".6">AngloAmerican</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="800" letter-spacing=".6">RHI</text></svg>
+        </div>
+        <div class="refs-logo">
+          <svg viewBox="0 0 120 24" aria-hidden="true"><text x="0" y="17" font-size="16" font-weight="800" letter-spacing=".6">aperam</text></svg>
+        </div>
+      </div>
+  </div>
+</section>
+
+<section class="category-section" id="categorySection">
+  <div class="container">
+    <div class="cards-grid">
+      {% set demoVideos = [
+        '/category.17.47.mp4',
+        '/catVideo.35.19.mp4',
+        '/category.17.47.mp4',
+        '/catVideo.35.19.mp4',
+        '/category.17.47.mp4',
+        '/catVideo.35.19.mp4'
+      ] %}
+      {% for category in categories %}
+        {% set v = demoVideos[loop.index0 % demoVideos|length] %}
+        <a href="{{ path('public_products', {category: category.id}) }}" style="text-decoration:none;color:inherit;">
+        <article class="model-card" data-title="{{ category.name }}">
+          <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1600&auto=format&fit=crop" alt="{{ category.name }}">
+          <video src="{{ v }}" muted preload="none"></video>
+          <div class="model-info">
+            <div></div>
+            <div>
+{#              <div class="badge">Benzin</div>#}
+              <div class="model-title">{{ category.name }}</div>
+{#              <p class="model-desc">Bu bir örnek açıklamadır. Üzerine geldiğinizde video oynar.</p>#}
+              <div class="arrow">→</div>
+            </div>
+          </div>
+        </article>
+        </a>
+      {% else %}
+        <p>Kategori bulunamadı.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Hover'da videoyu oynat/durdur
+  var categorySection = document.getElementById('categorySection');
+  document.querySelectorAll('.model-card').forEach(function(card){
+    var video = card.querySelector('video');
+    card.addEventListener('mouseenter', function(){
+      if (video) { video.play().catch(function(){}); }
+      if (categorySection) { categorySection.classList.add('is-dark'); }
+    });
+    card.addEventListener('mouseleave', function(){
+      if (video) { video.pause(); video.currentTime = 0; }
+      if (categorySection) { categorySection.classList.remove('is-dark'); }
+    });
+  });
+</script>
+<!-- Bids Section -->
+<style>
+  .bids-section { background:#121316; color:#e5e5e5; padding:56px 0 0; }
+  .bids-shell { max-width:1600px; margin:0 auto; padding:0 20px; }
+  .bids-shell { max-width:80%; margin:0 auto; padding:0 16px; }
+  .bids-head { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; }
+  .bids-title { font-weight:800; letter-spacing:.4px; font-size:22px; }
+  .bids-sub { color:#9aa0a6; font-size:13px; }
+  .bids-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:16px; }
+  @media (max-width: 1100px) { .bids-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+  @media (max-width: 800px) { .bids-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+  @media (max-width: 520px) { .bids-grid { grid-template-columns: 1fr; } }
+  .bid-card { position:relative; background:#141416; border:1px solid #1f2125; border-radius:12px; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease; }
+  .bid-card:hover { transform: translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35); }
+  .bid-media { position:relative; height:160px; background:#0a0a0a; }
+  .bid-media img { width:100%; height:100%; object-fit:cover; opacity:.9; }
+  .bid-body { padding:12px 14px 14px; display:flex; flex-direction:column; gap:6px; }
+  .bid-company { color:#c9cdd2; font-size:12px; letter-spacing:.2px; }
+  .bid-name { color:#fff; font-weight:700; font-size:14px; letter-spacing:.2px; }
+  .bid-meta { display:flex; align-items:center; justify-content:space-between; color:#9aa0a6; font-size:12px; margin-top:4px; }
+  .chip { padding:2px 6px; border:1px solid #2a2d32; border-radius:999px; font-size:11px; color:#c9cdd2; }
+  .fade-to-footer { height:42px; background: linear-gradient(to bottom, rgba(18,19,22,0), #0a0a0a); }
+</style>
+
+{% if approvedBids is defined and approvedBids|length > 0 %}
+<section class="bids-section">
+  <div class="bids-shell">
+    <div class="bids-head">
+      <div>
+        <div class="bids-title">Güncel İhaleler</div>
+        <div class="bids-sub">Sadece onaylanmış ilanlar listelenir</div>
+      </div>
+      <a href="{{ path('public_bids') }}" style="color:#c9cdd2;text-decoration:none;font-weight:600;">Tüm ihaleler →</a>
+    </div>
+    <div class="bids-grid">
+      {% for bid in approvedBids %}
+        <article class="bid-card">
+          <div class="bid-media">
+            {% set firstImage = bid.product and bid.product.images ? bid.product.images|first : null %}
+            {% if firstImage and firstImage.path is defined %}
+              <img src="{{ asset(firstImage.path) }}" alt="{{ bid.product.name ?? 'Ürün' }}">
+            {% else %}
+              <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop" alt="Bid">
+            {% endif %}
+          </div>
+          <div class="bid-body">
+            <div class="bid-company">{{ bid.company.name ?? 'Firma' }}</div>
+            <div class="bid-name">{{ bid.product.name ?? 'Ürün' }}</div>
+            <div class="bid-meta">
+              <span class="chip">Başlangıç: {{ bid.startingPrice ? (bid.startingPrice ~ ' ₺') : '-' }}</span>
+              <span>{{ bid.endTime ? bid.endTime|date('d.m.Y H:i') : '' }}</span>
+            </div>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="fade-to-footer"></div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
+{% endblock %}
+
+

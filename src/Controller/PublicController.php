@@ -50,6 +50,18 @@ class PublicController extends AbstractController
         ]);
     }
 
+    #[Route('/home2', name: 'public_home2')]
+    public function home2(CategoriesRepository $categoriesRepository, BidsRepository $bidsRepository): Response
+    {
+        $categories = $categoriesRepository->findBy(['parent' => null, 'isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC'], 8);
+        $approvedBids = $bidsRepository->findApprovedBids(6);
+
+        return $this->render('public/home2.html.twig', [
+            'categories' => $categories,
+            'approvedBids' => $approvedBids,
+        ]);
+    }
+
     #[Route('/products', name: 'public_products')]
     public function products(Request $request, ProductsRepository $productsRepository, CategoriesRepository $categoriesRepository): Response
     {

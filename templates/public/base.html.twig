@@ -61,6 +61,7 @@
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50 font-sans">
     <!-- Header -->
+    {% block header %}
     <header class="bg-gradient-to-r from-slate-50 via-blue-50 to-indigo-50 shadow-lg border-b border-blue-100 sticky top-0 z-50 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Top bar -->
@@ -204,6 +205,7 @@
             </div>
         </div>
     </header>
+    {% endblock %}
 
     <!-- Main Content -->
     <main>
@@ -211,6 +213,7 @@
     </main>
 
     <!-- Footer -->
+    {% block footer %}
     <footer class="bg-gray-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -293,6 +296,7 @@
             </div>
         </div>
     </footer>
+    {% endblock %}
 
     {% block javascripts %}{% endblock %}
 </body>

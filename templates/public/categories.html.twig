@@ -2,11 +2,34 @@
 
 {% block title %}Kategoriler | Makine Ticaret{% endblock %}
 {% block description %}Tüm ürün kategorileri. Makine, sanayi, tarım ve inşaat sektörlerine yönelik kapsamlı kategori rehberi.{% endblock %}
-
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home2') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">Kategoriler</div>
+      </div>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Modeller</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Araç Alımı</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Hizmetler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Deneyim</a>
+      <a href="{{ path('public_home') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Hakkında</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Shop</a>
+      <a href="{{ path('public_companies') }}" style="padding:8px 12px;border:1px solid #2b2b2b;border-radius:6px;color:#e5e5e5;text-decoration:none;font-size:13px;">Merkez Bul</a>
+    </nav>
+  </div>
+</header>
+{% endblock %}
 {% block body %}
 <!-- Page Header -->
 <section class="bg-white border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
         <nav class="flex mb-4" aria-label="Breadcrumb">
             <ol class="flex items-center space-x-2 text-sm text-gray-500">
                 <li>
@@ -20,7 +43,7 @@
                 </li>
             </ol>
         </nav>
-        
+
         <div class="text-center">
             <h1 class="text-3xl font-bold text-gray-900 mb-4">Ürün Kategorileri</h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -30,154 +53,112 @@
     </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12" style="max-width:80%;padding-left:16px;padding-right:16px;">
     {% if categories|length > 0 %}
 
-
-        <!-- Categories Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Grouped Categories List -->
+        <div class="space-y-10">
             {% for category in categories %}
-                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group">
-                    <!-- Category Header -->
-                    <div class="p-6 border-b border-gray-100">
-                        <div class="flex items-center">
-                            <div class="w-12 h-12 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-110 transition-transform">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                </svg>
+                {% if category.parent is null %}
+                    {% set activeChildren = [] %}
+                    {% for child in category.children %}
+                        {% if child.isActive %}
+                            {% set activeChildren = activeChildren|merge([child]) %}
+                        {% endif %}
+                    {% endfor %}
+                    <section class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-md bg-gray-900 text-white flex items-center justify-center mr-3">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                                    </svg>
+                                </div>
+                                <h3 class="text-base font-semibold text-gray-900">{{ category.name }}</h3>
                             </div>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-                                    <a href="{{ path('public_products', {category: category.id}) }}">
-                                        {{ category.name }}
-                                    </a>
-                                </h3>
-                                {% if category.description %}
-                                    <p class="text-gray-600 text-sm mt-1">
-                                        {{ category.description|slice(0, 80) }}{% if category.description|length > 80 %}...{% endif %}
-                                    </p>
-                                {% endif %}
-                            </div>
+                            <div class="text-sm text-gray-500">{{ activeChildren|length }} alt kategori</div>
                         </div>
-                    </div>
-                    
-                    <!-- Subcategories -->
-                    {% if category.children|length > 0 %}
-                        <div class="p-6">
-                            <h4 class="text-sm font-medium text-gray-900 mb-3">Alt Kategoriler</h4>
-                            <div class="space-y-3">
-                                {% for child in category.children %}
-                                    {% if child.isActive %}
-                                        <div class="border-l-2 border-gray-100 pl-3">
-                                            <a href="{{ path('public_products', {category: child.id}) }}" 
-                                               class="block text-sm font-medium text-gray-700 hover:text-primary-600 transition-colors mb-1">
-                                                <div class="flex items-center">
-                                                    <svg class="w-3 h-3 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                    </svg>
+
+                        {% if activeChildren|length > 0 %}
+                            {% set perCol = (activeChildren|length / 3)|round(0, 'ceil') %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                                {% for col in 0..2 %}
+                                    {% set start = col * perCol %}
+                                    {% set list = activeChildren|slice(start, perCol) %}
+                                    <ul class="space-y-2">
+                                        {% for child in list %}
+                                            <li>
+                                                <a href="{{ path('public_products', {category: child.id}) }}" class="text-sm text-gray-700 hover:text-gray-900">
                                                     {{ child.name }}
-                                                </div>
-                                            </a>
-                                            
-                                            <!-- Second level subcategories -->
-                                            {% set activeGrandchildren = [] %}
-                                            {% for grandchild in child.children %}
-                                                {% if grandchild.isActive %}
-                                                    {% set activeGrandchildren = activeGrandchildren|merge([grandchild]) %}
+                                                </a>
+                                                {% set gcCount = child.children|length %}
+                                                {% if gcCount > 0 %}
+                                                    <span class="text-xs text-gray-400">({{ gcCount }})</span>
                                                 {% endif %}
-                                            {% endfor %}
-                                            
-                                            {% if activeGrandchildren|length > 0 %}
-                                                <div class="ml-4 mt-1 space-y-1">
-                                                    {% for grandchild in activeGrandchildren %}
-                                                        <a href="{{ path('public_products', {category: grandchild.id}) }}" 
-                                                           class="block text-xs text-gray-600 hover:text-primary-600 transition-colors">
-                                                            <div class="flex items-center">
-                                                                <svg class="w-2 h-2 mr-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                                                </svg>
-                                                                {{ grandchild.name }}
-                                                            </div>
-                                                        </a>
-                                                    {% endfor %}
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
                                 {% endfor %}
                             </div>
-                        </div>
-                    {% else %}
-                        <div class="p-6">
-                            <p class="text-sm text-gray-500 italic">Alt kategori bulunmuyor</p>
-                        </div>
-                    {% endif %}
-                    
-                    <!-- Action Button -->
-                    <div class="px-6 pb-6">
-                        <a href="{{ path('public_products', {category: category.id}) }}" 
-                           class="inline-flex items-center justify-center w-full px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors group-hover:bg-primary-700">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                            </svg>
-                            Ürünleri Görüntüle
-                        </a>
-                    </div>
-                </div>
+                        {% else %}
+                            <div class="p-6 text-sm text-gray-500">Alt kategori bulunmuyor</div>
+                        {% endif %}
+                    </section>
+                {% endif %}
             {% endfor %}
         </div>
-        
+
         <!-- Category Stats -->
-        <div class="mt-16 bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg p-8 text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">Kategori İstatistikleri</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <div class="text-3xl font-bold text-primary-600">{{ categories|length }}</div>
-                    <div class="text-gray-600">Ana Kategori</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-bold text-primary-600">
-                        {% set subcategory_count = 0 %}
-                        {% for category in categories %}
-                            {% set subcategory_count = subcategory_count + category.children|length %}
-                            {% for child in category.children %}
-                                {% set subcategory_count = subcategory_count + child.children|length %}
-                            {% endfor %}
-                        {% endfor %}
-                        {{ subcategory_count }}
-                    </div>
-                    <div class="text-gray-600">Alt Kategori</div>
-                </div>
-                <div>
-                    <div class="text-3xl font-bold text-primary-600">1000+</div>
-                    <div class="text-gray-600">Toplam Ürün</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Popular Categories -->
-        <section class="mt-16">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">En Popüler Kategoriler</h2>
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {% for category in categories|slice(0, 6) %}
-                    <a href="{{ path('public_products', {category: category.id}) }}" 
-                       class="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary-300 hover:shadow-md transition-all group">
-                        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 transition-colors">
-                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                            </svg>
-                        </div>
-                        <h3 class="text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors">
-                            {{ category.name }}
-                        </h3>
-                        {% if category.children|length > 0 %}
-                            <p class="text-xs text-gray-500 mt-1">{{ category.children|length }} alt kategori</p>
-                        {% endif %}
-                    </a>
-                {% endfor %}
-            </div>
-        </section>
-        
+{#        <div class="mt-16 bg-gradient-to-r from-primary-50 to-primary-100 rounded-lg p-8 text-center">#}
+{#            <h2 class="text-2xl font-bold text-gray-900 mb-4">Kategori İstatistikleri</h2>#}
+{#            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">#}
+{#                <div>#}
+{#                    <div class="text-3xl font-bold text-primary-600">{{ categories|length }}</div>#}
+{#                    <div class="text-gray-600">Ana Kategori</div>#}
+{#                </div>#}
+{#                <div>#}
+{#                    <div class="text-3xl font-bold text-primary-600">#}
+{#                        {% set subcategory_count = 0 %}#}
+{#                        {% for category in categories %}#}
+{#                            {% set subcategory_count = subcategory_count + category.children|length %}#}
+{#                            {% for child in category.children %}#}
+{#                                {% set subcategory_count = subcategory_count + child.children|length %}#}
+{#                            {% endfor %}#}
+{#                        {% endfor %}#}
+{#                        {{ subcategory_count }}#}
+{#                    </div>#}
+{#                    <div class="text-gray-600">Alt Kategori</div>#}
+{#                </div>#}
+{#                <div>#}
+{#                    <div class="text-3xl font-bold text-primary-600">1000+</div>#}
+{#                    <div class="text-gray-600">Toplam Ürün</div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#        #}
+{#        <!-- Popular Categories -->#}
+{#        <section class="mt-16">#}
+{#            <h2 class="text-2xl font-bold text-gray-900 mb-8 text-center">En Popüler Kategoriler</h2>#}
+{#            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">#}
+{#                {% for category in categories|slice(0, 6) %}#}
+{#                    <a href="{{ path('public_products', {category: category.id}) }}" #}
+{#                       class="bg-white border border-gray-200 rounded-lg p-4 text-center hover:border-primary-300 hover:shadow-md transition-all group">#}
+{#                        <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:bg-primary-200 transition-colors">#}
+{#                            <svg class="w-5 h-5 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">#}
+{#                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>#}
+{#                            </svg>#}
+{#                        </div>#}
+{#                        <h3 class="text-sm font-medium text-gray-900 group-hover:text-primary-600 transition-colors">#}
+{#                            {{ category.name }}#}
+{#                        </h3>#}
+{#                        {% if category.children|length > 0 %}#}
+{#                            <p class="text-xs text-gray-500 mt-1">{{ category.children|length }} alt kategori</p>#}
+{#                        {% endif %}#}
+{#                    </a>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        </section>#}
+
     {% else %}
         <!-- No Categories Found -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
@@ -186,7 +167,7 @@
             </svg>
             <h3 class="text-lg font-medium text-gray-900 mb-2">Kategori Bulunamadı</h3>
             <p class="text-gray-600 mb-6">Henüz hiç kategori eklenmemiş.</p>
-            <a href="{{ path('public_home') }}" 
+            <a href="{{ path('public_home') }}"
                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -198,28 +179,47 @@
 </div>
 
 <!-- CTA Section -->
-<section class="bg-primary-600 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 class="text-3xl font-bold mb-4">Aradığınız Kategoriyi Bulamadınız mı?</h2>
-        <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">
-            Özel ihtiyaçlarınız için bizimle iletişime geçin. Size en uygun çözümü bulalım.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="{{ path('public_products') }}" 
-               class="inline-flex items-center px-8 py-3 border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-                Ürün Ara
-            </a>
-            <a href="{{ path('public_companies') }}" 
-               class="inline-flex items-center px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                </svg>
-                Firmalar
-            </a>
-        </div>
+{#<section class="bg-primary-600 text-white">#}
+{#    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center" style="max-width:80%;padding-left:16px;padding-right:16px;">#}
+{#        <h2 class="text-3xl font-bold mb-4">Aradığınız Kategoriyi Bulamadınız mı?</h2>#}
+{#        <p class="text-xl mb-8 text-primary-100 max-w-2xl mx-auto">#}
+{#            Özel ihtiyaçlarınız için bizimle iletişime geçin. Size en uygun çözümü bulalım.#}
+{#        </p>#}
+{#        <div class="flex flex-col sm:flex-row gap-4 justify-center">#}
+{#            <a href="{{ path('public_products') }}" #}
+{#               class="inline-flex items-center px-8 py-3 border border-white text-white font-semibold rounded-lg hover:bg-white hover:text-primary-600 transition-colors">#}
+{#                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">#}
+{#                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>#}
+{#                </svg>#}
+{#                Ürün Ara#}
+{#            </a>#}
+{#            <a href="{{ path('public_companies') }}" #}
+{#               class="inline-flex items-center px-8 py-3 bg-white text-primary-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">#}
+{#                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">#}
+{#                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>#}
+{#                </svg>#}
+{#                Firmalar#}
+{#            </a>#}
+{#        </div>#}
+{#    </div>#}
+{#</section>#}
+{% endblock %}
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
     </div>
-</section>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
 {% endblock %}
