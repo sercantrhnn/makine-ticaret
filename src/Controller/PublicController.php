@@ -69,6 +69,7 @@ class PublicController extends AbstractController
         $limit = 12;
         $search = $request->query->get('search', '');
         $categoryId = $request->query->get('category');
+        $sort = $request->query->get('sort');
 
         $category = null;
         if ($categoryId) {
@@ -76,7 +77,7 @@ class PublicController extends AbstractController
         }
 
         // Ürünleri getir (pagination ile)
-        $products = $productsRepository->findWithFilters($page, $limit, $search, $category);
+        $products = $productsRepository->findWithFilters($page, $limit, $search, $category, $sort);
         $totalProducts = $productsRepository->countWithFilters($search, $category);
         $totalPages = ceil($totalProducts / $limit);
 
@@ -90,6 +91,7 @@ class PublicController extends AbstractController
             'totalPages' => $totalPages,
             'totalProducts' => $totalProducts,
             'search' => $search,
+            'sort' => $sort,
         ]);
     }
 

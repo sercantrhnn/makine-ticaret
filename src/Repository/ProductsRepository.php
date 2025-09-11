@@ -72,25 +72,47 @@ class ProductsRepository extends ServiceEntityRepository
     /**
      * Filtrelerle ürünleri getir
      */
-    public function findWithFilters(int $page, int $limit, string $search = '', $category = null): array
+    public function findWithFilters(int $page, int $limit, string $search = '', $category = null, ?string $sort = null): array
     {
         $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.company', 'c')
             ->leftJoin('p.category', 'cat')
-            ->orderBy('p.createdAt', 'DESC');
-        
+            ;
+
+        // Sorting
+        switch ($sort) {
+            case 'price_asc':
+                $qb->addSelect('(CASE WHEN p.price IS NULL THEN 1 ELSE 0 END) AS HIDDEN price_nulls')
+                   ->orderBy('price_nulls', 'ASC')
+                   ->addOrderBy('p.price', 'ASC');
+                break;
+            case 'price_desc':
+                $qb->addSelect('(CASE WHEN p.price IS NULL THEN 1 ELSE 0 END) AS HIDDEN price_nulls')
+                   ->orderBy('price_nulls', 'ASC')
+                   ->addOrderBy('p.price', 'DESC');
+                break;
+            case 'name_asc':
+                $qb->orderBy('p.name', 'ASC');
+                break;
+            case 'name_desc':
+                $qb->orderBy('p.name', 'DESC');
+                break;
+            default:
+                $qb->orderBy('p.createdAt', 'DESC');
+        }
+ 
         if (!empty($search)) {
             $qb->andWhere('LOWER(p.name) LIKE LOWER(:search) OR LOWER(p.description) LIKE LOWER(:search) OR LOWER(p.brand) LIKE LOWER(:search) OR LOWER(p.modelType) LIKE LOWER(:search) OR LOWER(c.name) LIKE LOWER(:search)')
                ->setParameter('search', '%' . $search . '%');
         }
-        
+ 
         if ($category) {
             // Seçilen kategori ve tüm alt kategorilerini dahil et
             $categoryIds = $this->getAllCategoryIds($category);
             $qb->andWhere('p.category IN (:categoryIds)')
                ->setParameter('categoryIds', $categoryIds);
         }
-        
+ 
         return $qb->setFirstResult(($page - 1) * $limit)
                  ->setMaxResults($limit)
                  ->getQuery()
