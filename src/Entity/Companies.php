@@ -73,6 +73,9 @@ class Companies
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $catalogPath = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $certificatePath = null;
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $owner = null;
@@ -289,6 +292,17 @@ class Companies
     {
         $this->catalogPath = $catalogPath;
 
+        return $this;
+    }
+
+    public function getCertificatePath(): ?string
+    {
+        return $this->certificatePath;
+    }
+
+    public function setCertificatePath(?string $certificatePath): static
+    {
+        $this->certificatePath = $certificatePath;
         return $this;
     }
 

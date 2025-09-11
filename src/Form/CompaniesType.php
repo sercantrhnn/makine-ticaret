@@ -120,6 +120,20 @@ class CompaniesType extends AbstractType
                 ],
                 'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']
             ])
+            ->add('certificateFile', FileType::class, [
+                'label' => 'Sertifika PDF (Max 25MB)',
+                'required' => false,
+                'mapped' => false,
+                'constraints' => [
+                    new File([
+                        'maxSize' => '25M',
+                        'maxSizeMessage' => 'Sertifika dosyası 25MB\'dan büyük olamaz. Lütfen daha küçük bir dosya seçin.',
+                        'mimeTypes' => ['application/pdf'],
+                        'mimeTypesMessage' => 'Lütfen geçerli bir PDF dosyası yükleyin',
+                    ])
+                ],
+                'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']
+            ])
         ;
     }
 

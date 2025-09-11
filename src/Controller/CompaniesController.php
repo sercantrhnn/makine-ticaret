@@ -148,6 +148,19 @@ class CompaniesController extends AbstractController
             $catalogFile->move($uploadDir . 'catalogs', $catalogFileName);
             $company->setCatalogPath('uploads/catalogs/' . $catalogFileName);
         }
+
+        // Sertifika yükleme
+        $certificateFile = $form->get('certificateFile')->getData();
+        if ($certificateFile) {
+            // Eski sertifika varsa sil
+            if ($company->getCertificatePath() && file_exists($this->getParameter('kernel.project_dir') . '/public/' . $company->getCertificatePath())) {
+                unlink($this->getParameter('kernel.project_dir') . '/public/' . $company->getCertificatePath());
+            }
+
+            $certificateFileName = $this->generateUniqueFileName($certificateFile, 'certificate');
+            $certificateFile->move($uploadDir . 'certificates', $certificateFileName);
+            $company->setCertificatePath('uploads/certificates/' . $certificateFileName);
+        }
     }
     
     /**
