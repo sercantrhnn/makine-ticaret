@@ -55,6 +55,12 @@ class Products
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $detail = null;
 
+    #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 2, nullable: true)]
+    private ?string $price = null;
+
+    #[ORM\Column(length: 3, nullable: true)]
+    private ?string $currency = null;
+
     /** @var Collection<int, \App\Entity\ProductImages> */
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: \App\Entity\ProductImages::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['isPrimary' => 'DESC', 'sortOrder' => 'ASC', 'id' => 'ASC'])]
@@ -211,6 +217,28 @@ class Products
     {
         $this->detail = $detail;
 
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?string $price): static
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    public function getCurrency(): ?string
+    {
+        return $this->currency;
+    }
+
+    public function setCurrency(?string $currency): static
+    {
+        $this->currency = $currency;
         return $this;
     }
 

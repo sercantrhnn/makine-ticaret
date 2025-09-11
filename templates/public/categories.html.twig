@@ -5,7 +5,7 @@
 {% block header %}
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
   <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
-    <a href="{{ path('public_home2') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
       <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
         <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
       </div>
@@ -15,13 +15,40 @@
       </div>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Modeller</a>
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Araç Alımı</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Hizmetler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Deneyim</a>
-      <a href="{{ path('public_home') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Hakkında</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Shop</a>
-      <a href="{{ path('public_companies') }}" style="padding:8px 12px;border:1px solid #2b2b2b;border-radius:6px;color:#e5e5e5;text-decoration:none;font-size:13px;">Merkez Bul</a>
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+      {% if app.user %}
+        <div style="position:relative;" id="userMenuRoot">
+          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('app_logout') }}" style="display:block;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">Çıkış Yap</a>
+          </div>
+        </div>
+        <script>
+          (function(){
+            var btn = document.getElementById('userMenuButton');
+            var dd = document.getElementById('userMenuDropdown');
+            var root = document.getElementById('userMenuRoot');
+            if (!btn || !dd || !root) return;
+            btn.addEventListener('click', function(e){
+              e.stopPropagation();
+              dd.style.display = dd.style.display === 'none' || dd.style.display === '' ? 'block' : 'none';
+            });
+            document.addEventListener('click', function(e){
+              if (!root.contains(e.target)) { dd.style.display = 'none'; }
+            });
+          })();
+        </script>
+      {% else %}
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+      {% endif %}
     </nav>
   </div>
 </header>

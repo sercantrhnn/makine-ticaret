@@ -14,13 +14,15 @@
   .muted { color:#6b7280; }
   .accent-link { color:#374151; }
   .accent-link:hover { color:#111827; }
+  .btn-neutral { background:#C0C0C0; color:#111111; transition: background-color .2s ease; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .btn-neutral:hover { background:#B8B8B8; }
 </style>
 {% endblock %}
 
 {% block header %}
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
   <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
-    <a href="{{ path('public_home2') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
       <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
         <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
       </div>
@@ -31,10 +33,39 @@
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
       <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
       <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
       <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
-      <a href="{{ path('public_home') }}" style="padding:8px 12px;border:1px solid #2b2b2b;border-radius:6px;color:#e5e5e5;text-decoration:none;font-size:13px;">Ana Sayfa</a>
+      {% if app.user %}
+        <div style="position:relative;" id="userMenuRoot">
+          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('app_logout') }}" style="display:block;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">Çıkış Yap</a>
+          </div>
+        </div>
+        <script>
+          (function(){
+            var btn = document.getElementById('userMenuButton');
+            var dd = document.getElementById('userMenuDropdown');
+            var root = document.getElementById('userMenuRoot');
+            if (!btn || !dd || !root) return;
+            btn.addEventListener('click', function(e){
+              e.stopPropagation();
+              dd.style.display = dd.style.display === 'none' || dd.style.display === '' ? 'block' : 'none';
+            });
+            document.addEventListener('click', function(e){
+              if (!root.contains(e.target)) { dd.style.display = 'none'; }
+            });
+          })();
+        </script>
+      {% else %}
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+      {% endif %}
     </nav>
   </div>
 </header>
@@ -77,7 +108,7 @@
                         {% endif %}
                     </ol>
                 </nav>
-                
+
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     {% if selectedCategory %}
                         {{ selectedCategory.name }}
@@ -87,7 +118,7 @@
                         Tüm Ürünler
                     {% endif %}
                 </h1>
-                
+
                 <p class="muted">
                     {% if totalProducts > 0 %}
                         {{ totalProducts }} ürün bulundu
@@ -96,7 +127,7 @@
                     {% endif %}
                 </p>
             </div>
-            
+
             <!-- Search Form -->
             <div class="mt-6 lg:mt-0 lg:ml-8">
                 <form method="GET" class="flex flex-col sm:flex-row gap-3">
@@ -104,10 +135,10 @@
                         <input type="hidden" name="category" value="{{ selectedCategory.id }}">
                     {% endif %}
                     <div class="relative flex-1 sm:min-w-80">
-                        <input type="text" 
-                               name="search" 
-                               value="{{ search }}" 
-                               placeholder="Ürün, marka veya firma ara..." 
+                        <input type="text"
+                               name="search"
+                               value="{{ search }}"
+                               placeholder="Ürün, marka veya firma ara..."
                                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +146,7 @@
                             </svg>
                         </div>
                     </div>
-                    <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-lg hover:bg-indigo-700 transition-colors">
+                    <button type="submit" class="px-6 py-2.5 font-medium rounded-lg transition-colors shadow btn-neutral" onmouseover="this.style.background='#B8B8B8'" onmouseout="this.style.background='#C0C0C0'">
                         Ara
                     </button>
                 </form>
@@ -127,7 +158,7 @@
 
 <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8 page-dark" style="background:transparent;max-width:80%;padding-left:16px;padding-right:16px;">
     <div class="flex flex-col lg:flex-row gap-8">
-        
+
         <!-- Sidebar - Categories (contextual) -->
         <aside class="lg:w-64 flex-shrink-0">
             <div class="rounded-lg shadow-sm border p-6 sticky top-24 card-light">
@@ -167,7 +198,7 @@
                 {% else %}
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Kategoriler</h3>
                     <div class="space-y-2">
-                        <a href="{{ path('public_products') }}" 
+                        <a href="{{ path('public_products') }}"
                            class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors {% if not selectedCategory %}bg-gray-100 text-gray-900{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Tüm Ürünler</a>
                         {% for category in categories %}
                             {% if category.parent is null %}
@@ -178,7 +209,7 @@
                 {% endif %}
             </div>
         </aside>
-        
+
         <!-- Main Content -->
         <main class="flex-1">
             {% if products|length > 0 %}
@@ -189,8 +220,8 @@
                             <!-- Product Image -->
                             <div class="relative h-72 overflow-hidden bg-gray-50">
                                 {% if product.images|length > 0 %}
-                                    <img src="{{ asset(product.images.first.imagePath) }}" 
-                                         alt="{{ product.name }}" 
+                                    <img src="{{ asset(product.images.first.imagePath) }}"
+                                         alt="{{ product.name }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 {% else %}
                                     <div class="flex items-center justify-center h-full">
@@ -201,7 +232,7 @@
                                         </div>
                                     </div>
                                 {% endif %}
-                                
+
                                 <!-- Status Badges -->
                                 <div class="absolute top-4 left-4 flex flex-col gap-2">
                                     <span class="px-3 py-1.5 text-xs font-semibold rounded-full backdrop-blur-sm {% if product.productStatus == 'satilik' %}bg-emerald-600 text-white shadow-emerald-500/25{% else %}bg-indigo-600 text-white shadow-indigo-500/25{% endif %} shadow-lg">
@@ -213,18 +244,18 @@
                                         </span>
                                     {% endif %}
                                 </div>
-                                
+
                                 <!-- Quick View Overlay -->
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
                                     <div class="absolute bottom-4 left-4 right-4">
-                                        <a href="{{ path('public_product_detail', {id: product.id}) }}" 
+                                        <a href="{{ path('public_product_detail', {id: product.id}) }}"
                                            class="block w-full bg-white text-gray-900 text-center py-2.5 px-4 rounded-lg font-medium text-sm shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-50">
                                             Detayları Görüntüle
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <!-- Product Info -->
                             <div class="p-6">
                                 <!-- Product Name -->
@@ -233,7 +264,7 @@
                                         {{ product.name }}
                                     </a>
                                 </h3>
-                                
+
                                 <!-- Product Details -->
                                 <div class="space-y-3 mb-4">
                                     {% if product.brand %}
@@ -249,44 +280,54 @@
                                             </div>
                                         </div>
                                     {% endif %}
-                                    
+
                                     {% if product.category %}
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                                             </svg>
-                                            <a href="{{ path('public_products', {category: product.category.id}) }}" 
+                                            <a href="{{ path('public_products', {category: product.category.id}) }}"
                                                class="text-sm accent-link transition-colors">
                                                 {{ product.category.name }}
                                             </a>
                                         </div>
                                     {% endif %}
-                                    
+
                                     {% if product.company %}
                                         <div class="flex items-center">
                                             <svg class="w-4 h-4 text-gray-400 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                             </svg>
-                                            <a href="{{ path('public_company_detail', {id: product.company.id}) }}" 
+                                            <a href="{{ path('public_company_detail', {id: product.company.id}) }}"
                                                class="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
                                                 {{ product.company.name }}
                                             </a>
                                         </div>
                                     {% endif %}
                                 </div>
-                                
+
                                 <!-- Description -->
                                 {% if product.description %}
                                     <p class="text-gray-600 text-sm mb-5 line-clamp-2 leading-relaxed">
                                         {{ product.description|slice(0, 120) }}{% if product.description|length > 120 %}...{% endif %}
                                     </p>
                                 {% endif %}
-                                
-                                <!-- Action Button -->
-                                <div class="pt-4 border-t border-gray-100">
-                                    <a href="{{ path('public_product_detail', {id: product.id}) }}" 
-                                       class="block w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-center py-3 px-4 rounded-lg font-medium hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 transform group-hover:scale-105 shadow-md">
-                                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                                <!-- Footer Actions: price left, detail button right -->
+                                <div class="pt-4 border-t border-gray-100 flex items-center justify-between">
+                                    <div class="text-lg font-extrabold text-gray-900">
+                                        {% if product.price and product.currency %}
+                                            {% set currencySymbols = {'TRY':'₺','USD':'$','EUR':'€','GBP':'£'} %}
+                                            <span>{{ currencySymbols[product.currency]|default(product.currency) }}</span>
+                                            <span>{{ product.price|number_format(2, ',', '.') }}</span>
+                                        {% else %}
+                                            <span class="text-sm text-gray-500">Fiyat için iletişime geçin</span>
+                                        {% endif %}
+                                    </div>
+                                    <a href="{{ path('public_product_detail', {id: product.id}) }}"
+                                       class="inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-all duration-300 transform group-hover:scale-105 shadow-md"
+                                       style="background:#C0C0C0;color:#111111;">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                         </svg>
@@ -297,19 +338,19 @@
                         </div>
                     {% endfor %}
                 </div>
-                
+
                 <!-- Pagination -->
                 {% if totalPages > 1 %}
                     <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-lg">
                         <div class="flex flex-1 justify-between sm:hidden">
                             {% if currentPage > 1 %}
-                                <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage - 1})) }}" 
+                                <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage - 1})) }}"
                                    class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
                                     Önceki
                                 </a>
                             {% endif %}
                             {% if currentPage < totalPages %}
-                                <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage + 1})) }}" 
+                                <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage + 1})) }}"
                                    class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
                                     Sonraki
                                 </a>
@@ -330,14 +371,14 @@
                                 <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                                     <!-- Previous Page -->
                                     {% if currentPage > 1 %}
-                                        <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage - 1})) }}" 
+                                        <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage - 1})) }}"
                                            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                                             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
                                             </svg>
                                         </a>
                                     {% endif %}
-                                    
+
                                     <!-- Page Numbers -->
                                     {% for page in 1..totalPages %}
                                         {% if page == currentPage %}
@@ -345,7 +386,7 @@
                                                 {{ page }}
                                             </span>
                                         {% elseif page == 1 or page == totalPages or (page >= currentPage - 2 and page <= currentPage + 2) %}
-                                            <a href="{{ path('public_products', app.request.query.all|merge({page: page})) }}" 
+                                            <a href="{{ path('public_products', app.request.query.all|merge({page: page})) }}"
                                                class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                                                 {{ page }}
                                             </a>
@@ -355,10 +396,10 @@
                                             </span>
                                         {% endif %}
                                     {% endfor %}
-                                    
+
                                     <!-- Next Page -->
                                     {% if currentPage < totalPages %}
-                                        <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage + 1})) }}" 
+                                        <a href="{{ path('public_products', app.request.query.all|merge({page: currentPage + 1})) }}"
                                            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                                             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
@@ -370,7 +411,7 @@
                         </div>
                     </div>
                 {% endif %}
-                
+
             {% else %}
                 <!-- No Products Found -->
                 <div class="rounded-lg shadow-sm border p-12 text-center card-light">
@@ -388,14 +429,14 @@
                         {% endif %}
                     </p>
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <a href="{{ path('public_products') }}" 
+                        <a href="{{ path('public_products') }}"
                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                             <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
                             Tüm Ürünler
                         </a>
-                        <a href="{{ path('public_home') }}" 
+                        <a href="{{ path('public_home') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                             <svg class="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>

@@ -3,10 +3,61 @@
 {% block title %}Firmalar{% if search %} - "{{ search }}" araması{% endif %} | Makine Ticaret{% endblock %}
 {% block description %}Güvenilir firma rehberi. Sanayi sektöründe faaliyet gösteren firmalar ve iletişim bilgileri.{% endblock %}
 
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">Firmalar</div>
+      </div>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+      {% if app.user %}
+        <div style="position:relative;" id="userMenuRoot">
+          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('app_logout') }}" style="display:block;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">Çıkış Yap</a>
+          </div>
+        </div>
+        <script>
+          (function(){
+            var btn = document.getElementById('userMenuButton');
+            var dd = document.getElementById('userMenuDropdown');
+            var root = document.getElementById('userMenuRoot');
+            if (!btn || !dd || !root) return;
+            btn.addEventListener('click', function(e){
+              e.stopPropagation();
+              dd.style.display = dd.style.display === 'none' || dd.style.display === '' ? 'block' : 'none';
+            });
+            document.addEventListener('click', function(e){
+              if (!root.contains(e.target)) { dd.style.display = 'none'; }
+            });
+          })();
+        </script>
+      {% else %}
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+{% endblock %}
 {% block body %}
 <!-- Page Header -->
 <section class="bg-white border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
             <div class="flex-1">
                 <nav class="flex mb-4" aria-label="Breadcrumb">
@@ -22,7 +73,7 @@
                         </li>
                     </ol>
                 </nav>
-                
+
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     {% if search %}
                         "{{ search }}" için Firma Arama Sonuçları
@@ -30,7 +81,7 @@
                         Tüm Firmalar
                     {% endif %}
                 </h1>
-                
+
                 <p class="text-gray-600">
                     {% if totalCompanies > 0 %}
                         {{ totalCompanies }} firma bulundu
@@ -39,15 +90,15 @@
                     {% endif %}
                 </p>
             </div>
-            
+
             <!-- Search Form -->
             <div class="mt-6 lg:mt-0 lg:ml-8">
                 <form method="GET" class="flex flex-col sm:flex-row gap-3">
                     <div class="relative flex-1 sm:min-w-80">
-                        <input type="text" 
-                               name="search" 
-                               value="{{ search }}" 
-                               placeholder="Firma adı, faaliyet alanı ara..." 
+                        <input type="text"
+                               name="search"
+                               value="{{ search }}"
+                               placeholder="Firma adı, faaliyet alanı ara..."
                                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,7 +106,7 @@
                             </svg>
                         </div>
                     </div>
-                    <button type="submit" class="px-6 py-2.5 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                    <button type="submit" class="px-6 py-2.5 font-medium rounded-lg transition-colors shadow" style="background:#C0C0C0;color:#111111;" onmouseover="this.style.background='#B8B8B8'" onmouseout="this.style.background='#C0C0C0'">
                         Ara
                     </button>
                 </form>
@@ -64,38 +115,36 @@
     </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
     {% if companies|length > 0 %}
         <!-- Companies Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" style="gap:24px;">
             {% for company in companies %}
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300 group">
-                    <!-- Company Header -->
-                    <div class="p-6">
-                        <div class="flex items-center mb-4">
-                            {% if company.logoPath %}
-                                <img src="{{ asset(company.logoPath) }}" 
-                                     alt="{{ company.name }}" 
-                                     class="w-16 h-16 rounded-lg object-cover mr-4 group-hover:scale-105 transition-transform">
-                            {% else %}
-                                <div class="w-16 h-16 bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg flex items-center justify-center mr-4 group-hover:scale-105 transition-transform">
-                                    <span class="text-2xl font-bold text-white">
-                                        {{ company.name|slice(0,1)|upper }}
-                                    </span>
+                    <!-- Media (aligned with products) -->
+                    <div class="relative h-72 overflow-hidden bg-gray-50">
+                        {% if company.logoPath %}
+                            <img src="{{ asset(company.logoPath) }}"
+                                 alt="{{ company.name }}"
+                                 class="w-full h-full object-contain p-8 opacity-95 group-hover:scale-105 transition-transform">
+                        {% else %}
+                            <div class="flex items-center justify-center w-full h-full">
+                                <div class="w-24 h-24 bg-gray-200 rounded-2xl flex items-center justify-center">
+                                    <span class="text-3xl font-bold text-gray-500">{{ company.name|slice(0,1)|upper }}</span>
                                 </div>
-                            {% endif %}
-                            <div class="flex-1">
-                                <h3 class="text-xl font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
-                                    <a href="{{ path('public_company_detail', {id: company.id}) }}">
-                                        {{ company.name }}
-                                    </a>
-                                </h3>
-                                {% if company.shortName and company.shortName != company.name %}
-                                    <p class="text-gray-500 text-sm">{{ company.shortName }}</p>
-                                {% endif %}
                             </div>
-                        </div>
-                        
+                        {% endif %}
+                    </div>
+
+                    <!-- Company Body -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-gray-900 mb-1 group-hover:text-primary-600 transition-colors">
+                            <a href="{{ path('public_company_detail', {id: company.id}) }}">{{ company.name }}</a>
+                        </h3>
+                        {% if company.shortName and company.shortName != company.name %}
+                            <p class="text-gray-500 text-sm mb-3">{{ company.shortName }}</p>
+                        {% endif %}
+
                         <!-- Company Info -->
                         {% if company.activityType %}
                             <div class="mb-3">
@@ -104,13 +153,13 @@
                                 </span>
                             </div>
                         {% endif %}
-                        
+
                         {% if company.about %}
                             <p class="text-gray-600 text-sm mb-4 line-clamp-3">
                                 {{ company.about|slice(0, 150) }}{% if company.about|length > 150 %}...{% endif %}
                             </p>
                         {% endif %}
-                        
+
                         <!-- Company Details -->
                         <div class="space-y-2 text-sm text-gray-600 mb-4">
                             {% if company.foundedYear %}
@@ -121,7 +170,7 @@
                                     <span class="font-medium">Kuruluş:</span> {{ company.foundedYear }}
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.phone %}
                                 <div class="flex items-center">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,7 +181,7 @@
                                     </a>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.email %}
                                 <div class="flex items-center">
                                     <svg class="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,10 +193,11 @@
                                 </div>
                             {% endif %}
                         </div>
-                        
+
                         <!-- Action Button -->
-                        <a href="{{ path('public_company_detail', {id: company.id}) }}" 
-                           class="inline-flex items-center justify-center w-full px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors group-hover:bg-primary-700">
+                        <a href="{{ path('public_company_detail', {id: company.id}) }}"
+                           class="inline-flex items-center justify-center w-full px-4 py-3 text-sm font-medium rounded-lg group-hover:scale-[1.02]"
+                           style="background:#C0C0C0;color:#111111;">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
@@ -157,19 +207,19 @@
                 </div>
             {% endfor %}
         </div>
-        
+
         <!-- Pagination -->
         {% if totalPages > 1 %}
             <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 rounded-lg">
                 <div class="flex flex-1 justify-between sm:hidden">
                     {% if currentPage > 1 %}
-                        <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage - 1})) }}" 
+                        <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage - 1})) }}"
                            class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
                             Önceki
                         </a>
                     {% endif %}
                     {% if currentPage < totalPages %}
-                        <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage + 1})) }}" 
+                        <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage + 1})) }}"
                            class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
                             Sonraki
                         </a>
@@ -190,14 +240,14 @@
                         <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                             <!-- Previous Page -->
                             {% if currentPage > 1 %}
-                                <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage - 1})) }}" 
+                                <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage - 1})) }}"
                                    class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
                                     </svg>
                                 </a>
                             {% endif %}
-                            
+
                             <!-- Page Numbers -->
                             {% for page in 1..totalPages %}
                                 {% if page == currentPage %}
@@ -205,7 +255,7 @@
                                         {{ page }}
                                     </span>
                                 {% elseif page == 1 or page == totalPages or (page >= currentPage - 2 and page <= currentPage + 2) %}
-                                    <a href="{{ path('public_companies', app.request.query.all|merge({page: page})) }}" 
+                                    <a href="{{ path('public_companies', app.request.query.all|merge({page: page})) }}"
                                        class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                                         {{ page }}
                                     </a>
@@ -215,10 +265,10 @@
                                     </span>
                                 {% endif %}
                             {% endfor %}
-                            
+
                             <!-- Next Page -->
                             {% if currentPage < totalPages %}
-                                <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage + 1})) }}" 
+                                <a href="{{ path('public_companies', app.request.query.all|merge({page: currentPage + 1})) }}"
                                    class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0">
                                     <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
@@ -230,7 +280,7 @@
                 </div>
             </div>
         {% endif %}
-        
+
     {% else %}
         <!-- No Companies Found -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
@@ -246,14 +296,14 @@
                 {% endif %}
             </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <a href="{{ path('public_companies') }}" 
+                <a href="{{ path('public_companies') }}"
                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                     </svg>
                     Tüm Firmalar
                 </a>
-                <a href="{{ path('public_home') }}" 
+                <a href="{{ path('public_home') }}"
                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -264,4 +314,23 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
 {% endblock %}

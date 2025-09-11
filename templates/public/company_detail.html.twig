@@ -3,10 +3,31 @@
 {% block title %}{{ company.name }} | Makine Ticaret{% endblock %}
 {% block description %}{{ company.about|slice(0, 160) }}{% if company.about|length > 160 %}...{% endif %}{% endblock %}
 
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">Firma</div>
+      </div>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+    </nav>
+  </div>
+</header>
+{% endblock %}
 {% block body %}
 <!-- Breadcrumb -->
 <section class="bg-white border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4" style="max-width:80%;padding-left:16px;padding-right:16px;">
         <nav class="flex" aria-label="Breadcrumb">
             <ol class="flex items-center space-x-2 text-sm text-gray-500">
                 <li>
@@ -29,7 +50,7 @@
     </div>
 </section>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
     <!-- Company Header -->
     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
         <!-- Background Image -->
@@ -39,8 +60,8 @@
                     <div class="p-8 text-white">
                         <div class="flex items-center">
                             {% if company.logoPath %}
-                                <img src="{{ asset(company.logoPath) }}" 
-                                     alt="{{ company.name }}" 
+                                <img src="{{ asset(company.logoPath) }}"
+                                     alt="{{ company.name }}"
                                      class="w-20 h-20 rounded-lg bg-white p-2 mr-6">
                             {% else %}
                                 <div class="w-20 h-20 bg-white rounded-lg flex items-center justify-center mr-6">
@@ -60,12 +81,12 @@
                 </div>
             </div>
         {% else %}
-            <div class="h-32 bg-gradient-to-r from-primary-600 to-primary-700">
+            <div class="h-32" style="background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
                 <div class="h-full flex items-center p-8 text-white">
                     <div class="flex items-center">
                         {% if company.logoPath %}
-                            <img src="{{ asset(company.logoPath) }}" 
-                                 alt="{{ company.name }}" 
+                            <img src="{{ asset(company.logoPath) }}"
+                                 alt="{{ company.name }}"
                                  class="w-16 h-16 rounded-lg bg-white p-2 mr-6">
                         {% else %}
                             <div class="w-16 h-16 bg-white rounded-lg flex items-center justify-center mr-6">
@@ -77,14 +98,14 @@
                         <div>
                             <h1 class="text-3xl font-bold">{{ company.name }}</h1>
                             {% if company.title %}
-                                <p class="text-xl text-primary-200">{{ company.title }}</p>
+                                <p class="text-xl text-gray-300">{{ company.title }}</p>
                             {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         {% endif %}
-        
+
         <!-- Company Info -->
         <div class="p-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -97,7 +118,7 @@
                             </span>
                         </div>
                     {% endif %}
-                    
+
                     {% if company.about %}
                         <div class="mb-6">
                             <h2 class="text-xl font-semibold text-gray-900 mb-3">Hakkımızda</h2>
@@ -106,7 +127,7 @@
                             </div>
                         </div>
                     {% endif %}
-                    
+
                     <!-- Company Specifications -->
                     <div class="bg-gray-50 rounded-lg p-6">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Firma Bilgileri</h3>
@@ -117,21 +138,21 @@
                                     <dd class="mt-1 text-sm text-gray-900">{{ company.foundedYear }}</dd>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.tradeRegistryNo %}
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Ticaret Sicil No</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ company.tradeRegistryNo }}</dd>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.mersisNo %}
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">MERSİS No</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ company.mersisNo }}</dd>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.activityType %}
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Faaliyet Alanı</dt>
@@ -141,12 +162,12 @@
                         </dl>
                     </div>
                 </div>
-                
+
                 <!-- Right Column - Contact Info -->
                 <div>
                     <div class="bg-white border border-gray-200 rounded-lg p-6 sticky top-24">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">İletişim Bilgileri</h3>
-                        
+
                         <div class="space-y-4">
                             {% if company.phone %}
                                 <div class="flex items-start">
@@ -161,7 +182,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.email %}
                                 <div class="flex items-start">
                                     <svg class="w-5 h-5 text-gray-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +196,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.website %}
                                 <div class="flex items-start">
                                     <svg class="w-5 h-5 text-gray-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,7 +210,7 @@
                                     </div>
                                 </div>
                             {% endif %}
-                            
+
                             {% if company.adress %}
                                 <div class="flex items-start">
                                     <svg class="w-5 h-5 text-gray-400 mt-0.5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -208,11 +229,11 @@
                                 </div>
                             {% endif %}
                         </div>
-                        
+
                         <!-- Contact Actions -->
                         <div class="mt-6 space-y-3">
                             {% if company.phone %}
-                                <a href="tel:{{ company.phone }}" 
+                                <a href="tel:{{ company.phone }}"
                                    class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
@@ -220,9 +241,9 @@
                                     Hemen Ara
                                 </a>
                             {% endif %}
-                            
+
                             {% if company.email %}
-                                <a href="mailto:{{ company.email }}" 
+                                <a href="mailto:{{ company.email }}"
                                    class="w-full inline-flex items-center justify-center px-4 py-2 border border-primary-600 text-sm font-medium rounded-md text-primary-600 bg-white hover:bg-primary-50 transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -231,10 +252,10 @@
                                 </a>
                             {% endif %}
                         </div>
-                        
+
                         {% if company.catalogPath %}
                             <div class="mt-4 pt-4 border-t border-gray-200">
-                                <a href="{{ asset(company.catalogPath) }}" target="_blank" 
+                                <a href="{{ asset(company.catalogPath) }}" target="_blank"
                                    class="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition-colors">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -257,26 +278,26 @@
                 <span class="text-gray-600">{{ products|length }} ürün</span>
             {% endif %}
         </div>
-        
+
         {% if products|length > 0 %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="gap:24px;">
                 {% for product in products %}
                     <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
                         <!-- Product Image -->
-                        <div class="aspect-w-16 aspect-h-12 bg-gray-100">
+                        <div class="relative h-72 bg-gray-100 overflow-hidden">
                             {% if product.images|length > 0 %}
-                                <img src="{{ asset(product.images.first.imagePath) }}" 
-                                     alt="{{ product.name }}" 
-                                     class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="{{ asset(product.images.first.imagePath) }}"
+                                     alt="{{ product.name }}"
+                                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             {% else %}
-                                <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                                <div class="w-full h-full bg-gray-100 flex items-center justify-center">
                                     <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                     </svg>
                                 </div>
                             {% endif %}
                         </div>
-                        
+
                         <!-- Product Info -->
                         <div class="p-6">
                             <!-- Status Badges -->
@@ -290,42 +311,43 @@
                                     </span>
                                 {% endif %}
                             </div>
-                            
+
                             <!-- Product Name -->
                             <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-                                <a href="{{ path('public_product_detail', {id: product.id}) }}" 
+                                <a href="{{ path('public_product_detail', {id: product.id}) }}"
                                    class="hover:text-primary-600 transition-colors">
                                     {{ product.name }}
                                 </a>
                             </h3>
-                            
+
                             <!-- Product Details -->
                             <div class="space-y-1 text-sm text-gray-600 mb-4">
                                 {% if product.brand %}
                                     <p><span class="font-medium">Marka:</span> {{ product.brand }}{% if product.modelType %} - {{ product.modelType }}{% endif %}</p>
                                 {% endif %}
-                                
+
                                 {% if product.category %}
                                     <p>
                                         <span class="font-medium">Kategori:</span>
-                                        <a href="{{ path('public_products', {category: product.category.id}) }}" 
+                                        <a href="{{ path('public_products', {category: product.category.id}) }}"
                                            class="text-primary-600 hover:text-primary-700">
                                             {{ product.category.name }}
                                         </a>
                                     </p>
                                 {% endif %}
                             </div>
-                            
+
                             <!-- Description -->
                             {% if product.description %}
                                 <p class="text-gray-600 text-sm mb-4 line-clamp-2">
                                     {{ product.description|slice(0, 100) }}{% if product.description|length > 100 %}...{% endif %}
                                 </p>
                             {% endif %}
-                            
+
                             <!-- Action Button -->
-                            <a href="{{ path('public_product_detail', {id: product.id}) }}" 
-                               class="inline-flex items-center justify-center w-full px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                            <a href="{{ path('public_product_detail', {id: product.id}) }}"
+                               class="inline-flex items-center justify-center w-full px-4 py-3 text-sm font-medium rounded-lg transition-colors"
+                               style="background:#C0C0C0;color:#111111;">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -347,4 +369,23 @@
         {% endif %}
     </section>
 </div>
+{% endblock %}
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
 {% endblock %}

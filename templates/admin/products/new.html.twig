@@ -51,7 +51,18 @@
                             {{ form_errors(form.modelType, {'attr': {'class': 'text-sm text-red-600'}}) }}
                         </div>
                         
+                        <div class="space-y-2">
+                            {{ form_label(form.price, 'Fiyat', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.price, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors', 'placeholder': 'Örn: 150000.00'}}) }}
+                            {{ form_errors(form.price, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
 
+                        <div class="space-y-2">
+                            {{ form_label(form.currency, 'Para Birimi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                            {{ form_widget(form.currency, {'attr': {'class': 'w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors'}}) }}
+                            {{ form_errors(form.currency, {'attr': {'class': 'text-sm text-red-600'}}) }}
+                        </div>
+ 
                     </div>
                 </div>
 

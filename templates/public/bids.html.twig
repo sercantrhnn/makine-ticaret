@@ -2,30 +2,77 @@
 
 {% block title %}İhaleler - Makine Ticaret{% endblock %}
 
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">İhaleler</div>
+      </div>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+      {% if app.user %}
+        <div style="position:relative;" id="userMenuRoot">
+          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('app_logout') }}" style="display:block;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">Çıkış Yap</a>
+          </div>
+        </div>
+        <script>
+          (function(){
+            var btn = document.getElementById('userMenuButton');
+            var dd = document.getElementById('userMenuDropdown');
+            var root = document.getElementById('userMenuRoot');
+            if (!btn || !dd || !root) return;
+            btn.addEventListener('click', function(e){
+              e.stopPropagation();
+              dd.style.display = dd.style.display === 'none' || dd.style.display === '' ? 'block' : 'none';
+            });
+            document.addEventListener('click', function(e){
+              if (!root.contains(e.target)) { dd.style.display = 'none'; }
+            });
+          })();
+        </script>
+      {% else %}
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+{% endblock %}
 {% block body %}
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section class="bg-white border-b border-gray-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
             <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">
-                    İhaleler
-                </h1>
-                <p class="text-xl text-blue-100 max-w-2xl mx-auto">
-                    Onaylanan ve aktif durumda olan tüm ihaleleri keşfedin
-                </p>
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">İhaleler</h1>
+                <p class="text-base text-gray-600 max-w-2xl mx-auto">Onaylanan ve aktif durumdaki ihaleleri keşfedin.</p>
             </div>
         </div>
     </section>
 
     <!-- Search & Filter Section -->
     <section class="bg-white shadow-sm border-b border-gray-200 py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
             <form method="GET" class="flex flex-col md:flex-row gap-4 items-center">
                 <div class="flex-1 w-full">
                     <div class="relative">
-                        <input type="text" 
-                               name="search" 
+                        <input type="text"
+                               name="search"
                                value="{{ search }}"
                                placeholder="İhale, ürün, firma adında arayın..."
                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500">
@@ -36,7 +83,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg">
+                <button type="submit" class="px-6 py-3 font-semibold rounded-lg transition-all duration-200 shadow" style="background:#C0C0C0;color:#111111;">
                     <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
@@ -48,7 +95,7 @@
 
     <!-- Results Info -->
     <section class="py-6">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="text-2xl font-bold text-gray-900">İhaleler</h2>
@@ -76,7 +123,7 @@
     <section class="pb-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {% if bids|length > 0 %}
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" style="gap:24px;">
                     {% for bid in bids %}
                         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 border border-gray-100 group">
                             <!-- Status Badge -->
@@ -91,11 +138,11 @@
                                     Onaylı İhale
                                 </div>
                             {% endif %}
-                            
+
                             <div class="p-5">
                                 <!-- Product Info -->
                                 <div class="mb-4">
-                                    <h3 class="text-md font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                                         {{ bid.product.name }}
                                     </h3>
                                     <div class="space-y-1">
@@ -129,8 +176,9 @@
                                 </div>
 
                                 <!-- Action Button -->
-                                <a href="{{ path('public_bid_detail', {'id': bid.id}) }}" 
-                                   class="block w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-center py-2.5 px-4 rounded-md text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 group-hover:shadow-md">
+                                <a href="{{ path('public_bid_detail', {'id': bid.id}) }}"
+                                   class="block w-full text-center py-3 px-4 rounded-md text-sm font-medium transition-all duration-200 group-hover:shadow-md"
+                                   style="background:#C0C0C0;color:#111111;">
                                     İhale Detayı
                                 </a>
                             </div>
@@ -196,4 +244,23 @@
         </div>
     </section>
 </div>
+{% endblock %}
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
 {% endblock %}
