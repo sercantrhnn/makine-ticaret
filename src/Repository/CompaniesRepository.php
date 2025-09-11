@@ -34,10 +34,20 @@ class CompaniesRepository extends ServiceEntityRepository
     /**
      * Pagination ve search ile firmaları getir
      */
-    public function findWithPaginationAndSearch(int $page, int $limit, string $search = ''): array
+    public function findWithPaginationAndSearch(int $page, int $limit, string $search = '', ?string $sort = null): array
     {
-        $qb = $this->createQueryBuilder('c')
-            ->orderBy('c.name', 'ASC');
+        $qb = $this->createQueryBuilder('c');
+
+        // Sorting
+        switch ($sort) {
+            case 'name_desc':
+                $qb->orderBy('c.name', 'DESC');
+                break;
+            case 'name_asc':
+            default:
+                $qb->orderBy('c.name', 'ASC');
+                break;
+        }
         
         if (!empty($search)) {
             $qb->andWhere('LOWER(c.name) LIKE LOWER(:search) OR LOWER(c.about) LIKE LOWER(:search) OR LOWER(c.short_name) LIKE LOWER(:search) OR LOWER(c.title) LIKE LOWER(:search) OR LOWER(c.activityType) LIKE LOWER(:search) OR LOWER(c.phone) LIKE LOWER(:search) OR LOWER(c.email) LIKE LOWER(:search) OR LOWER(c.website) LIKE LOWER(:search)')
@@ -64,5 +74,64 @@ class CompaniesRepository extends ServiceEntityRepository
         }
         
         return $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Filtrelerle firmaları getir: belirli kategorilerde (veya altlarında) ürünü olan firmalar
+     */
+    public function findWithCategoryFilter(int $page, int $limit, string $search = '', ?array $categoryIds = null, ?string $sort = null): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.products', 'p')
+            ->leftJoin('p.category', 'cat')
+            ->addSelect('c')
+            ->groupBy('c.id')
+            ;
+
+        switch ($sort) {
+            case 'name_desc':
+                $qb->orderBy('c.name', 'DESC');
+                break;
+            case 'name_asc':
+            default:
+                $qb->orderBy('c.name', 'ASC');
+                break;
+        }
+
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(c.name) LIKE LOWER(:search) OR LOWER(c.about) LIKE LOWER(:search) OR LOWER(c.short_name) LIKE LOWER(:search) OR LOWER(c.title) LIKE LOWER(:search) OR LOWER(c.activityType) LIKE LOWER(:search) OR LOWER(c.phone) LIKE LOWER(:search) OR LOWER(c.email) LIKE LOWER(:search) OR LOWER(c.website) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($categoryIds && count($categoryIds) > 0) {
+            $qb->andWhere('cat IN (:categoryIds)')->setParameter('categoryIds', $categoryIds);
+        }
+
+        return $qb->setFirstResult(($page - 1) * $limit)
+                 ->setMaxResults($limit)
+                 ->getQuery()
+                 ->getResult();
+    }
+
+    /**
+     * Filtrelerle toplam firma sayısını getir
+     */
+    public function countWithCategoryFilter(string $search = '', ?array $categoryIds = null): int
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('COUNT(DISTINCT c.id)')
+            ->leftJoin('c.products', 'p')
+            ->leftJoin('p.category', 'cat');
+
+        if (!empty($search)) {
+            $qb->andWhere('LOWER(c.name) LIKE LOWER(:search) OR LOWER(c.about) LIKE LOWER(:search) OR LOWER(c.short_name) LIKE LOWER(:search) OR LOWER(c.title) LIKE LOWER(:search) OR LOWER(c.activityType) LIKE LOWER(:search) OR LOWER(c.phone) LIKE LOWER(:search) OR LOWER(c.email) LIKE LOWER(:search) OR LOWER(c.website) LIKE LOWER(:search)')
+               ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($categoryIds && count($categoryIds) > 0) {
+            $qb->andWhere('cat IN (:categoryIds)')->setParameter('categoryIds', $categoryIds);
+        }
+
+        return (int)$qb->getQuery()->getSingleScalarResult();
     }
 }

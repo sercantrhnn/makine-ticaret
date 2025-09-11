@@ -94,6 +94,16 @@
             <!-- Search Form -->
             <div class="mt-6 lg:mt-0 lg:ml-8">
                 <form method="GET" class="flex flex-col sm:flex-row gap-3">
+                    {% if selectedCategoryId %}
+                        <input type="hidden" name="category" value="{{ selectedCategoryId }}">
+                    {% endif %}
+                    <div>
+                        <select name="sort" class="px-3 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500" onchange="this.form.submit()">
+                            <option value="" {% if sort is empty %}selected{% endif %}>Sırala</option>
+                            <option value="name_asc" {% if sort == 'name_asc' %}selected{% endif %}>Ada göre A → Z</option>
+                            <option value="name_desc" {% if sort == 'name_desc' %}selected{% endif %}>Ada göre Z → A</option>
+                        </select>
+                    </div>
                     <div class="relative flex-1 sm:min-w-80">
                         <input type="text"
                                name="search"
@@ -116,6 +126,25 @@
 </section>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar - Top-level Categories -->
+        <aside class="lg:w-64 flex-shrink-0">
+            <div class="rounded-lg shadow-sm border p-6 sticky top-24 bg-white">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Ana Kategoriler</h3>
+                <div class="space-y-2">
+                    <a href="{{ path('public_companies', app.request.query.all|merge({category: null}) ) }}"
+                       class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors {% if not selectedCategoryId %}bg-gray-100 text-gray-900{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Tüm Firmalar</a>
+                    {% for category in categories %}
+                        {% if category.parent is null and category.isActive %}
+                            <a href="{{ path('public_companies', app.request.query.all|merge({category: category.id})) }}"
+                               class="block w-full text-left px-3 py-2 rounded-md text-sm transition-colors {% if selectedCategoryId and selectedCategoryId == category.id %}bg-gray-100 text-gray-900{% else %}text-gray-700 hover:bg-gray-100{% endif %}">{{ category.name }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
+
+        <div class="flex-1">
     {% if companies|length > 0 %}
         <!-- Companies Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8" style="gap:24px;">
@@ -280,7 +309,8 @@
                 </div>
             </div>
         {% endif %}
-
+        </div>
+    </div>
     {% else %}
         <!-- No Companies Found -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">

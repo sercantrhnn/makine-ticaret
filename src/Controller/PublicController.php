@@ -104,15 +104,33 @@ class PublicController extends AbstractController
     }
 
     #[Route('/companies', name: 'public_companies')]
-    public function companies(Request $request, CompaniesRepository $companiesRepository): Response
+    public function companies(Request $request, CompaniesRepository $companiesRepository, \App\Repository\CategoriesRepository $categoriesRepository): Response
     {
         $page = $request->query->getInt('page', 1);
         $limit = 12;
         $search = $request->query->get('search', '');
+        $categoryId = $request->query->getInt('category');
+        $sort = $request->query->get('sort');
 
-        $companies = $companiesRepository->findWithPaginationAndSearch($page, $limit, $search);
-        $totalCompanies = $companiesRepository->countWithSearch($search);
+        $categoryIds = null;
+        $selectedCategory = null;
+        if ($categoryId) {
+            // Top-level ve alt kategoriler dahil
+            // Basit yaklaşım: doğrudan ürünlerin category.id eşleşmesi; altları da kapsamak için CategoriesRepository gerekebilir
+            // Burada sadece seçilen id ile filtreleyelim; alt kategoriler istenirse ileride genişletilir
+            $categoryIds = [$categoryId];
+        }
+
+        if ($categoryIds) {
+            $companies = $companiesRepository->findWithCategoryFilter($page, $limit, $search, $categoryIds, $sort);
+            $totalCompanies = $companiesRepository->countWithCategoryFilter($search, $categoryIds);
+        } else {
+            $companies = $companiesRepository->findWithPaginationAndSearch($page, $limit, $search, $sort);
+            $totalCompanies = $companiesRepository->countWithSearch($search);
+        }
         $totalPages = ceil($totalCompanies / $limit);
+
+        $categories = $categoriesRepository->findBy(['isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC']);
 
         return $this->render('public/companies.html.twig', [
             'companies' => $companies,
@@ -120,6 +138,9 @@ class PublicController extends AbstractController
             'totalPages' => $totalPages,
             'totalCompanies' => $totalCompanies,
             'search' => $search,
+            'selectedCategoryId' => $categoryId ?: null,
+            'categories' => $categories,
+            'sort' => $sort,
         ]);
     }
 
