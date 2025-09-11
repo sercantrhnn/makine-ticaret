@@ -1,0 +1,83 @@
+{% extends 'public/base.html.twig' %}
+
+{% block title %}Mesaj Konusu - #{{ offer.id }} | Makine Ticaret{% endblock %}
+
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">Mesajlar</div>
+      </div>
+    </a>
+  </div>
+</header>
+{% endblock %}
+
+{% block body %}
+<div style="min-height: calc(100vh - 120px);">
+<section class="py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
+    <div class="mb-4">
+      <a href="{{ path('user_messages_inbox') }}" class="text-sm text-gray-600 hover:text-gray-900">← Mesajlarım</a>
+    </div>
+    <div class="bg-white rounded-lg border border-gray-200">
+      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <div>
+          <h1 class="text-lg font-semibold text-gray-900">{{ offer.bid.product.name }}</h1>
+          <p class="text-sm text-gray-500">İhale #{{ offer.bid.id }}</p>
+        </div>
+        <div class="text-sm text-gray-700">Karşı taraf: {{ offer.bidder == app.user ? (offer.owner.name ?? offer.owner.email) : (offer.bidder.name ?? offer.bidder.email) }}</div>
+      </div>
+      <div class="p-6 space-y-3 max-h-[60vh] overflow-auto">
+        {% for m in messages %}
+          <div class="p-3 rounded-lg border {{ m.sender == app.user ? 'bg-indigo-50 border-indigo-100' : 'bg-gray-50 border-gray-200' }}">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-medium text-gray-900">{{ m.sender.name ?? m.sender.email }}</div>
+              <div class="text-xs text-gray-500">{{ m.createdAt|date('d.m.Y H:i') }}</div>
+            </div>
+            <div class="mt-2 text-sm text-gray-800">{{ m.content|nl2br }}</div>
+          </div>
+        {% else %}
+          <div class="text-sm text-gray-500">Henüz mesaj yok.</div>
+        {% endfor %}
+      </div>
+      <div class="px-6 py-4 border-t border-gray-100">
+        {{ form_start(form) }}
+        <div class="flex gap-2">
+          {{ form_widget(form.content, {'attr': {'class': 'flex-1 px-3 py-2 border border-gray-300 rounded-lg', 'rows': 2}}) }}
+          <button type="submit" class="px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">Gönder</button>
+        </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
+{% endblock %}
+
+

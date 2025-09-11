@@ -7,6 +7,7 @@ use App\Entity\Companies;
 use App\Entity\Products;
 use App\Form\BidsType;
 use App\Repository\BidsRepository;
+use App\Repository\BidOfferRepository;
 use App\Repository\CompaniesRepository;
 use App\Repository\ProductsRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +26,8 @@ class BidsController extends AbstractController
         private EntityManagerInterface $entityManager,
         private BidsRepository $bidsRepository,
         private CompaniesRepository $companiesRepository,
-        private ProductsRepository $productsRepository
+        private ProductsRepository $productsRepository,
+        private BidOfferRepository $bidOfferRepository
     ) {}
 
     #[Route('/', name: 'app_bids_index', methods: ['GET'])]
@@ -46,9 +48,16 @@ class BidsController extends AbstractController
             }
         }
 
+        // Teklif sayıları
+        $offerCounts = [];
+        foreach ($bids as $bid) {
+            $offerCounts[$bid->getId()] = $this->bidOfferRepository->countByBidId($bid->getId());
+        }
+
         return $this->render('admin/bids/index.html.twig', [
             'bids' => $bids,
             'isAdmin' => in_array('ROLE_ADMIN', $user->getRoles()),
+            'offerCounts' => $offerCounts,
         ]);
     }
 
@@ -96,9 +105,12 @@ class BidsController extends AbstractController
             }
         }
 
+        $offers = $this->bidOfferRepository->findBy(['bid' => $bid], ['createdAt' => 'DESC']);
+
         return $this->render('admin/bids/show.html.twig', [
             'bid' => $bid,
             'isAdmin' => in_array('ROLE_ADMIN', $user->getRoles()),
+            'offers' => $offers,
         ]);
     }
 

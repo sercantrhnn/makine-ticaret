@@ -1,0 +1,116 @@
+{% extends 'public/base.html.twig' %}
+
+{% block title %}Teklif Ver - {{ bid.product.name }} | Makine Ticaret{% endblock %}
+
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
+      </div>
+      <div>
+        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
+        <div style="font-size:11px;color:#b3b3b3;">Teklif</div>
+      </div>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">İhaleler</a>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block body %}
+<section class="py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
+    <div class="mb-6">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <a href="{{ path('public_home') }}" class="hover:text-gray-700">Ana Sayfa</a>
+        <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <a href="{{ path('public_bids') }}" class="hover:text-gray-700">İhaleler</a>
+        <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <a href="{{ path('public_bid_detail', {id: bid.id}) }}" class="hover:text-gray-700">İhale Detayı</a>
+        <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        <span class="text-gray-900">Teklif Ver</span>
+      </nav>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <h1 class="text-xl font-semibold text-gray-900">Teklif Ver - {{ bid.product.name }}</h1>
+          </div>
+          <div class="p-6">
+            {{ form_start(form) }}
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  {{ form_label(form.price, 'Teklif Fiyatı', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                  {{ form_widget(form.price, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg'}}) }}
+                </div>
+                <div>
+                  {{ form_label(form.currency, 'Para Birimi', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                  {{ form_widget(form.currency, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg'}}) }}
+                </div>
+                <div>
+                  {{ form_label(form.contactPhone, 'Telefon', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                  {{ form_widget(form.contactPhone, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg', 'placeholder': '+90 5xx xxx xx xx'}}) }}
+                </div>
+                <div>
+                  {{ form_label(form.contactEmail, 'E-posta', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                  {{ form_widget(form.contactEmail, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg', 'placeholder': 'mail@ornek.com'}}) }}
+                </div>
+              </div>
+              <div class="mt-4">
+                {{ form_label(form.message, 'Mesajınız', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                {{ form_widget(form.message, {'attr': {'class': 'w-full px-3 py-2 border border-gray-300 rounded-lg', 'rows': '4', 'placeholder': 'İstek, sorular veya ek bilgiler...'}}) }}
+              </div>
+              <div class="mt-6 flex items-center justify-end gap-3">
+                <a href="{{ path('public_bid_detail', {id: bid.id}) }}" class="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50">Vazgeç</a>
+                <button type="submit" class="px-5 py-2 rounded-lg text-white" style="background:#0a0a0a;">Teklif Gönder</button>
+              </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">İhale Özeti</h3>
+          <p class="text-sm text-gray-600 mb-1"><span class="font-medium text-gray-800">Ürün:</span> {{ bid.product.name }}</p>
+          <p class="text-sm text-gray-600 mb-1"><span class="font-medium text-gray-800">Firma:</span> {{ bid.company.name }}</p>
+          <p class="text-sm text-gray-600 mb-1"><span class="font-medium text-gray-800">Başlangıç:</span> ₺{{ bid.startingPrice|number_format }}</p>
+          {% if bid.endTime %}
+            <p class="text-sm text-gray-600"><span class="font-medium text-gray-800">Bitiş:</span> {{ bid.endTime|date('d.m.Y H:i') }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+      </div>
+      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
+{% endblock %}
+
+

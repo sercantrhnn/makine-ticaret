@@ -1,0 +1,45 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Teklif Mesajları - #{{ offer.id }}{% endblock %}
+{% block page_title %}Teklif Mesajları - #{{ offer.id }}{% endblock %}
+
+{% block body %}
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Teklif Mesajları</h1>
+      <p class="text-sm text-gray-500">İhale: {{ offer.bid.product.name }} - Teklif Sahibi: {{ offer.bidder.name ?? offer.bidder.email }}</p>
+    </div>
+    <a href="{{ path('admin_bid_offers', {id: offer.bid.id}) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Tekliflere Dön</a>
+  </div>
+
+  <div class="bg-white shadow rounded-lg">
+    <div class="p-6 space-y-4">
+      <div class="space-y-3 max-h-[60vh] overflow-auto">
+        {% for m in messages %}
+          <div class="p-3 rounded-lg border {{ m.sender == app.user ? 'bg-indigo-50 border-indigo-100' : 'bg-gray-50 border-gray-200' }}">
+            <div class="flex items-center justify-between">
+              <div class="text-sm font-medium text-gray-900">{{ m.sender.name ?? m.sender.email }}</div>
+              <div class="text-xs text-gray-500">{{ m.createdAt|date('d.m.Y H:i') }}</div>
+            </div>
+            <div class="mt-2 text-sm text-gray-800">{{ m.content|nl2br }}</div>
+          </div>
+        {% else %}
+          <div class="text-sm text-gray-500">Henüz mesaj yok.</div>
+        {% endfor %}
+      </div>
+
+      <div class="pt-4 border-t border-gray-200">
+        {{ form_start(form) }}
+          <div class="flex gap-2">
+            {{ form_widget(form.content, {'attr': {'class': 'flex-1 px-3 py-2 border border-gray-300 rounded-lg', 'rows': 2}}) }}
+            <button type="submit" class="px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">Gönder</button>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

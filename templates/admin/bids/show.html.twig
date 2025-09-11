@@ -215,6 +215,45 @@
             </div>
             
             <div class="bg-white shadow rounded-lg mt-6">
+                <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="text-lg font-medium text-gray-900">Gelen Teklifler</h3>
+                    <div class="flex items-center gap-3">
+                        <span class="text-sm text-gray-500">{{ offers|length }} adet</span>
+                        <a href="{{ path('admin_bid_offers', {id: bid.id}) }}" class="text-indigo-600 hover:text-indigo-900 text-sm">Tümünü Gör</a>
+                    </div>
+                </div>
+                <div class="p-6 space-y-3">
+                    {% if offers|length > 0 %}
+                        {% for offer in offers %}
+                            <div class="p-3 border border-gray-200 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm text-gray-700">
+                                        <span class="font-semibold">{{ offer.bidder.name ?? offer.bidder.email }}</span>
+                                        <span class="text-gray-500">• {{ offer.createdAt|date('d.m.Y H:i') }}</span>
+                                    </div>
+                                    <div class="text-sm font-bold text-gray-900">
+                                        {{ offer.currency }} {{ offer.price|number_format(2, ',', '.') }}
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-sm text-gray-600">
+                                    {% if offer.contactPhone %}<div>Telefon: {{ offer.contactPhone }}</div>{% endif %}
+                                    {% if offer.contactEmail %}<div>E-posta: {{ offer.contactEmail }}</div>{% endif %}
+                                </div>
+                                {% if offer.message %}
+                                    <div class="mt-2 text-sm text-gray-700">{{ offer.message|nl2br }}</div>
+                                {% endif %}
+                                <div class="mt-3">
+                                    <a href="{{ path('admin_bid_offer_messages', {id: offer.id}) }}" class="inline-flex items-center px-3 py-1.5 text-sm rounded-md text-white" style="background:#0a0a0a;">Mesaj Gönder</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="text-sm text-gray-500">Henüz teklif yok.</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="bg-white shadow rounded-lg mt-6">
                 <div class="px-6 py-4 border-b border-gray-200">
                     <h3 class="text-lg font-medium text-gray-900">İstatistikler</h3>
                 </div>

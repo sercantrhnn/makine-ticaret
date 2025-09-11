@@ -26,8 +26,21 @@
             <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:160px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
-            <a href="{{ path('app_logout') }}" style="display:block;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">Çıkış Yap</a>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
+              <span>Mesajlarım</span>
+            </a>
+            {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
+            <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>Panele Git</span>
+            </a>
+            {% endif %}
+            <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+              <span>Çıkış Yap</span>
+            </a>
           </div>
         </div>
         <script>
@@ -313,6 +326,7 @@
     </div>
     <div class="bids-grid">
       {% for bid in approvedBids %}
+        <a href="{{ path('public_bid_detail', {'id': bid.id}) }}" style="text-decoration:none;color:inherit;display:block;">
         <article class="bid-card">
           <div class="bid-media">
             {% set firstImage = bid.product and bid.product.images ? bid.product.images|first : null %}
@@ -331,6 +345,7 @@
             </div>
           </div>
         </article>
+        </a>
       {% endfor %}
     </div>
   </div>
