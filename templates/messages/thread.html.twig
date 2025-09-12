@@ -26,11 +26,47 @@
       <a href="{{ path('user_messages_inbox') }}" class="text-sm text-gray-600 hover:text-gray-900">← Mesajlarım</a>
     </div>
     <div class="bg-white rounded-lg border border-gray-200">
-      <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-        <div>
+      <div class="px-6 py-4 border-b border-gray-100">
+        <div class="mb-4">
           <h1 class="text-lg font-semibold text-gray-900">{{ offer.bid.product.name }}</h1>
           <p class="text-sm text-gray-500">İhale #{{ offer.bid.id }}</p>
         </div>
+        
+        <!-- İhale Bilgileri -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-4">
+          <h3 class="text-sm font-semibold text-gray-900 mb-2">İhale Detayları</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <span class="text-gray-600">Ürün:</span>
+              <span class="text-gray-900">{{ offer.bid.product.name }}</span>
+            </div>
+            <div>
+              <span class="text-gray-600">Kategori:</span>
+              <span class="text-gray-900">{{ offer.bid.product.category.name }}</span>
+            </div>
+            <div>
+              <span class="text-gray-600">İhale Başlangıç:</span>
+              <span class="text-gray-900">{{ offer.bid.createdAt|date('d.m.Y H:i') }}</span>
+            </div>
+            <div>
+              <span class="text-gray-600">İhale Bitiş:</span>
+              <span class="text-gray-900">{{ offer.bid.endTime|date('d.m.Y H:i') }}</span>
+            </div>
+            <div>
+              <span class="text-gray-600">Başlangıç Fiyatı:</span>
+              <span class="text-gray-900">{{ offer.bid.startingPrice|number_format(2, ',', '.') }} TL</span>
+            </div>
+            <div>
+              <span class="text-gray-600">Teklif Fiyatı:</span>
+              <span class="text-gray-900 font-semibold">{{ offer.currency }} {{ offer.price|number_format(2, ',', '.') }}</span>
+            </div>
+            <div>
+              <span class="text-gray-600">İletişim:</span>
+              <span class="text-gray-900">{{ offer.contactPhone }} / {{ offer.contactEmail }}</span>
+            </div>
+          </div>
+        </div>
+        
         <div class="text-sm text-gray-700">Karşı taraf: {{ offer.bidder == app.user ? (offer.owner.name ?? offer.owner.email) : (offer.bidder.name ?? offer.bidder.email) }}</div>
       </div>
       <div class="p-6 space-y-3 max-h-[60vh] overflow-auto">

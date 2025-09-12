@@ -22,37 +22,80 @@
 <div style="min-height: calc(100vh - 120px);">
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
-    <h1 class="text-2xl font-bold text-gray-900 mb-4">Mesajlarım</h1>
-    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-50">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İhale / Ürün</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taraf</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teklif</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Son Güncelleme</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlem</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          {% for offer in offers %}
-            <tr class="hover:bg-gray-50">
-              <td class="px-6 py-4 text-sm text-gray-900">#{{ offer.bid.id }} — {{ offer.product.name }}</td>
-              <td class="px-6 py-4 text-sm text-gray-700">{{ offer.owner == app.user ? (offer.bidder.name ?? offer.bidder.email) : (offer.owner.name ?? offer.owner.email) }}</td>
-              <td class="px-6 py-4 text-sm text-gray-900">{{ offer.currency }} {{ offer.price|number_format(2, ',', '.') }}</td>
-              <td class="px-6 py-4 text-sm text-gray-700">{{ offer.updatedAt|date('d.m.Y H:i') }}</td>
-              <td class="px-6 py-4 text-sm font-medium">
-                <a href="{{ path('user_messages_thread', {id: offer.id}) }}" class="text-indigo-600 hover:text-indigo-900">Görüntüle</a>
-              </td>
-            </tr>
-          {% else %}
+    <h1 class="text-2xl font-bold text-gray-900 mb-6">Mesajlarım</h1>
+    
+    {# İhale Teklifleri #}
+    {% if offers|length > 0 %}
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">İhale Teklifleri</h2>
+      <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
             <tr>
-              <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">Henüz bir mesajınız yok.</td>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İhale / Ürün</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taraf</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teklif</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Son Güncelleme</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlem</th>
             </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for offer in offers %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-900">#{{ offer.bid.id }} — {{ offer.product.name }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700">{{ offer.owner == app.user ? (offer.bidder.name ?? offer.bidder.email) : (offer.owner.name ?? offer.owner.email) }}</td>
+                <td class="px-6 py-4 text-sm text-gray-900">{{ offer.currency }} {{ offer.price|number_format(2, ',', '.') }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700">{{ offer.updatedAt|date('d.m.Y H:i') }}</td>
+                <td class="px-6 py-4 text-sm font-medium">
+                  <a href="{{ path('user_messages_thread', {id: offer.id}) }}" class="text-indigo-600 hover:text-indigo-900">Görüntüle</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
+    {% endif %}
+
+    {# Alım Talepleri #}
+    {% if purchaseRequests|length > 0 %}
+    <div class="mb-8">
+      <h2 class="text-lg font-semibold text-gray-900 mb-4">Alım Talepleri</h2>
+      <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ürün Adı</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Açıklama</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tarih</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlem</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for pr in purchaseRequests %}
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ pr.productName }}</td>
+                <td class="px-6 py-4 text-sm text-gray-700 max-w-xs">
+                  <div class="line-clamp-2">{{ pr.description|default('Açıklama yok') }}</div>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-700">{{ pr.date|date('d.m.Y H:i') }}</td>
+                <td class="px-6 py-4 text-sm font-medium">
+                  <a href="{{ path('user_purchase_request_thread', {id: pr.id}) }}" class="text-indigo-600 hover:text-indigo-900">Görüntüle</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    {# Hiç mesaj yoksa #}
+    {% if offers|length == 0 and purchaseRequests|length == 0 %}
+    <div class="bg-white rounded-lg border border-gray-200 p-8 text-center">
+      <p class="text-gray-500">Henüz bir mesajınız yok.</p>
+    </div>
+    {% endif %}
   </div>
 </section>
 </div>

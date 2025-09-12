@@ -26,8 +26,8 @@ class PurchaseRequest
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $pending = null;
+    #[ORM\Column(length: 20)]
+    private ?string $status = 'pending';
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
@@ -35,6 +35,7 @@ class PurchaseRequest
     public function __construct()
     {
         $this->date = new \DateTimeImmutable();
+        $this->status = 'pending';
     }
 
 
@@ -91,14 +92,14 @@ class PurchaseRequest
         return $this;
     }
 
-    public function getPending(): ?string
+    public function getStatus(): ?string
     {
-        return $this->pending;
+        return $this->status;
     }
 
-    public function setPending(?string $pending): static
+    public function setStatus(string $status): static
     {
-        $this->pending = $pending;
+        $this->status = $status;
 
         return $this;
     }
