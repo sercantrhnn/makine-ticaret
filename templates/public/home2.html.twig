@@ -6,13 +6,7 @@
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
   <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
     <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
-      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
-        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
-      </div>
-      <div>
-        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
-        <div style="font-size:11px;color:#b3b3b3;">Yeni Deneyim</div>
-      </div>
+      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
       <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
@@ -182,6 +176,12 @@
   .arrow {
     font-size: 20px;
   }
+
+  /* Reveal animations */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.from-left { transform: translateX(-28px); }
+  .reveal.from-right { transform: translateX(28px); }
+  .reveal.visible { opacity: 1; transform: translate(0,0); }
 </style>
 
 <section class="hero-video">
@@ -258,7 +258,7 @@
       {% for category in categories %}
         {% set v = demoVideos[loop.index0 % demoVideos|length] %}
         <a href="{{ path('public_products', {category: category.id}) }}" style="text-decoration:none;color:inherit;">
-        <article class="model-card" data-title="{{ category.name }}">
+        <article class="model-card reveal {{ loop.index is odd ? 'from-left' : 'from-right' }}" data-title="{{ category.name }}">
           <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1600&auto=format&fit=crop" alt="{{ category.name }}">
           <video src="{{ v }}" muted preload="none"></video>
           <div class="model-info">
@@ -303,7 +303,7 @@
         </thead>
         <tbody>
           {% for pr in purchaseRequests %}
-            <tr>
+            <tr class="reveal">
               <td class="date-cell">{{ pr.date|date('d.m.Y H:i') }}</td>
               <td class="product-name">{{ pr.productName }}</td>
               <td class="description-cell max-w-xs">
@@ -341,6 +341,32 @@
       if (categorySection) { categorySection.classList.remove('is-dark'); }
     });
   });
+
+  // Reveal on scroll
+  function initRevealAnimations(){
+    var revealItems = document.querySelectorAll('.reveal:not(.visible)');
+    if (!revealItems.length) return;
+    if ('IntersectionObserver' in window) {
+      var observer = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+      revealItems.forEach(function(el){ observer.observe(el); });
+    } else {
+      // Fallback: show immediately
+      revealItems.forEach(function(el){ el.classList.add('visible'); });
+    }
+  }
+  // İlk çalıştırma (script yüklendiğinde mevcut olanlar)
+  initRevealAnimations();
+  // DOM yüklendiğinde (geç gelen içerikler için)
+  document.addEventListener('DOMContentLoaded', initRevealAnimations);
+  // Tüm sayfa yüklendiğinde (en geç)
+  window.addEventListener('load', initRevealAnimations);
 
   // İletişime Geç butonu kontrolü
   function handleContactClick(prId) {
@@ -551,7 +577,7 @@
     <div class="bids-grid">
       {% for bid in approvedBids %}
         <a href="{{ path('public_bid_detail', {'id': bid.id}) }}" style="text-decoration:none;color:inherit;display:block;">
-        <article class="bid-card">
+        <article class="bid-card reveal {{ loop.index is odd ? 'from-right' : 'from-left' }}">
           <div class="bid-media">
             {% set firstImage = bid.product and bid.product.images ? bid.product.images|first : null %}
             {% if firstImage and firstImage.path is defined %}
@@ -580,20 +606,60 @@
 
 {% block footer %}
 <footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
-        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;">
+    <!-- Ana içerik -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:start;margin-bottom:20px;">
+      <!-- Logo - Sol -->
+      <div>
+        <a href="{{ path('public_home') }}" style="display:inline-flex;align-items:center;">
+          <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:46px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+        </a>
       </div>
-      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
-      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+
+      <!-- İletişim - Orta -->
+      <div style="font-size:13px;line-height:1.7;">
+        <div style="font-weight:700;color:#e5e5e5;margin-bottom:8px;">İletişim</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>İstanbul, Türkiye</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.08"/><path d="M16 3H8a2 2 0 0 0-2 2v5a6 6 0 1 0 12 0V5a2 2 0 0 0-2-2z"/></svg>
+          <a href="mailto:info@makineticaret.com" style="color:#bdbdbd;text-decoration:none;">info@makineticaret.com</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V21a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 12.81 19.86 19.86 0 0 1 0 4.18 A2 2 0 0 1 2 2h4.09a2 2 0 0 1 2 1.72c.12.86.32 1.7.6 2.5a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c.8.28 1.64.48 2.5.6A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:+90XXXXXXXXXX" style="color:#bdbdbd;text-decoration:none;">+90 (___) ___ __ __</a>
+        </div>
+      </div>
+
+      <!-- Sayfalar - Sağ -->
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <div style="font-weight:700;color:#e5e5e5;margin-bottom:4px;">Sayfalarımız</div>
+        <nav style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;font-size:13px;">
+          <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+          <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+          <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+          <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+        </nav>
+      </div>
     </div>
-    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
-    </nav>
+
+    <!-- Alt kısım: Sosyal medya + Copyright -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1a1a1a;">
+      <div style="display:flex;gap:12px;">
+        <a href="#" aria-label="Twitter" style="color:#bdbdbd;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 12 7.11v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" style="color:#bdbdbd;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram" style="color:#bdbdbd;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        </a>
+      </div>
+      <div style="font-size:12px;color:#7a7a7a;text-align:center;">© {{ "now"|date("Y") }} MINEINDUSTRIES. Tüm hakları saklıdır.</div>
+    </div>
   </div>
 </footer>
 {% endblock %}
