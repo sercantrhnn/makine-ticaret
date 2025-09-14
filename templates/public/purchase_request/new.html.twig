@@ -2,45 +2,173 @@
 
 {% block title %}Alım Talebi Oluştur{% endblock %}
 
-{% block header %}{% endblock %}
-
-{% block body %}
-<section class="bg-white border-b border-gray-200">
-  <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Alım Talebi Oluştur</h1>
-    <div class="bg-white rounded-lg shadow-sm border p-6">
-      {{ form_start(form) }}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            {{ form_label(form.productName) }}
-            {{ form_widget(form.productName, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
-            {{ form_errors(form.productName) }}
-          </div>
-          <div>
-            {{ form_label(form.phone) }}
-            {{ form_widget(form.phone, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
-            {{ form_errors(form.phone) }}
-          </div>
-          <div>
-            {{ form_label(form.email) }}
-            {{ form_widget(form.email, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
-            {{ form_errors(form.email) }}
-          </div>
-          <div class="md:col-span-2">
-            {{ form_label(form.description) }}
-            {{ form_widget(form.description, {attr:{class:'w-full border rounded-lg px-3 py-2', rows:5}}) }}
-            {{ form_errors(form.description) }}
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+      {% if app.user %}
+        <div style="position:relative;" id="userMenuRoot">
+          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
+              <span>Mesajlarım</span>
+            </a>
+            <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Alım Talebi Oluştur</span>
+            </a>
+            {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
+            <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>Panele Git</span>
+            </a>
+            {% endif %}
+            <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+              <span>Çıkış Yap</span>
+            </a>
           </div>
         </div>
-        <div class="mt-6">
-          <button type="submit" class="px-6 py-3 rounded-lg text-white" style="background:#0a0a0a;">Talep Gönder</button>
-        </div>
-      {{ form_end(form) }}
-    </div>
+        <script>
+          (function(){
+            var btn = document.getElementById('userMenuButton');
+            var dd = document.getElementById('userMenuDropdown');
+            var root = document.getElementById('userMenuRoot');
+            if (!btn || !dd || !root) return;
+            btn.addEventListener('click', function(e){
+              e.stopPropagation();
+              dd.style.display = dd.style.display === 'none' || dd.style.display === '' ? 'block' : 'none';
+            });
+            document.addEventListener('click', function(e){
+              if (!root.contains(e.target)) { dd.style.display = 'none'; }
+            });
+          })();
+        </script>
+      {% else %}
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+      {% endif %}
+    </nav>
   </div>
-</section>
+</header>
 {% endblock %}
 
-{% block footer %}{% endblock %}
+{% block body %}
+<div style="min-height: calc(100vh - 200px); display: flex; flex-direction: column;">
+  <section class="bg-white border-b border-gray-200 flex-1">
+    <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
+      <h1 class="text-2xl font-bold text-gray-900 mb-6">Alım Talebi Oluştur</h1>
+      <div class="bg-white rounded-lg shadow-sm border p-6">
+        {{ form_start(form) }}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              {{ form_label(form.productName) }}
+              {{ form_widget(form.productName, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
+              {{ form_errors(form.productName) }}
+            </div>
+            <div>
+              {{ form_label(form.phone) }}
+              {{ form_widget(form.phone, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
+              {{ form_errors(form.phone) }}
+            </div>
+            <div>
+              {{ form_label(form.email) }}
+              {{ form_widget(form.email, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
+              {{ form_errors(form.email) }}
+            </div>
+            <div class="md:col-span-2">
+              {{ form_label(form.description) }}
+              {{ form_widget(form.description, {attr:{class:'w-full border rounded-lg px-3 py-2', rows:5}}) }}
+              {{ form_errors(form.description) }}
+            </div>
+          </div>
+          
+          <!-- Temaya uygun buton -->
+          <div class="mt-6 flex justify-end">
+            <button type="submit" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+              </svg>
+              Talep Gönder
+            </button>
+          </div>
+        {{ form_end(form, {'render_rest': false}) }}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;">
+    <!-- Ana içerik -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:start;margin-bottom:20px;">
+      <!-- Logo - Sol -->
+      <div>
+        <a href="{{ path('public_home') }}" style="display:inline-flex;align-items:center;">
+          <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:46px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+        </a>
+      </div>
+
+      <!-- İletişim - Orta -->
+      <div style="font-size:13px;line-height:1.7;">
+        <div style="font-weight:700;color:#e5e5e5;margin-bottom:8px;">İletişim</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>İstanbul, Türkiye</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.08"/><path d="M16 3H8a2 2 0 0 0-2 2v5a6 6 0 1 0 12 0V5a2 2 0 0 0-2-2z"/></svg>
+          <a href="mailto:info@makineticaret.com" style="color:#bdbdbd;text-decoration:none;">info@makineticaret.com</a>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V21a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 12.81 19.86 19.86 0 0 1 0 4.18 A2 2 0 0 1 2 2h4.09a2 2 0 0 1 2 1.72c.12.86.32 1.7.6 2.5a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c.8.28 1.64.48 2.5.6A2 2 0 0 1 22 16.92z"/></svg>
+          <a href="tel:+90XXXXXXXXXX" style="color:#bdbdbd;text-decoration:none;">+90 (___) ___ __ __</a>
+        </div>
+      </div>
+
+      <!-- Sayfalar - Sağ -->
+      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
+        <div style="font-weight:700;color:#e5e5e5;margin-bottom:4px;">Sayfalarımız</div>
+        <nav style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;font-size:13px;">
+          <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+          <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+          <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+          <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Alt kısım: Sosyal medya + Copyright -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1a1a1a;">
+      <div style="display:flex;gap:12px;">
+        <a href="#" aria-label="Twitter" style="color:#bdbdbd;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 12 7.11v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn" style="color:#bdbdbd;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram" style="color:#bdbdbd;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
+        </a>
+      </div>
+      <div style="font-size:12px;color:#7a7a7a;text-align:center;">© {{ "now"|date("Y") }} MINEINDUSTRIES. Tüm hakları saklıdır.</div>
+    </div>
+  </div>
+</footer>
+{% endblock %}
 
 
