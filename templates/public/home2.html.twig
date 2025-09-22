@@ -580,11 +580,25 @@
         <article class="bid-card reveal {{ loop.index is odd ? 'from-right' : 'from-left' }}">
           <div class="bid-media">
             {% set firstImage = bid.product and bid.product.images ? bid.product.images|first : null %}
-            {% if firstImage and firstImage.path is defined %}
-              <img src="{{ asset(firstImage.path) }}" alt="{{ bid.product.name ?? 'Ürün' }}">
+            {% if firstImage and firstImage.imagePath is defined and firstImage.imagePath %}
+              <img src="{{ asset(firstImage.imagePath) }}" alt="{{ bid.product.name ?? 'Ürün' }}">
             {% else %}
               <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1600&auto=format&fit=crop" alt="Bid">
             {% endif %}
+
+            {# Company badge with logo and name #}
+            <div style="position:absolute;top:8px;left:8px;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.12);">
+              {% if bid.company and bid.company.logoPath %}
+                <img src="{{ asset(bid.company.logoPath) }}" alt="{{ bid.company.name }}" style="width:22px;height:22px;border-radius:999px;object-fit:cover;background:#fff;">
+              {% else %}
+                <div style="width:22px;height:22px;border-radius:999px;background:#e5e7eb;color:#111;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">
+                  {{ bid.company and bid.company.name ? bid.company.name|slice(0,1)|upper : 'F' }}
+                </div>
+              {% endif %}
+              <span style="color:#fff;font-size:12px;font-weight:600;letter-spacing:.2px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                {{ bid.company and bid.company.name ? bid.company.name : 'Firma' }}
+              </span>
+            </div>
           </div>
           <div class="bid-body">
             <div class="bid-company">{{ bid.company.name ?? 'Firma' }}</div>
