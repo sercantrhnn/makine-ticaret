@@ -284,7 +284,7 @@ function deleteBid(bidId) {
     if (confirm('Bu ihale silinecek. Emin misiniz?')) {
         const form = document.getElementById('delete-form');
         form.action = `/admin/bids/${bidId}`;
-        form.querySelector('input[name="_token"]').value = '{{ csrf_token('delete') }}';
+        form.querySelector('input[name="_token"]').value = '{{ csrf_token('delete' ~ bid.id) }}';
         form.submit();
     }
 }

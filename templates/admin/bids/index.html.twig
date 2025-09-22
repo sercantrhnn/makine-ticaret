@@ -161,7 +161,7 @@
                                             {% endif %}
                                         {% endif %}
 
-                                        <button onclick="deleteBid({{ bid.id }})"
+                                        <button onclick="deleteBid({{ bid.id }}, '{{ csrf_token('delete' ~ bid.id) }}')"
                                                 class="text-red-600 hover:text-red-900"
                                                 title="Sil">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,11 +185,11 @@
 </form>
 
 <script>
-function deleteBid(bidId) {
+function deleteBid(bidId, token) {
     if (confirm('Bu ihale silinecek. Emin misiniz?')) {
         const form = document.getElementById('delete-form');
         form.action = `/admin/bids/${bidId}`;
-        form.querySelector('input[name="_token"]').value = '{{ csrf_token('delete') }}';
+        form.querySelector('input[name="_token"]').value = token;
         form.submit();
     }
 }
