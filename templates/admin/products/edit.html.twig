@@ -41,6 +41,75 @@
             </div>
             
             <div class="p-6">
+
+                {# Mevcut Dosyalar (Form dışında, ayrı POST formları ile) #}
+                {% if product.images|length > 0 or product.videos|length > 0 %}
+                    <div class="mb-8 p-4 bg-white rounded-lg border border-purple-200">
+                        <h5 class="text-md font-medium text-gray-800 mb-3 flex items-center">
+                            <svg class="w-4 h-4 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Mevcut Dosyalar
+                        </h5>
+
+                        {% if product.images|length > 0 %}
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-4">
+                                {% for image in product.images %}
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <img src="{{ asset(image.imagePath) }}" alt="{{ image.altText ?? (product.name ~ ' görseli') }}" class="w-16 h-16 object-cover rounded mr-3 border border-gray-200">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs text-gray-500 truncate" title="{{ image.imagePath|split('/')|last }}">
+                                                {{ image.imagePath|split('/')|last|slice(0, 15) }}{% if (image.imagePath|split('/')|last|length) > 15 %}...{% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="ml-3">
+                                            <form method="post" action="{{ path('product_images_delete', {'id': image.id}) }}" onsubmit="return confirm('Bu fotoğrafı silmek istediğinize emin misiniz?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_image_' ~ image.id) }}">
+                                                <button class="inline-flex items-center px-2 py-1 text-xs text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100" title="Sil">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0H7m1-3h8a2 2 0 012 2v1H6V6a2 2 0 012-2z" />
+                                                    </svg>
+                                                    Sil
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% if product.videos|length > 0 %}
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                {% for video in product.videos %}
+                                    <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mr-3">
+                                            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs text-gray-500 truncate" title="{{ video.videoPath|split('/')|last }}">
+                                                {{ video.videoPath|split('/')|last|slice(0, 15) }}{% if (video.videoPath|split('/')|last|length) > 15 %}...{% endif %}
+                                            </p>
+                                        </div>
+                                        <div class="ml-3">
+                                            <form method="post" action="{{ path('product_videos_delete', {'id': video.id}) }}" onsubmit="return confirm('Bu videoyu silmek istediğinize emin misiniz?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_video_' ~ video.id) }}">
+                                                <button class="inline-flex items-center px-2 py-1 text-xs text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100" title="Sil">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0H7m1-3h8a2 2 0 012 2v1H6V6a2 2 0 012-2z" />
+                                                    </svg>
+                                                    Sil
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
                 {{ form_start(form, {'attr': {'id': 'product-edit-form', 'class': 'space-y-8', 'enctype': 'multipart/form-data'}}) }}
                 
                 <!-- Temel Ürün Bilgileri -->
@@ -170,80 +239,6 @@
                         <p class="text-xs text-gray-500">Ürünün sıfır mı ikinci el mi olduğunu belirtin</p>
                     </div>
                 </div>
-
-                {# Mevcut Dosyalar - Dosya Yüklemeleri bölümünün hemen üstünde, ana form içinde ayrı submit butonları ile #}
-                {% if product.images|length > 0 or product.videos|length > 0 %}
-                    <div class="bg-white rounded-lg p-6 border border-purple-200">
-                        <h5 class="text-md font-medium text-gray-800 mb-3 flex items-center">
-                            <svg class="w-4 h-4 text-purple-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Mevcut Dosyalar
-                        </h5>
-                        <div class="space-y-3">
-                            {% if product.images|length > 0 %}
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                    {% for image in product.images %}
-                                        <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                            <img src="{{ asset(image.imagePath) }}" alt="{{ image.altText ?? (product.name ~ ' görseli') }}" class="w-16 h-16 object-cover rounded mr-3 border border-gray-200">
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-xs text-gray-500 truncate" title="{{ image.imagePath|split('/')|last }}">
-                                                    {{ image.imagePath|split('/')|last|slice(0, 15) }}{% if (image.imagePath|split('/')|last|length) > 15 %}...{% endif %}
-                                                </p>
-                                            </div>
-                                            <div class="ml-3">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_image_' ~ image.id) }}">
-                                                <button formaction="{{ path('product_images_delete', {'id': image.id}) }}"
-                                                        formmethod="post"
-                                                        formnovalidate
-                                                        onclick="return confirm('Bu fotoğrafı silmek istediğinize emin misiniz?');"
-                                                        class="inline-flex items-center px-2 py-1 text-xs text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100"
-                                                        title="Sil">
-                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0H7m1-3h8a2 2 0 012 2v1H6V6a2 2 0 012-2z" />
-                                                    </svg>
-                                                    Sil
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                            {% if product.videos|length > 0 %}
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                    {% for video in product.videos %}
-                                        <div class="flex items-center p-3 bg-gray-50 rounded-lg border border-gray-200">
-                                            <div class="flex-shrink-0 w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center mr-3">
-                                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                                </svg>
-                                            </div>
-                                            <div class="flex-1 min-w-0">
-                                                <p class="text-xs text-gray-500 truncate" title="{{ video.videoPath|split('/')|last }}">
-                                                    {{ video.videoPath|split('/')|last|slice(0, 15) }}{% if (video.videoPath|split('/')|last|length) > 15 %}...{% endif %}
-                                                </p>
-                                            </div>
-                                            <div class="ml-3">
-                                                <input type="hidden" name="_token" value="{{ csrf_token('delete_video_' ~ video.id) }}">
-                                                <button formaction="{{ path('product_videos_delete', {'id': video.id}) }}"
-                                                        formmethod="post"
-                                                        formnovalidate
-                                                        onclick="return confirm('Bu videoyu silmek istediğinize emin misiniz?');"
-                                                        class="inline-flex items-center px-2 py-1 text-xs text-red-700 bg-red-50 border border-red-200 rounded hover:bg-red-100"
-                                                        title="Sil">
-                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7h6m2 0H7m1-3h8a2 2 0 012 2v1H6V6a2 2 0 012-2z" />
-                                                    </svg>
-                                                    Sil
-                                                </button>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endif %}
 
                 <!-- Dosya Yüklemeleri -->
                 <div class="bg-purple-50 rounded-lg p-6">
