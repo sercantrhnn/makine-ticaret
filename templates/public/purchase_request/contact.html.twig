@@ -2,9 +2,70 @@
 
 {% block title %}Alım Talebi İletişim - {{ pr.productName }}{% endblock %}
 
-{% block header %}{% endblock %}
+{% block header %}
+<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
+    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
+      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+    </a>
+    <nav style="display:flex;gap:22px;align-items:center;">
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+      {% if app.user %}
+        <div style="position:relative;" id="userMenuRoot">
+          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
+            <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
+              <span>Mesajlarım</span>
+            </a>
+            <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+              <span>Alım Talebi Oluştur</span>
+            </a>
+            {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
+            <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              <span>İhale Oluştur</span>
+            </a>
+            {% endif %}
+            <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+              <span>Çıkış Yap</span>
+            </a>
+          </div>
+        </div>
+        <script>
+          (function(){
+            var btn = document.getElementById('userMenuButton');
+            var dd = document.getElementById('userMenuDropdown');
+            var root = document.getElementById('userMenuRoot');
+            if (!btn || !dd || !root) return;
+            btn.addEventListener('click', function(e){ e.stopPropagation(); dd.style.display = dd.style.display === 'none' || dd.style.display === '' ? 'block' : 'none'; });
+            document.addEventListener('click', function(e){ if (!root.contains(e.target)) { dd.style.display = 'none'; } });
+          })();
+        </script>
+      {% else %}
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+      {% endif %}
+    </nav>
+  </div>
+</header>
+{% endblock %}
 
 {% block body %}
+<style>
+  html, body { height: 100%; }
+  body { display: flex; flex-direction: column; }
+</style>
+<div style="flex:1 0 auto;">
 <section class="bg-white border-b border-gray-200">
   <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
     <div class="mb-6">
@@ -64,6 +125,24 @@
     </div>
   </div>
 </section>
+</div>
 {% endblock %}
 
-{% block footer %}{% endblock %}
+{% block footer %}
+<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
+  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="{{ path('public_home') }}" style="display:inline-flex;align-items:center;">
+        <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:46px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+      </a>
+      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+    </div>
+    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    </nav>
+  </div>
+</footer>
+{% endblock %}
