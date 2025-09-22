@@ -270,6 +270,25 @@
                                 </a>
                             </div>
                         {% endif %}
+
+                        {% if mapEmbedUrl %}
+                            <div class="mt-6">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-3">Harita</h3>
+                                <div class="rounded-lg overflow-hidden border border-gray-200" style="aspect-ratio: 16 / 9;">
+                                    <iframe
+                                        src="{{ mapEmbedUrl }}"
+                                        width="100%"
+                                        height="100%"
+                                        style="border:0;"
+                                        allowfullscreen=""
+                                        loading="lazy"
+                                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                </div>
+                                <a href="{{ company.mapsUrl ?: mapEmbedUrl }}" target="_blank" class="mt-2 inline-flex items-center text-sm text-primary-600 hover:text-primary-700">
+                                    Google Haritalar'da Aç
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

@@ -99,11 +99,19 @@
 
         <!-- Product Images -->
         <div class="lg:max-w-lg lg:self-start">
+            {% set imageUrls = [] %}
+            {% for img in product.images %}
+                {% set imageUrls = imageUrls|merge([asset(img.imagePath)]) %}
+            {% endfor %}
+            <div id="product-gallery" data-images='{{ imageUrls|json_encode|e('html_attr') }}'></div>
+
             <div class="aspect-w-1 aspect-h-1 rounded-lg overflow-hidden mb-4">
                 {% if product.images|length > 0 %}
                     <img src="{{ asset(product.images.first.imagePath) }}"
                          alt="{{ product.name }}"
-                         class="w-full h-96 object-cover">
+                         class="w-full h-96 object-cover cursor-zoom-in"
+                         data-index="0"
+                         id="mainProductImage">
                 {% else %}
                     <div class="w-full h-96 bg-gray-100 flex items-center justify-center">
                         <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,11 +124,12 @@
             <!-- Additional Images -->
             {% if product.images|length > 1 %}
                 <div class="grid grid-cols-4 gap-2">
-                    {% for image in product.images|slice(1, 4) %}
+                    {% for image in product.images|slice(1) %}
                         <div class="aspect-w-1 aspect-h-1 rounded-md overflow-hidden">
                             <img src="{{ asset(image.imagePath) }}"
                                  alt="{{ product.name }}"
-                                 class="w-full h-20 object-cover hover:opacity-75 cursor-pointer">
+                                 class="w-full h-20 object-cover hover:opacity-75 cursor-pointer"
+                                 data-index="{{ loop.index }}">
                         </div>
                     {% endfor %}
                 </div>
@@ -348,6 +357,82 @@
             </div>
         </section>
     {% endif %}
+<script>
+(function(){
+  var galleryRoot = document.getElementById('product-gallery');
+  if (!galleryRoot) return;
+  var images = [];
+  try { images = JSON.parse(galleryRoot.getAttribute('data-images') || '[]'); } catch(e) {}
+  if (!images.length) return;
+
+  var current = 0;
+  var main = document.getElementById('mainProductImage');
+  function openModal(startIndex){
+    current = startIndex || 0;
+    var overlay = document.createElement('div');
+    overlay.id = 'imgModal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center;z-index:9999;';
+
+    var img = document.createElement('img');
+    img.id = 'imgModalImage';
+    img.src = images[current];
+    img.alt = 'image';
+    img.style.cssText = 'max-width:90vw;max-height:85vh;object-fit:contain;box-shadow:0 10px 40px rgba(0,0,0,.5);border-radius:8px;';
+
+    var prev = document.createElement('button');
+    prev.innerHTML = '&#10094;';
+    prev.style.cssText = 'position:absolute;left:20px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;';
+    prev.onclick = function(e){ e.stopPropagation(); show(current-1); };
+
+    var next = document.createElement('button');
+    next.innerHTML = '&#10095;';
+    next.style.cssText = 'position:absolute;right:20px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;';
+    next.onclick = function(e){ e.stopPropagation(); show(current+1); };
+
+    var close = document.createElement('button');
+    close.innerHTML = '&#10006;';
+    close.style.cssText = 'position:absolute;top:16px;right:16px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);width:40px;height:40px;border-radius:999px;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;';
+    close.onclick = function(e){ e.stopPropagation(); destroy(); };
+
+    function show(index){
+      if (index < 0) index = images.length - 1;
+      if (index >= images.length) index = 0;
+      current = index;
+      img.src = images[current];
+    }
+
+    function onKey(e){
+      if (e.key === 'Escape') destroy();
+      if (e.key === 'ArrowRight') show(current+1);
+      if (e.key === 'ArrowLeft') show(current-1);
+    }
+
+    overlay.appendChild(img);
+    overlay.appendChild(prev);
+    overlay.appendChild(next);
+    overlay.appendChild(close);
+    overlay.addEventListener('click', destroy);
+    document.body.appendChild(overlay);
+    document.addEventListener('keydown', onKey);
+
+    function destroy(){
+      document.removeEventListener('keydown', onKey);
+      if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+    }
+  }
+
+  if (main) {
+    main.addEventListener('click', function(){ openModal(parseInt(main.getAttribute('data-index')||'0',10)); });
+  }
+  var thumbs = document.querySelectorAll('[data-index]');
+  for (var i=0;i<thumbs.length;i++){
+    thumbs[i].addEventListener('click', function(){
+      var idx = parseInt(this.getAttribute('data-index')||'0',10);
+      openModal(idx);
+    });
+  }
+})();
+</script>
 </div>
 {% endblock %}
 {% block footer %}

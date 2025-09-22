@@ -150,10 +150,12 @@ class PublicController extends AbstractController
     public function companyDetail(Companies $company, ProductsRepository $productsRepository): Response
     {
         $products = $productsRepository->findBy(['company' => $company], ['createdAt' => 'DESC']);
+        $mapEmbedUrl = $this->buildMapEmbedUrl($company->getMapsUrl());
 
         return $this->render('public/company_detail.html.twig', [
             'company' => $company,
             'products' => $products,
+            'mapEmbedUrl' => $mapEmbedUrl,
         ]);
     }
 
@@ -220,5 +222,64 @@ class PublicController extends AbstractController
         }
 
         return $products;
+    }
+
+    /**
+     * Verilen maps URL'den güvenilir bir Google Maps embed URL üretir.
+     * Desteklenen durumlar: embed URL, @lat,long, q paramı, /place/ yolu.
+     */
+    private function buildMapEmbedUrl(?string $mapsUrl): ?string
+    {
+        if (!$mapsUrl) {
+            return null;
+        }
+
+        // Zaten embed ise doğrudan kullan
+        if (strpos($mapsUrl, '/embed') !== false) {
+            return $mapsUrl;
+        }
+
+        $queryParam = null;
+        $llParam = null;
+
+        // URL parse etmeyi dene
+        $parsed = @parse_url($mapsUrl);
+        if (is_array($parsed)) {
+            // q parametresi
+            if (!empty($parsed['query'])) {
+                parse_str($parsed['query'], $qs);
+                if (!empty($qs['q'])) {
+                    $queryParam = trim((string) $qs['q']);
+                }
+            }
+
+            // /place/<isim> yakala
+            if (!$queryParam && !empty($parsed['path']) && strpos($parsed['path'], '/place/') !== false) {
+                $after = substr($parsed['path'], strpos($parsed['path'], '/place/') + 7);
+                $place = strtok($after, '/');
+                if ($place) {
+                    $queryParam = urldecode(str_replace('+', ' ', $place));
+                }
+            }
+        }
+
+        // @lat,long,zoom deseni
+        if (!$queryParam && preg_match('/@(-?\d+\.\d+),(-?\d+\.\d+)/', $mapsUrl, $m)) {
+            $lat = $m[1];
+            $lng = $m[2];
+            $queryParam = $lat . ',' . $lng;
+            $llParam = $queryParam;
+        }
+
+        // Hiçbir şey bulunamadıysa, tüm URL'yi arama paramı yap (en azından merkezlemeye çalışır)
+        if (!$queryParam) {
+            $queryParam = $mapsUrl;
+        }
+
+        $base = 'https://www.google.com/maps?output=embed&hl=tr&z=14&q=' . rawurlencode($queryParam);
+        if ($llParam) {
+            $base .= '&ll=' . rawurlencode($llParam);
+        }
+        return $base;
     }
 }
