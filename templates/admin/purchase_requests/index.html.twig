@@ -29,6 +29,7 @@
             <span class="font-medium {{ color }}">{{ pr.status|capitalize }}</span>
           </td>
           <td class="px-6 py-4 text-sm font-medium space-x-3">
+            <button type="button" onclick="openPrModal({{ pr.id }})" class="text-primary-600 hover:text-primary-900">Görüntüle</button>
             {% if pr.status == 'pending' %}
               <a href="{{ path('admin_purchase_request_approve', {id: pr.id}) }}" class="text-indigo-600 hover:text-indigo-900">Onayla</a>
               <a href="{{ path('admin_purchase_request_reject', {id: pr.id}) }}" class="text-gray-700 hover:text-gray-900">Reddet</a>
@@ -45,6 +46,71 @@
     </tbody>
   </table>
 </div>
+<!-- Modal -->
+<div id="prModal" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/50" onclick="closePrModal()"></div>
+  <div class="relative max-w-2xl w-[92%] md:w-[720px] mx-auto mt-24 bg-white rounded-lg shadow-lg overflow-hidden">
+    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-gray-900">Alım Talebi Detayı</h3>
+      <button onclick="closePrModal()" class="text-gray-400 hover:text-gray-600">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="p-5 space-y-3 text-sm">
+      <div><span class="text-gray-500">Tarih:</span> <span id="pr-date" class="text-gray-900"></span></div>
+      <div><span class="text-gray-500">Ürün:</span> <span id="pr-product" class="text-gray-900"></span></div>
+      <div id="pr-phone-wrap" class="hidden"><span class="text-gray-500">Telefon:</span> <a id="pr-phone" class="text-primary-600" href="#"></a></div>
+      <div id="pr-email-wrap" class="hidden"><span class="text-gray-500">E-posta:</span> <a id="pr-email" class="text-primary-600" href="#"></a></div>
+      <div id="pr-desc-wrap" class="hidden">
+        <div class="text-gray-500 mb-1">Açıklama</div>
+        <div id="pr-desc" class="text-gray-900 whitespace-pre-wrap"></div>
+      </div>
+    </div>
+    <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2">
+      <a id="pr-approve" href="#" class="inline-flex items-center px-4 py-2 rounded-md text-white bg-indigo-600 hover:bg-indigo-700">Onayla</a>
+      <a id="pr-reject" href="#" class="inline-flex items-center px-4 py-2 rounded-md text-gray-800 bg-gray-200 hover:bg-gray-300">Reddet</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PR_DATA = {
+    {% for pr in items %}
+      {{ pr.id }}: {
+        id: {{ pr.id }},
+        date: '{{ pr.date ? pr.date|date('d.m.Y H:i') : '' }}',
+        productName: {{ pr.productName|json_encode|raw }},
+        phone: {{ pr.phone|default('')|json_encode|raw }},
+        email: {{ pr.email|default('')|json_encode|raw }},
+        description: {{ pr.description|default('')|json_encode|raw }},
+        status: {{ pr.status|json_encode|raw }}
+      }{{ not loop.last ? ',' : '' }}
+    {% endfor %}
+  };
+
+  function openPrModal(id){
+    const m = document.getElementById('prModal');
+    const d = PR_DATA[id];
+    if (!d) return;
+    document.getElementById('pr-date').textContent = d.date || '';
+    document.getElementById('pr-product').textContent = d.productName || '';
+    const phoneWrap = document.getElementById('pr-phone-wrap');
+    const emailWrap = document.getElementById('pr-email-wrap');
+    const descWrap = document.getElementById('pr-desc-wrap');
+    if (d.phone){
+      const a = document.getElementById('pr-phone'); a.textContent = d.phone; a.href = 'tel:'+d.phone; phoneWrap.classList.remove('hidden');
+    } else { phoneWrap.classList.add('hidden'); }
+    if (d.email){
+      const a = document.getElementById('pr-email'); a.textContent = d.email; a.href = 'mailto:'+d.email; emailWrap.classList.remove('hidden');
+    } else { emailWrap.classList.add('hidden'); }
+    if (d.description){ document.getElementById('pr-desc').textContent = d.description; descWrap.classList.remove('hidden'); }
+    else { descWrap.classList.add('hidden'); }
+    document.getElementById('pr-approve').href = '{{ path('admin_purchase_request_approve', {id: 0}) }}'.replace('/0/approve','/'+id+'/approve');
+    document.getElementById('pr-reject').href = '{{ path('admin_purchase_request_reject', {id: 0}) }}'.replace('/0/reject','/'+id+'/reject');
+    m.classList.remove('hidden');
+  }
+  function closePrModal(){ document.getElementById('prModal').classList.add('hidden'); }
+</script>
 {% endblock %}
 
 
