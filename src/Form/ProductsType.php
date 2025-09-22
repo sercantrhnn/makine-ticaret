@@ -89,14 +89,14 @@ class ProductsType extends AbstractType
                 'placeholder' => 'Kategori seçiniz',
             ])
             ->add('imageFiles', FileType::class, [
-                'label' => 'Ürün Fotoğrafları (Max 5 adet, her biri 5MB)',
+                'label' => 'Ürün Fotoğrafları (Max 10 adet, her biri 5MB)',
                 'required' => false,
                 'mapped' => false,
                 'multiple' => true,
                 'constraints' => [
                     new Count([
-                        'max' => 5,
-                        'maxMessage' => 'En fazla 5 fotoğraf yükleyebilirsiniz.',
+                        'max' => 10,
+                        'maxMessage' => 'En fazla 10 fotoğraf yükleyebilirsiniz.',
                     ]),
                     new \Symfony\Component\Validator\Constraints\All([
                         'constraints' => [

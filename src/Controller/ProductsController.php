@@ -101,6 +101,42 @@ class ProductsController extends AbstractController
         ]);
     }
 
+    #[Route('/images/{id}/delete', name: 'product_images_delete', methods: ['POST'])]
+    public function deleteImage(Request $request, \App\Entity\ProductImages $image, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete_image_'.$image->getId(), (string) $request->request->get('_token'))) {
+            $product = $image->getProduct();
+            // Fiziksel dosyayı sil
+            if ($image->getImagePath() && file_exists($this->getParameter('kernel.project_dir') . '/public/' . $image->getImagePath())) {
+                @unlink($this->getParameter('kernel.project_dir') . '/public/' . $image->getImagePath());
+            }
+            $entityManager->remove($image);
+            $entityManager->flush();
+            $this->addFlash('success', 'Fotoğraf silindi.');
+            return $this->redirectToRoute('products_edit', ['id' => $product->getId()]);
+        }
+        $this->addFlash('error', 'Geçersiz istek.');
+        return $this->redirectToRoute('products_index');
+    }
+
+    #[Route('/videos/{id}/delete', name: 'product_videos_delete', methods: ['POST'])]
+    public function deleteVideo(Request $request, \App\Entity\ProductVideos $video, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete_video_'.$video->getId(), (string) $request->request->get('_token'))) {
+            $product = $video->getProduct();
+            // Fiziksel dosyayı sil
+            if ($video->getVideoPath() && file_exists($this->getParameter('kernel.project_dir') . '/public/' . $video->getVideoPath())) {
+                @unlink($this->getParameter('kernel.project_dir') . '/public/' . $video->getVideoPath());
+            }
+            $entityManager->remove($video);
+            $entityManager->flush();
+            $this->addFlash('success', 'Video silindi.');
+            return $this->redirectToRoute('products_edit', ['id' => $product->getId()]);
+        }
+        $this->addFlash('error', 'Geçersiz istek.');
+        return $this->redirectToRoute('products_index');
+    }
+
     #[Route('/{id}', name: 'products_delete', methods: ['POST'])]
     public function delete(Request $request, Products $product, EntityManagerInterface $entityManager): Response
     {
