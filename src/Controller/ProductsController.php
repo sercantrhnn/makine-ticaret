@@ -7,6 +7,7 @@ use App\Form\ProductsType;
 use App\Entity\Companies;
 use App\Repository\ProductsRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -141,9 +142,13 @@ class ProductsController extends AbstractController
     public function delete(Request $request, Products $product, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->getPayload()->getString('_token'))) {
-            $entityManager->remove($product);
-            $entityManager->flush();
-            $this->addFlash('success', 'Ürün başarıyla silindi.');
+            try {
+                $entityManager->remove($product);
+                $entityManager->flush();
+                $this->addFlash('success', 'Ürün başarıyla silindi.');
+            } catch (ForeignKeyConstraintViolationException $e) {
+                $this->addFlash('error', 'Ürün silinemedi: İlişkili kayıtlar (ör. ihale/teklif) mevcut. Önce ilişkili kayıtları kaldırın.');
+            }
         }
 
         return $this->redirectToRoute('products_index', [], Response::HTTP_SEE_OTHER);
