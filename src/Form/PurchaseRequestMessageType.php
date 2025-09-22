@@ -18,9 +18,6 @@ class PurchaseRequestMessageType extends AbstractType
                 'label' => 'Mesajınız',
                 'required' => true,
                 'attr' => ['rows' => 4]
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'Mesaj Gönder',
             ]);
     }
 
