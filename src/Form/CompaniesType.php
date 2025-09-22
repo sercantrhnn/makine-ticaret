@@ -74,6 +74,11 @@ class CompaniesType extends AbstractType
                 'label' => 'Website',
                 'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']
             ])
+            ->add('city', null, [
+                'label' => 'İl',
+                'required' => false,
+                'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm', 'placeholder' => 'İstanbul']
+            ])
             ->add('mapsUrl', null, [
                 'label' => 'Maps URL',
                 'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']

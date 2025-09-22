@@ -44,10 +44,13 @@ class Companies
     private ?int $foundedYear = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $tradeRegistryNo = null;
+    private ?string $tradeRegistryNo = null;
 
     #[ORM\Column(nullable: true)]
-    private ?int $mersisNo = null;
+    private ?string $mersisNo = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $city = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $adress = null;
@@ -293,6 +296,20 @@ class Companies
         $this->catalogPath = $catalogPath;
 
         return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(?string $city): void
+    {
+        $normalized = $city !== null ? trim($city) : null;
+        if ($normalized === '') {
+            $normalized = null;
+        }
+        $this->city = $normalized !== null ? mb_strtoupper($normalized, 'UTF-8') : null;
     }
 
     public function getCertificatePath(): ?string

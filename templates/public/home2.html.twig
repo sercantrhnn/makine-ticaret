@@ -373,7 +373,7 @@
     {% if app.user %}
       {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
         // Firma sahibi - iletişime geç
-        window.location.href = "{{ path('purchase_request_contact', {id: '__PR_ID__'}) }}".replace('__PR_ID__', prId);
+        window.location.href = "{{ path('purchase_request_contact', {id: 1}) }}".replace('1', prId);
       {% else %}
         // Login olmuş ama firma sahibi değil - toast göster
         showToast('Sadece firma sahipleri alım talepleriyle iletişime geçebilir.', 'warning');

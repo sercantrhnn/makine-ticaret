@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Products;
 use App\Form\ProductsType;
+use App\Entity\Companies;
 use App\Repository\ProductsRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -41,6 +42,15 @@ class ProductsController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $product = new Products();
+
+        // Eğer bir firma ID'si ile gelindiyse, ürüne önceden set et
+        $companyId = $request->query->getInt('company', 0);
+        if ($companyId > 0) {
+            $company = $entityManager->getRepository(Companies::class)->find($companyId);
+            if ($company) {
+                $product->setCompany($company);
+            }
+        }
         $form = $this->createForm(ProductsType::class, $product);
         $form->handleRequest($request);
 
