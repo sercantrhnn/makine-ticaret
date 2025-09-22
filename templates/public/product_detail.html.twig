@@ -134,6 +134,25 @@
                     {% endfor %}
                 </div>
             {% endif %}
+
+            {% if product.videos|length > 0 %}
+                <div class="mt-6">
+                    <h2 class="text-base font-semibold text-gray-900 mb-3">Ürün Videoları</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for video in product.videos %}
+                            <div class="bg-black rounded-lg overflow-hidden">
+                                <video controls preload="metadata" class="w-full h-64 object-cover">
+                                    <source src="/{{ video.videoPath }}" type="video/mp4">
+                                    Tarayıcınız video oynatmayı desteklemiyor.
+                                </video>
+                                {% if video.title %}
+                                    <div class="px-3 py-2 text-xs text-gray-600 bg-gray-50 border-t border-gray-100">{{ video.title }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
         </div>
 
         <!-- Product Info -->
@@ -294,6 +313,7 @@
                     </div>
                 </div>
             {% endif %}
+
 
             <!-- Contact Actions -->
             <div class="border-t border-gray-200 pt-8">
