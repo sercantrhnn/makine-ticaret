@@ -34,7 +34,7 @@ class CompaniesRepository extends ServiceEntityRepository
     /**
      * Pagination ve search ile firmaları getir
      */
-    public function findWithPaginationAndSearch(int $page, int $limit, string $search = '', ?string $sort = null): array
+    public function findWithPaginationAndSearch(int $page, int $limit, string $search = '', ?string $sort = null, ?string $city = null): array
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -54,6 +54,11 @@ class CompaniesRepository extends ServiceEntityRepository
                ->setParameter('search', '%' . $search . '%');
         }
         
+        if (!empty($city)) {
+            $qb->andWhere('c.city = :city')
+               ->setParameter('city', $city);
+        }
+        
         return $qb->setFirstResult(($page - 1) * $limit)
                  ->setMaxResults($limit)
                  ->getQuery()
@@ -63,7 +68,7 @@ class CompaniesRepository extends ServiceEntityRepository
     /**
      * Search ile toplam firma sayısını getir
      */
-    public function countWithSearch(string $search = ''): int
+    public function countWithSearch(string $search = '', ?string $city = null): int
     {
         $qb = $this->createQueryBuilder('c')
             ->select('COUNT(c.id)');
@@ -73,13 +78,18 @@ class CompaniesRepository extends ServiceEntityRepository
                ->setParameter('search', '%' . $search . '%');
         }
         
+        if (!empty($city)) {
+            $qb->andWhere('c.city = :city')
+               ->setParameter('city', $city);
+        }
+        
         return $qb->getQuery()->getSingleScalarResult();
     }
 
     /**
      * Filtrelerle firmaları getir: belirli kategorilerde (veya altlarında) ürünü olan firmalar
      */
-    public function findWithCategoryFilter(int $page, int $limit, string $search = '', ?array $categoryIds = null, ?string $sort = null): array
+    public function findWithCategoryFilter(int $page, int $limit, string $search = '', ?array $categoryIds = null, ?string $sort = null, ?string $city = null): array
     {
         $qb = $this->createQueryBuilder('c')
             ->leftJoin('c.products', 'p')
@@ -106,6 +116,11 @@ class CompaniesRepository extends ServiceEntityRepository
         if ($categoryIds && count($categoryIds) > 0) {
             $qb->andWhere('cat IN (:categoryIds)')->setParameter('categoryIds', $categoryIds);
         }
+        
+        if (!empty($city)) {
+            $qb->andWhere('c.city = :city')
+               ->setParameter('city', $city);
+        }
 
         return $qb->setFirstResult(($page - 1) * $limit)
                  ->setMaxResults($limit)
@@ -116,7 +131,7 @@ class CompaniesRepository extends ServiceEntityRepository
     /**
      * Filtrelerle toplam firma sayısını getir
      */
-    public function countWithCategoryFilter(string $search = '', ?array $categoryIds = null): int
+    public function countWithCategoryFilter(string $search = '', ?array $categoryIds = null, ?string $city = null): int
     {
         $qb = $this->createQueryBuilder('c')
             ->select('COUNT(DISTINCT c.id)')
@@ -131,7 +146,27 @@ class CompaniesRepository extends ServiceEntityRepository
         if ($categoryIds && count($categoryIds) > 0) {
             $qb->andWhere('cat IN (:categoryIds)')->setParameter('categoryIds', $categoryIds);
         }
+        
+        if (!empty($city)) {
+            $qb->andWhere('c.city = :city')
+               ->setParameter('city', $city);
+        }
 
         return (int)$qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Sistemde kayıtlı farklı illeri getirir
+     * @return string[]
+     */
+    public function getDistinctCities(): array
+    {
+        $rows = $this->createQueryBuilder('c')
+            ->select('DISTINCT c.city AS city')
+            ->andWhere('c.city IS NOT NULL')
+            ->orderBy('c.city', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+        return array_values(array_filter(array_map(static fn($r) => $r['city'] ?? null, $rows)));
     }
 }

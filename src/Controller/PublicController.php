@@ -113,6 +113,7 @@ class PublicController extends AbstractController
         $search = $request->query->get('search', '');
         $categoryId = $request->query->getInt('category');
         $sort = $request->query->get('sort');
+        $city = $request->query->get('city') ?: null;
 
         $categoryIds = null;
         $selectedCategory = null;
@@ -124,15 +125,16 @@ class PublicController extends AbstractController
         }
 
         if ($categoryIds) {
-            $companies = $companiesRepository->findWithCategoryFilter($page, $limit, $search, $categoryIds, $sort);
-            $totalCompanies = $companiesRepository->countWithCategoryFilter($search, $categoryIds);
+            $companies = $companiesRepository->findWithCategoryFilter($page, $limit, $search, $categoryIds, $sort, $city);
+            $totalCompanies = $companiesRepository->countWithCategoryFilter($search, $categoryIds, $city);
         } else {
-            $companies = $companiesRepository->findWithPaginationAndSearch($page, $limit, $search, $sort);
-            $totalCompanies = $companiesRepository->countWithSearch($search);
+            $companies = $companiesRepository->findWithPaginationAndSearch($page, $limit, $search, $sort, $city);
+            $totalCompanies = $companiesRepository->countWithSearch($search, $city);
         }
         $totalPages = ceil($totalCompanies / $limit);
 
         $categories = $categoriesRepository->findBy(['isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC']);
+        $cities = $companiesRepository->getDistinctCities();
 
         return $this->render('public/companies.html.twig', [
             'companies' => $companies,
@@ -143,6 +145,8 @@ class PublicController extends AbstractController
             'selectedCategoryId' => $categoryId ?: null,
             'categories' => $categories,
             'sort' => $sort,
+            'cities' => $cities,
+            'selectedCity' => $city,
         ]);
     }
 
