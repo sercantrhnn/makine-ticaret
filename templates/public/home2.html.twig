@@ -195,6 +195,131 @@
   </div>
   </section>
 
+<!-- Kayan Logolar Bölümü -->
+<section class="sliding-logos-section">
+  <div class="sliding-logos-container">
+    <div class="sliding-logos-track">
+      <!-- İlk grup logolar -->
+      <div class="sliding-logos-group">
+        <img src="{{ asset('FirmaPng/0284c1788a11165bd29a078c2ed15484.webp') }}" alt="Logo 1" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/34-346773_general-electric-hd-png-download.png') }}" alt="General Electric" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/avo4nfcls.webp') }}" alt="Logo 3" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/avtwd8flx.webp') }}" alt="Logo 4" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/images (1).png') }}" alt="Logo 5" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/komatsu-logo-kr0M2jTZ_t.jpg') }}" alt="Komatsu" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/nipponsteel.png') }}" alt="Nippon Steel" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/png-transparent-ab-volvo-volvo-cars-volvo-s60-car-trademark-logo-car.png') }}" alt="Volvo" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/png-transparent-hitachi-logo-thumbnail.png') }}" alt="Hitachi" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/png-transparent-siemens-building-technologies-siemens-sector-industry-organization-siemens-corporation-saab-automobile-miscellaneous-blue-text-thumbnail.png') }}" alt="Siemens" class="sliding-logo">
+      </div>
+      <!-- İkinci grup logolar (tekrar) -->
+      <div class="sliding-logos-group">
+        <img src="{{ asset('FirmaPng/0284c1788a11165bd29a078c2ed15484.webp') }}" alt="Logo 1" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/34-346773_general-electric-hd-png-download.png') }}" alt="General Electric" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/avo4nfcls.webp') }}" alt="Logo 3" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/avtwd8flx.webp') }}" alt="Logo 4" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/images (1).png') }}" alt="Logo 5" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/komatsu-logo-kr0M2jTZ_t.jpg') }}" alt="Komatsu" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/nipponsteel.png') }}" alt="Nippon Steel" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/png-transparent-ab-volvo-volvo-cars-volvo-s60-car-trademark-logo-car.png') }}" alt="Volvo" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/png-transparent-hitachi-logo-thumbnail.png') }}" alt="Hitachi" class="sliding-logo">
+        <img src="{{ asset('FirmaPng/png-transparent-siemens-building-technologies-siemens-sector-industry-organization-siemens-corporation-saab-automobile-miscellaneous-blue-text-thumbnail.png') }}" alt="Siemens" class="sliding-logo">
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .sliding-logos-section {
+    background: #f8fafc;
+    padding: 80px 0;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .sliding-logos-container {
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .sliding-logos-track {
+    display: flex;
+    animation: slide 35s linear infinite;
+    gap: 80px;
+    align-items: center;
+  }
+  
+  .sliding-logos-group {
+    display: flex;
+    gap: 80px;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  
+  .sliding-logo {
+    height: 70px;
+    width: auto;
+    max-width: 160px;
+    object-fit: contain;
+    filter: none;
+    opacity: 0.8;
+    transition: all 0.4s ease;
+  }
+  
+  .sliding-logo:hover {
+    opacity: 1;
+    transform: scale(1.15) translateY(-2px);
+  }
+  
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .sliding-logos-section {
+      padding: 60px 0;
+    }
+    
+    .sliding-logos-track {
+      gap: 60px;
+    }
+    
+    .sliding-logos-group {
+      gap: 60px;
+    }
+    
+    .sliding-logo {
+      height: 55px;
+      max-width: 130px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .sliding-logos-section {
+      padding: 50px 0;
+    }
+    
+    .sliding-logos-track {
+      gap: 50px;
+    }
+    
+    .sliding-logos-group {
+      gap: 50px;
+    }
+    
+    .sliding-logo {
+      height: 45px;
+      max-width: 110px;
+    }
+  }
+</style>
+
 <style>
   .refs-section { background:#edf1f7; padding:64px 0 68px; }
   .refs-shell { max-width:1600px; margin:0 auto; padding:0 20px; }
