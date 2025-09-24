@@ -1,7 +1,7 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}Kategoriler | Makine Ticaret{% endblock %}
-{% block description %}Tüm ürün kategorileri. Makine, sanayi, tarım ve inşaat sektörlerine yönelik kapsamlı kategori rehberi.{% endblock %}
+{% block title %}{{ 'Kategoriler'|auto_translate(app.request.locale) }} | Makine Ticaret{% endblock %}
+{% block description %}{{ 'Tüm ürün kategorileri. Makine, sanayi, tarım ve inşaat sektörlerine yönelik kapsamlı kategori rehberi.'|auto_translate(app.request.locale) }}{% endblock %}
 {% block header %}
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
   <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
@@ -9,11 +9,11 @@
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
-      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">Alım Talebi Oluştur</a>
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</a>
       {% if app.user %}
         <div style="position:relative;" id="userMenuRoot">
           <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
@@ -24,21 +24,21 @@
           <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
             <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
-              <span>Mesajlarım</span>
+              <span>{{ 'Mesajlarım'|auto_translate(app.request.locale) }}</span>
             </a>
             <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-              <span>Alım Talebi Oluştur</span>
+              <span>{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
             <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              <span>İhale Oluştur</span>
+              <span>{{ 'İhale Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% endif %}
             <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
-              <span>Çıkış Yap</span>
+              <span>{{ 'Çıkış Yap'|auto_translate(app.request.locale) }}</span>
             </a>
           </div>
         </div>
@@ -58,9 +58,14 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Giriş Yap'|auto_translate(app.request.locale) }}</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Kayıt Ol'|auto_translate(app.request.locale) }}</a>
       {% endif %}
+      
+      <!-- Language Switcher -->
+      <div style="margin-left:10px;">
+        {% include 'components/language-switcher-dark.html.twig' %}
+      </div>
     </nav>
   </div>
 </header>
@@ -72,21 +77,21 @@
         <nav class="flex mb-4" aria-label="Breadcrumb">
             <ol class="flex items-center space-x-2 text-sm text-gray-500">
                 <li>
-                    <a href="{{ path('public_home') }}" class="hover:text-primary-600">Ana Sayfa</a>
+                    <a href="{{ path('public_home') }}" class="hover:text-primary-600">{{ 'Ana Sayfa'|auto_translate(app.request.locale) }}</a>
                 </li>
                 <li class="flex items-center">
                     <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
-                    <span class="text-gray-900">Kategoriler</span>
+                    <span class="text-gray-900">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</span>
                 </li>
             </ol>
         </nav>
 
         <div class="text-center">
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">Ürün Kategorileri</h1>
+            <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ 'Ürün Kategorileri'|auto_translate(app.request.locale) }}</h1>
             <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                Aradığınız ürünü kolayca bulabilmeniz için düzenlenmiş kapsamlı kategori yapımız
+                {{ 'Aradığınız ürünü kolayca bulabilmeniz için düzenlenmiş kapsamlı kategori yapımız'|auto_translate(app.request.locale) }}
             </p>
         </div>
     </div>
@@ -113,9 +118,9 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                                     </svg>
                                 </div>
-                                <h3 class="text-base font-semibold text-gray-900">{{ category.name }}</h3>
+                                <h3 class="text-base font-semibold text-gray-900">{{ category|smart_translate('name', app.request.locale) }}</h3>
                             </div>
-                            <div class="text-sm text-gray-500">{{ activeChildren|length }} alt kategori</div>
+                            <div class="text-sm text-gray-500">{{ activeChildren|length }} {{ 'alt kategori'|auto_translate(app.request.locale) }}</div>
                         </div>
 
                         {% if activeChildren|length > 0 %}
@@ -128,7 +133,7 @@
                                         {% for child in list %}
                                             <li>
                                                 <a href="{{ path('public_products', {category: child.id}) }}" class="text-sm text-gray-700 hover:text-gray-900">
-                                                    {{ child.name }}
+                                                    {{ child|smart_translate('name', app.request.locale) }}
                                                 </a>
                                                 {% set gcCount = child.children|length %}
                                                 {% if gcCount > 0 %}
@@ -140,7 +145,7 @@
                                 {% endfor %}
                             </div>
                         {% else %}
-                            <div class="p-6 text-sm text-gray-500">Alt kategori bulunmuyor</div>
+                            <div class="p-6 text-sm text-gray-500">{{ 'Alt kategori bulunmuyor'|auto_translate(app.request.locale) }}</div>
                         {% endif %}
                     </section>
                 {% endif %}
@@ -204,14 +209,14 @@
             <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
             </svg>
-            <h3 class="text-lg font-medium text-gray-900 mb-2">Kategori Bulunamadı</h3>
-            <p class="text-gray-600 mb-6">Henüz hiç kategori eklenmemiş.</p>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">{{ 'Kategori Bulunamadı'|auto_translate(app.request.locale) }}</h3>
+            <p class="text-gray-600 mb-6">{{ 'Henüz hiç kategori eklenmemiş.'|auto_translate(app.request.locale) }}</p>
             <a href="{{ path('public_home') }}"
                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                 </svg>
-                Ana Sayfa
+                {{ 'Ana Sayfa'|auto_translate(app.request.locale) }}
             </a>
         </div>
     {% endif %}
@@ -253,10 +258,10 @@
       <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
     </div>
     <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
     </nav>
   </div>
 </footer>

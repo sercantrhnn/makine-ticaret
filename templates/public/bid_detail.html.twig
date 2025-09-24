@@ -1,6 +1,6 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}{{ bid.product.name }} - İhale Detayı - Makine Ticaret{% endblock %}
+{% block title %}{{ bid.product|smart_translate('name', app.request.locale) }} - {{ 'İhale Detayı'|auto_translate(app.request.locale) }} - Makine Ticaret{% endblock %}
 
 {% block header %}
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
@@ -9,11 +9,11 @@
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">İhaleler</a>
-      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">Alım Talebi Oluştur</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</a>
       {% if app.user %}
         <div style="position:relative;" id="userMenuRoot">
           <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
@@ -24,21 +24,21 @@
           <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
             <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
-              <span>Mesajlarım</span>
+              <span>{{ 'Mesajlarım'|auto_translate(app.request.locale) }}</span>
             </a>
             <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-              <span>Alım Talebi Oluştur</span>
+              <span>{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
             <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              <span>İhale Oluştur</span>
+              <span>{{ 'İhale Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% endif %}
             <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
-              <span>Çıkış Yap</span>
+              <span>{{ 'Çıkış Yap'|auto_translate(app.request.locale) }}</span>
             </a>
           </div>
         </div>
@@ -56,9 +56,14 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Giriş Yap'|auto_translate(app.request.locale) }}</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Kayıt Ol'|auto_translate(app.request.locale) }}</a>
       {% endif %}
+      
+      <!-- Language Switcher -->
+      <div style="margin-left:10px;">
+        {% include 'components/language-switcher-dark.html.twig' %}
+      </div>
     </nav>
   </div>
 </header>
@@ -83,7 +88,7 @@
                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <a href="{{ path('public_bids') }}" class="ml-4 text-gray-500 hover:text-gray-700 transition-colors">İhaleler</a>
+                            <a href="{{ path('public_bids') }}" class="ml-4 text-gray-500 hover:text-gray-700 transition-colors">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
                         </div>
                     </li>
                     <li>
@@ -91,7 +96,7 @@
                             <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <span class="ml-4 text-gray-900 font-medium">İhale Detayı</span>
+                            <span class="ml-4 text-gray-900 font-medium">{{ 'İhale Detayı'|auto_translate(app.request.locale) }}</span>
                         </div>
                     </li>
                 </ol>
@@ -113,37 +118,37 @@
                                     <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
-                                    <span class="font-semibold">İhale #{{ bid.id }}</span>
+                                    <span class="font-semibold">{{ 'İhale'|auto_translate(app.request.locale) }} #{{ bid.id }}</span>
                                 </div>
                                 {% set now = date() %}
                                 {% set endTime = bid.endTime %}
                                 {% if endTime > now %}
                                     <span class="bg-gray-700 bg-opacity-90 px-3 py-1 rounded-full text-sm font-medium">
-                                        Aktif İhale
+                                        {{ 'Aktif İhale'|auto_translate(app.request.locale) }}
                                     </span>
                                 {% else %}
                                     <span class="bg-gray-600 bg-opacity-90 px-3 py-1 rounded-full text-sm font-medium">
-                                        Onaylı İhale
+                                        {{ 'Onaylı İhale'|auto_translate(app.request.locale) }}
                                     </span>
                                 {% endif %}
                             </div>
                         </div>
 
                         <div class="p-6">
-                            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{{ bid.product.name }}</h1>
+                            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-4">{{ bid.product|smart_translate('name', app.request.locale) }}</h1>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <div>
-                                    <span class="text-sm text-gray-500">Marka & Model:</span>
+                                    <span class="text-sm text-gray-500">{{ 'Marka'|auto_translate(app.request.locale) }} & {{ 'Model'|auto_translate(app.request.locale) }}:</span>
                                     <p class="font-semibold text-gray-900">{{ bid.product.brand }} - {{ bid.product.modelType }}</p>
                                 </div>
                                 {% if bid.product.category %}
                                     <div>
-                                        <span class="text-sm text-gray-500">Kategori:</span>
-                                        <p class="font-semibold text-gray-900">{{ bid.product.category.name }}</p>
+                                        <span class="text-sm text-gray-500">{{ 'Kategori'|auto_translate(app.request.locale) }}:</span>
+                                        <p class="font-semibold text-gray-900">{{ bid.product.category|smart_translate('name', app.request.locale) }}</p>
                                     </div>
                                 {% endif %}
                                 <div>
-                                    <span class="text-sm text-gray-500">İhale Veren Firma:</span>
+                                    <span class="text-sm text-gray-500">{{ 'İhale Veren Firma'|auto_translate(app.request.locale) }}:</span>
                                     <p class="font-semibold text-gray-900">
                                         <a href="{{ path('public_company_detail', {'id': bid.company.id}) }}" class="text-indigo-600 hover:text-indigo-700 transition-colors">
                                             {{ bid.company.name }}
@@ -151,7 +156,7 @@
                                     </p>
                                 </div>
                                 <div>
-                                    <span class="text-sm text-gray-500">İhale Tarihi:</span>
+                                    <span class="text-sm text-gray-500">{{ 'İhale Tarihi'|auto_translate(app.request.locale) }}:</span>
                                     <p class="font-semibold text-gray-900">{{ bid.createdAt|date('d.m.Y H:i') }}</p>
                                 </div>
                             </div>
@@ -165,7 +170,7 @@
                                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                 </svg>
-                                <span class="font-semibold">Ürün Detayları</span>
+                                <span class="font-semibold">{{ 'Ürün Detayları'|auto_translate(app.request.locale) }}</span>
                             </div>
                         </div>
 
@@ -173,18 +178,18 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {% if bid.product.detail %}
                                     <div>
-                                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Teknik Detaylar</h3>
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'Teknik Detaylar'|auto_translate(app.request.locale) }}</h3>
                                         <div class="prose prose-sm text-gray-600">
-                                            {{ bid.product.detail|nl2br }}
+                                            {{ bid.product.detail|auto_translate(app.request.locale)|nl2br }}
                                         </div>
                                     </div>
                                 {% endif %}
 
                                 {% if bid.product.description %}
                                     <div>
-                                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Açıklama</h3>
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'Açıklama'|auto_translate(app.request.locale) }}</h3>
                                         <div class="prose prose-sm text-gray-600">
-                                            {{ bid.product.description|nl2br }}
+                                            {{ bid.product|smart_translate('description', app.request.locale)|nl2br }}
                                         </div>
                                     </div>
                                 {% endif %}
@@ -193,7 +198,7 @@
                             <!-- Product Images -->
                             {% if bid.product.images|length > 0 %}
                                 <div class="mt-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Ürün Görselleri</h3>
+                                    <h3 class="text-lg font-semibold text-gray-900 mb-3">{{ 'Ürün Görselleri'|auto_translate(app.request.locale) }}</h3>
                                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                         {% for image in bid.product.images %}
                                             <div class="aspect-square rounded-lg overflow-hidden bg-gray-100">
@@ -216,7 +221,7 @@
                                     <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                     </svg>
-                                    <span class="font-semibold">İhale Açıklaması</span>
+                                    <span class="font-semibold">{{ 'İhale Açıklaması'|auto_translate(app.request.locale) }}</span>
                                 </div>
                             </div>
 
@@ -234,32 +239,32 @@
                     <!-- Bid Summary -->
                     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6 sticky top-6 border border-gray-100">
                         <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white px-6 py-4">
-                            <h3 class="text-lg font-semibold">İhale Özeti</h3>
+                            <h3 class="text-lg font-semibold">{{ 'İhale Özeti'|auto_translate(app.request.locale) }}</h3>
                         </div>
 
                         <div class="p-6">
                             <!-- Price -->
                             <div class="mb-6">
-                                <span class="text-sm text-gray-500 block mb-1">Başlangıç Fiyatı</span>
+                                <span class="text-sm text-gray-500 block mb-1">{{ 'Başlangıç Fiyatı'|auto_translate(app.request.locale) }}</span>
                                 <span class="text-3xl font-bold text-gray-900">₺{{ bid.startingPrice|number_format }}</span>
                             </div>
 
                             {% if app.user %}
                               {% if bid.company.owner is defined and app.user and bid.company.owner == app.user %}
                                 <div class="mb-6">
-                                  <div class="text-sm text-gray-600">Kendi ihalenize teklif veremezsiniz.</div>
+                                  <div class="text-sm text-gray-600">{{ 'Kendi ihalenize teklif veremezsiniz.'|auto_translate(app.request.locale) }}</div>
                                 </div>
                               {% else %}
                                 <div class="mb-6">
                                   <a href="{{ path('public_bid_offer', {id: bid.id}) }}" class="inline-flex items-center justify-center w-full px-4 py-3 text-sm font-medium rounded-lg" style="background:#0a0a0a;color:#ffffff;">
-                                    Teklif Ver
+                                    {{ 'Teklif Ver'|auto_translate(app.request.locale) }}
                                   </a>
                                 </div>
                               {% endif %}
                             {% else %}
                               <div class="mb-6">
                                 <a href="{{ path('app_login') }}" class="inline-flex items-center justify-center w-full px-4 py-3 text-sm font-medium rounded-lg border border-gray-300 bg-white text-gray-800 hover:bg-gray-50">
-                                  Giriş yaparak teklif verin
+                                  {{ 'Giriş yaparak teklif verin'|auto_translate(app.request.locale) }}
                                 </a>
                               </div>
                             {% endif %}
@@ -267,25 +272,25 @@
                             <!-- Time Info -->
                             <div class="space-y-4 mb-6">
                                 <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                                    <span class="text-sm text-gray-500">Başlangıç Tarihi:</span>
+                                    <span class="text-sm text-gray-500">{{ 'Başlangıç Tarihi'|auto_translate(app.request.locale) }}:</span>
                                     <span class="font-semibold text-gray-900">{{ bid.createdAt|date('d.m.Y') }}</span>
                                 </div>
                                 <div class="flex justify-between items-center pb-2 border-b border-gray-100">
-                                    <span class="text-sm text-gray-500">Bitiş Tarihi:</span>
+                                    <span class="text-sm text-gray-500">{{ 'Bitiş Tarihi'|auto_translate(app.request.locale) }}:</span>
                                     {% set now = date() %}
                                     {% set endTime = bid.endTime %}
                                     {% if endTime > now %}
                                         <span class="font-semibold text-gray-900">{{ endTime|date('d.m.Y H:i') }}</span>
                                     {% else %}
-                                        <span class="font-semibold text-red-600">Süresi Dolmuş</span>
+                                        <span class="font-semibold text-red-600">{{ 'Süresi Dolmuş'|auto_translate(app.request.locale) }}</span>
                                     {% endif %}
                                 </div>
                                 {% if endTime > now %}
                                     {% set timeLeft = date(endTime).diff(date(now)) %}
                                     <div class="flex justify-between items-center">
-                                        <span class="text-sm text-gray-500">Kalan Süre:</span>
+                                        <span class="text-sm text-gray-500">{{ 'Kalan Süre'|auto_translate(app.request.locale) }}:</span>
                                         <span class="font-semibold text-gray-900">
-                                            {{ timeLeft.days }} gün {{ timeLeft.h }} saat
+                                            {{ timeLeft.days }} {{ 'gün'|auto_translate(app.request.locale) }} {{ timeLeft.h }} {{ 'saat'|auto_translate(app.request.locale) }}
                                         </span>
                                     </div>
                                 {% endif %}
@@ -300,9 +305,9 @@
                                         <svg class="w-5 h-5 text-gray-700 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <span class="text-gray-800 font-semibold">Aktif İhale</span>
+                                        <span class="text-gray-800 font-semibold">{{ 'Aktif İhale'|auto_translate(app.request.locale) }}</span>
                                     </div>
-                                    <p class="text-gray-600 text-sm mt-1">Bu ihale aktif durumdadır.</p>
+                                    <p class="text-gray-600 text-sm mt-1">{{ 'Bu ihale aktif durumdadır.'|auto_translate(app.request.locale) }}</p>
                                 </div>
                             {% else %}
                                 <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
@@ -310,31 +315,31 @@
                                         <svg class="w-5 h-5 text-gray-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        <span class="text-gray-800 font-semibold">Onaylı İhale</span>
+                                        <span class="text-gray-800 font-semibold">{{ 'Onaylı İhale'|auto_translate(app.request.locale) }}</span>
                                     </div>
-                                    <p class="text-gray-600 text-sm mt-1">Bu ihale onaylanmıştır.</p>
+                                    <p class="text-gray-600 text-sm mt-1">{{ 'Bu ihale onaylanmıştır.'|auto_translate(app.request.locale) }}</p>
                                 </div>
                             {% endif %}
 
                             <!-- Company Info -->
                             <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                                <h4 class="font-semibold text-gray-900 mb-2">İhale Veren Firma</h4>
+                                <h4 class="font-semibold text-gray-900 mb-2">{{ 'İhale Veren Firma'|auto_translate(app.request.locale) }}</h4>
                                 <div class="space-y-2">
                                     <p class="text-gray-800 font-medium">{{ bid.company.name }}</p>
                                     {% if bid.company.phone %}
-                                        <p class="text-gray-600 text-sm">Telefon: {{ bid.company.phone }}</p>
+                                        <p class="text-gray-600 text-sm">{{ 'Telefon'|auto_translate(app.request.locale) }}: {{ bid.company.phone }}</p>
                                     {% endif %}
                                     {% if bid.company.email %}
-                                        <p class="text-gray-600 text-sm">E-posta: {{ bid.company.email }}</p>
+                                        <p class="text-gray-600 text-sm">{{ 'E-posta'|auto_translate(app.request.locale) }}: {{ bid.company.email }}</p>
                                     {% endif %}
                                     {% if bid.company.adress %}
-                                        <p class="text-gray-600 text-sm">Adres: {{ bid.company.adress }}</p>
+                                        <p class="text-gray-600 text-sm">{{ 'Adres'|auto_translate(app.request.locale) }}: {{ bid.company.adress }}</p>
                                     {% endif %}
                                 </div>
                                 <div class="mt-3">
                                     <a href="{{ path('public_company_detail', {'id': bid.company.id}) }}"
                                        class="inline-flex items-center px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-black transition-colors">
-                                        Firma Detayı
+                                        {{ 'Firma Detayı'|auto_translate(app.request.locale) }}
                                         <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                         </svg>
@@ -348,7 +353,7 @@
                     {% if bid.company.products|length > 1 %}
                         <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100">
                             <div class="bg-gradient-to-r from-gray-800 to-gray-700 text-white px-6 py-4">
-                                <h3 class="text-lg font-semibold">Firmanın Diğer Ürünleri</h3>
+                                <h3 class="text-lg font-semibold">{{ 'Firmanın Diğer Ürünleri'|auto_translate(app.request.locale) }}</h3>
                             </div>
 
                             <div class="p-6">
@@ -357,7 +362,7 @@
                                         {% if product.id != bid.product.id %}
                                             <div class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                                                 <div class="flex-1">
-                                                    <h4 class="font-medium text-gray-900 text-sm line-clamp-1">{{ product.name }}</h4>
+                                                    <h4 class="font-medium text-gray-900 text-sm line-clamp-1">{{ product|smart_translate('name', app.request.locale) }}</h4>
                                                     <p class="text-gray-600 text-xs">{{ product.brand }} - {{ product.modelType }}</p>
                                                 </div>
                                                 <a href="{{ path('public_product_detail', {'id': product.id}) }}"
@@ -375,7 +380,7 @@
                                     <div class="mt-4">
                                         <a href="{{ path('public_company_detail', {'id': bid.company.id}) }}"
                                            class="block text-center text-indigo-600 hover:text-indigo-700 text-sm font-medium transition-colors">
-                                            Tüm Ürünleri Gör ({{ bid.company.products|length }} ürün)
+                                            {{ 'Tüm Ürünleri Gör'|auto_translate(app.request.locale) }} ({{ bid.company.products|length }} {{ 'ürün'|auto_translate(app.request.locale) }})
                                         </a>
                                     </div>
                                 {% endif %}
@@ -399,10 +404,10 @@
       <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
     </div>
     <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
     </nav>
   </div>
 </footer>
