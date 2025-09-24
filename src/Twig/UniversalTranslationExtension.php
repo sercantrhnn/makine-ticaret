@@ -178,6 +178,17 @@ class UniversalTranslationExtension extends AbstractExtension
             'Firmanın Diğer Ürünleri' => 'companies.other_products',
             'Tüm Ürünleri Gör' => 'companies.view_all_products',
             'ürün' => 'products.product',
+            'Alım Talebi İletişim' => 'purchase_request.contact',
+            'Açıklama yok' => 'general.no_description',
+            'Talep Tarihi' => 'purchase_request.request_date',
+            'Mesaj Geçmişi' => 'messages.history',
+            'Siz' => 'user.you',
+            'Talep Sahibi' => 'purchase_request.requester',
+            'Henüz mesaj yok.' => 'messages.no_messages',
+            'Mesaj Gönder' => 'messages.send_message',
+            'Talep Gönder' => 'purchase_request.send_request',
+            'Panele Git' => 'nav.go_to_panel',
+            'Sayfalarımız' => 'footer.our_pages',
         ];
 
         return $keyMap[$text] ?? strtolower(str_replace([' ', 'ı', 'ğ', 'ü', 'ş', 'ö', 'ç'], ['_', 'i', 'g', 'u', 's', 'o', 'c'], $text));

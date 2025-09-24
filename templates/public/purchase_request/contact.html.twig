@@ -1,6 +1,6 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}Alım Talebi İletişim - {{ pr.productName }}{% endblock %}
+{% block title %}{{ 'Alım Talebi İletişim'|auto_translate(app.request.locale) }} - {{ pr|smart_translate('productName', app.request.locale) }}{% endblock %}
 
 {% block header %}
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
@@ -9,10 +9,10 @@
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
       {% if app.user %}
         <div style="position:relative;" id="userMenuRoot">
           <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
@@ -23,21 +23,21 @@
           <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
             <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
-              <span>Mesajlarım</span>
+              <span>{{ 'Mesajlarım'|auto_translate(app.request.locale) }}</span>
             </a>
             <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-              <span>Alım Talebi Oluştur</span>
+              <span>{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
             <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              <span>İhale Oluştur</span>
+              <span>{{ 'İhale Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% endif %}
             <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
-              <span>Çıkış Yap</span>
+              <span>{{ 'Çıkış Yap'|auto_translate(app.request.locale) }}</span>
             </a>
           </div>
         </div>
@@ -52,9 +52,14 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Giriş Yap'|auto_translate(app.request.locale) }}</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Kayıt Ol'|auto_translate(app.request.locale) }}</a>
       {% endif %}
+      
+      <!-- Language Switcher -->
+      <div style="margin-left:10px;">
+        {% include 'components/language-switcher-dark.html.twig' %}
+      </div>
     </nav>
   </div>
 </header>
@@ -69,14 +74,14 @@
 <section class="bg-white border-b border-gray-200">
   <div class="mx-auto px-4 sm:px-6 lg:px-8 py-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
     <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 mb-2">Alım Talebi İletişim</h1>
+      <h1 class="text-2xl font-bold text-gray-900 mb-2">{{ 'Alım Talebi İletişim'|auto_translate(app.request.locale) }}</h1>
       <div class="bg-gray-50 rounded-lg p-4">
-        <h2 class="text-lg font-semibold text-gray-900">{{ pr.productName }}</h2>
-        <p class="text-sm text-gray-600 mt-1">{{ pr.description|default('Açıklama yok') }}</p>
+        <h2 class="text-lg font-semibold text-gray-900">{{ pr|smart_translate('productName', app.request.locale) }}</h2>
+        <p class="text-sm text-gray-600 mt-1">{{ pr|smart_translate('description', app.request.locale)|default(('Açıklama yok'|auto_translate(app.request.locale))) }}</p>
         <div class="mt-2 text-sm text-gray-500">
-          <span>Talep Tarihi: {{ pr.date|date('d.m.Y H:i') }}</span>
-          {% if pr.phone %}<span class="ml-4">Telefon: {{ pr.phone }}</span>{% endif %}
-          {% if pr.email %}<span class="ml-4">E-posta: {{ pr.email }}</span>{% endif %}
+          <span>{{ 'Talep Tarihi'|auto_translate(app.request.locale) }}: {{ pr.date|date('d.m.Y H:i') }}</span>
+          {% if pr.phone %}<span class="ml-4">{{ 'Telefon'|auto_translate(app.request.locale) }}: {{ pr.phone }}</span>{% endif %}
+          {% if pr.email %}<span class="ml-4">{{ 'E-posta'|auto_translate(app.request.locale) }}: {{ pr.email }}</span>{% endif %}
         </div>
       </div>
     </div>
@@ -84,7 +89,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Messages -->
       <div class="lg:col-span-2">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Mesaj Geçmişi</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'Mesaj Geçmişi'|auto_translate(app.request.locale) }}</h3>
         <div class="bg-white rounded-lg border border-gray-200 p-4 max-h-96 overflow-y-auto">
           {% if messages|length > 0 %}
             {% for message in messages %}
@@ -92,25 +97,25 @@
                 <div class="flex justify-between items-start mb-2">
                   <span class="text-sm font-medium text-gray-900">
                     {% if message.sender == app.user %}
-                      Siz
+                      {{ 'Siz'|auto_translate(app.request.locale) }}
                     {% else %}
-                      {{ pr.productName }} Talep Sahibi
+                      {{ pr|smart_translate('productName', app.request.locale) }} {{ 'Talep Sahibi'|auto_translate(app.request.locale) }}
                     {% endif %}
                   </span>
                   <span class="text-xs text-gray-500">{{ message.createdAt|date('d.m.Y H:i') }}</span>
                 </div>
-                <p class="text-sm text-gray-700">{{ message.content|nl2br }}</p>
+                <p class="text-sm text-gray-700">{{ message.content|auto_translate(app.request.locale)|nl2br }}</p>
               </div>
             {% endfor %}
           {% else %}
-            <p class="text-gray-500 text-center py-8">Henüz mesaj yok.</p>
+            <p class="text-gray-500 text-center py-8">{{ 'Henüz mesaj yok.'|auto_translate(app.request.locale) }}</p>
           {% endif %}
         </div>
       </div>
 
       <!-- Message Form -->
       <div class="lg:col-span-1">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Mesaj Gönder</h3>
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'Mesaj Gönder'|auto_translate(app.request.locale) }}</h3>
         <div class="bg-white rounded-lg border border-gray-200 p-4">
           {{ form_start(form) }}
             <div class="mb-4">
@@ -118,7 +123,7 @@
               {{ form_widget(form.content, {attr:{class:'w-full border rounded-lg px-3 py-2'}}) }}
               {{ form_errors(form.content) }}
             </div>
-            <button type="submit" class="w-full px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">Mesaj Gönder</button>
+            <button type="submit" class="w-full px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">{{ 'Mesaj Gönder'|auto_translate(app.request.locale) }}</button>
           {{ form_end(form) }}
         </div>
       </div>
@@ -138,10 +143,10 @@
       <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
     </div>
     <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
     </nav>
   </div>
 </footer>
