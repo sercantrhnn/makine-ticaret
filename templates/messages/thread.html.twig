@@ -1,6 +1,6 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}Mesaj Konusu - #{{ offer.id }} | Makine Ticaret{% endblock %}
+{% block title %}{{ 'Mesaj Konusu'|auto_translate(app.request.locale) }} - #{{ offer.id }} | Makine Ticaret{% endblock %}
 
 {% block header %}
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
@@ -11,7 +11,7 @@
       </div>
       <div>
         <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
-        <div style="font-size:11px;color:#b3b3b3;">Mesajlar</div>
+        <div style="font-size:11px;color:#b3b3b3;">{{ 'Mesajlar'|auto_translate(app.request.locale) }}</div>
       </div>
     </a>
   </div>
@@ -23,51 +23,51 @@
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
     <div class="mb-4">
-      <a href="{{ path('user_messages_inbox') }}" class="text-sm text-gray-600 hover:text-gray-900">← Mesajlarım</a>
+      <a href="{{ path('user_messages_inbox') }}" class="text-sm text-gray-600 hover:text-gray-900">← {{ 'Mesajlarım'|auto_translate(app.request.locale) }}</a>
     </div>
     <div class="bg-white rounded-lg border border-gray-200">
       <div class="px-6 py-4 border-b border-gray-100">
         <div class="mb-4">
-          <h1 class="text-lg font-semibold text-gray-900">{{ offer.bid.product.name }}</h1>
-          <p class="text-sm text-gray-500">İhale #{{ offer.bid.id }}</p>
+          <h1 class="text-lg font-semibold text-gray-900">{{ offer.bid.product|smart_translate('name', app.request.locale) }}</h1>
+          <p class="text-sm text-gray-500">{{ 'İhale'|auto_translate(app.request.locale) }} #{{ offer.bid.id }}</p>
         </div>
         
         <!-- İhale Bilgileri -->
         <div class="bg-gray-50 rounded-lg p-4 mb-4">
-          <h3 class="text-sm font-semibold text-gray-900 mb-2">İhale Detayları</h3>
+          <h3 class="text-sm font-semibold text-gray-900 mb-2">{{ 'İhale Detayları'|auto_translate(app.request.locale) }}</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div>
-              <span class="text-gray-600">Ürün:</span>
-              <span class="text-gray-900">{{ offer.bid.product.name }}</span>
+              <span class="text-gray-600">{{ 'Ürün'|auto_translate(app.request.locale) }}:</span>
+              <span class="text-gray-900">{{ offer.bid.product|smart_translate('name', app.request.locale) }}</span>
             </div>
             <div>
-              <span class="text-gray-600">Kategori:</span>
-              <span class="text-gray-900">{{ offer.bid.product.category.name }}</span>
+              <span class="text-gray-600">{{ 'Kategori'|auto_translate(app.request.locale) }}:</span>
+              <span class="text-gray-900">{{ offer.bid.product.category|smart_translate('name', app.request.locale) }}</span>
             </div>
             <div>
-              <span class="text-gray-600">İhale Başlangıç:</span>
+              <span class="text-gray-600">{{ 'İhale Başlangıç'|auto_translate(app.request.locale) }}:</span>
               <span class="text-gray-900">{{ offer.bid.createdAt|date('d.m.Y H:i') }}</span>
             </div>
             <div>
-              <span class="text-gray-600">İhale Bitiş:</span>
+              <span class="text-gray-600">{{ 'İhale Bitiş'|auto_translate(app.request.locale) }}:</span>
               <span class="text-gray-900">{{ offer.bid.endTime|date('d.m.Y H:i') }}</span>
             </div>
             <div>
-              <span class="text-gray-600">Başlangıç Fiyatı:</span>
+              <span class="text-gray-600">{{ 'Başlangıç Fiyatı'|auto_translate(app.request.locale) }}:</span>
               <span class="text-gray-900">{{ offer.bid.startingPrice|number_format(2, ',', '.') }} TL</span>
             </div>
             <div>
-              <span class="text-gray-600">Teklif Fiyatı:</span>
+              <span class="text-gray-600">{{ 'Teklif Fiyatı'|auto_translate(app.request.locale) }}:</span>
               <span class="text-gray-900 font-semibold">{{ offer.currency }} {{ offer.price|number_format(2, ',', '.') }}</span>
             </div>
             <div>
-              <span class="text-gray-600">İletişim:</span>
+              <span class="text-gray-600">{{ 'İletişim'|auto_translate(app.request.locale) }}:</span>
               <span class="text-gray-900">{{ offer.contactPhone }} / {{ offer.contactEmail }}</span>
             </div>
           </div>
         </div>
         
-        <div class="text-sm text-gray-700">Karşı taraf: {{ offer.bidder == app.user ? (offer.owner.name ?? offer.owner.email) : (offer.bidder.name ?? offer.bidder.email) }}</div>
+        <div class="text-sm text-gray-700">{{ 'Karşı taraf'|auto_translate(app.request.locale) }}: {{ offer.bidder == app.user ? (offer.owner.name ?? offer.owner.email) : (offer.bidder.name ?? offer.bidder.email) }}</div>
       </div>
       <div class="p-6 space-y-3 max-h-[60vh] overflow-auto">
         {% for m in messages %}
@@ -76,17 +76,17 @@
               <div class="text-sm font-medium text-gray-900">{{ m.sender.name ?? m.sender.email }}</div>
               <div class="text-xs text-gray-500">{{ m.createdAt|date('d.m.Y H:i') }}</div>
             </div>
-            <div class="mt-2 text-sm text-gray-800">{{ m.content|nl2br }}</div>
+            <div class="mt-2 text-sm text-gray-800">{{ m.content|auto_translate(app.request.locale)|nl2br }}</div>
           </div>
         {% else %}
-          <div class="text-sm text-gray-500">Henüz mesaj yok.</div>
+          <div class="text-sm text-gray-500">{{ 'Henüz mesaj yok.'|auto_translate(app.request.locale) }}</div>
         {% endfor %}
       </div>
       <div class="px-6 py-4 border-t border-gray-100">
         {{ form_start(form) }}
         <div class="flex gap-2">
           {{ form_widget(form.content, {'attr': {'class': 'flex-1 px-3 py-2 border border-gray-300 rounded-lg', 'rows': 2}}) }}
-          <button type="submit" class="px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">Gönder</button>
+          <button type="submit" class="px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">{{ 'Gönder'|auto_translate(app.request.locale) }}</button>
         </div>
         {{ form_end(form) }}
       </div>
