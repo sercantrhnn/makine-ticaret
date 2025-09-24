@@ -37,9 +37,11 @@ class Categories
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Gedmo\Translatable]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
@@ -74,6 +76,9 @@ class Categories
     /** @var Collection<int, \App\Entity\Products> */
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: \App\Entity\Products::class)]
     private Collection $products;
+
+    #[Gedmo\Locale]
+    private $locale;
 
     public function __construct()
     {
@@ -304,5 +309,15 @@ class Categories
         
         // Materialized path güncelle
         $this->mpath = $this->calculateMpath();
+    }
+
+    public function setTranslatableLocale($locale): void
+    {
+        $this->locale = $locale;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
     }
 }

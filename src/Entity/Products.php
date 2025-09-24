@@ -26,9 +26,11 @@ class Products
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Gedmo\Translatable]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
     private ?string $description = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -53,6 +55,7 @@ class Products
     private ?string $origin = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Gedmo\Translatable]
     private ?string $detail = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 15, scale: 2, nullable: true)]
@@ -83,6 +86,9 @@ class Products
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Bids::class)]
     #[ORM\OrderBy(['id' => 'DESC'])]
     private Collection $bids;
+
+    #[Gedmo\Locale]
+    private $locale;
 
     public function __construct()
     {
@@ -357,5 +363,15 @@ class Products
             }
         }
         return $this;
+    }
+
+    public function setTranslatableLocale($locale): void
+    {
+        $this->locale = $locale;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
     }
 }

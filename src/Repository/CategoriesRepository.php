@@ -48,6 +48,72 @@ class CategoriesRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /** Locale ile aktif kök kategoriler - çeviri desteği */
+    public function findActiveRootCategoriesWithLocale(string $locale): array
+    {
+        $categories = $this->findActiveRootCategories();
+        
+        // Manuel olarak çevirileri yükle
+        foreach ($categories as $category) {
+            $this->loadTranslations($category, $locale);
+        }
+        
+        return $categories;
+    }
+
+    /**
+     * Bir kategorinin çevirilerini manuel olarak yükle
+     */
+    private function loadTranslations(Categories $category, string $locale): void
+    {
+        if ($locale === 'tr' || empty($locale)) {
+            return; // Varsayılan dil, çeviri gerekmez
+        }
+
+        $conn = $this->getEntityManager()->getConnection();
+        
+        // Name çevirisini al
+        $nameQuery = $conn->prepare('
+            SELECT content FROM ext_translations 
+            WHERE locale = :locale 
+            AND object_class = :class 
+            AND field = :field 
+            AND foreign_key = :id
+        ');
+        
+        $nameResult = $nameQuery->executeQuery([
+            'locale' => $locale,
+            'class' => Categories::class,
+            'field' => 'name',
+            'id' => (string)$category->getId()
+        ]);
+        
+        $translatedName = $nameResult->fetchOne();
+        if ($translatedName) {
+            // Reflection kullanarak private property'yi set et
+            $reflection = new \ReflectionClass($category);
+            $nameProperty = $reflection->getProperty('name');
+            $nameProperty->setAccessible(true);
+            $nameProperty->setValue($category, $translatedName);
+        }
+
+        // Description çevirisini al
+        $descResult = $nameQuery->executeQuery([
+            'locale' => $locale,
+            'class' => Categories::class,
+            'field' => 'description',
+            'id' => (string)$category->getId()
+        ]);
+        
+        $translatedDesc = $descResult->fetchOne();
+        if ($translatedDesc) {
+            $reflection = new \ReflectionClass($category);
+            $descProperty = $reflection->getProperty('description');
+            $descProperty->setAccessible(true);
+            $descProperty->setValue($category, $translatedDesc);
+        }
+    }
+
     /** Belirli bir kategorinin aktif çocukları */
     public function findActiveChildrenByParent(?Categories $parent): array
     {

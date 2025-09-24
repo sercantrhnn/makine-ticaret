@@ -1,0 +1,44 @@
+<!-- Language Switcher Component -->
+<div class="relative" x-data="{ open: false }">
+    <button @click="open = !open" 
+            class="flex items-center px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-md border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+        <span>{{ locale_display_name(current_locale()) }}</span>
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+        </svg>
+    </button>
+
+    <div x-show="open" 
+         @click.away="open = false"
+         x-transition:enter="transition ease-out duration-100"
+         x-transition:enter-start="transform opacity-0 scale-95"
+         x-transition:enter-end="transform opacity-100 scale-100"
+         x-transition:leave="transition ease-in duration-75"
+         x-transition:leave-start="transform opacity-100 scale-100"
+         x-transition:leave-end="transform opacity-0 scale-95"
+         class="absolute right-0 z-50 mt-2 w-48 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+        
+        <div class="py-1">
+            {% for locale in supported_locales() %}
+                {% if locale != current_locale() %}
+                    <a href="{{ locale_switch_url(locale) }}" 
+                       class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-200">
+                        {% if locale == 'tr' %}
+                            <span class="mr-3 text-lg">🇹🇷</span>
+                        {% elseif locale == 'en' %}
+                            <span class="mr-3 text-lg">🇺🇸</span>
+                        {% elseif locale == 'de' %}
+                            <span class="mr-3 text-lg">🇩🇪</span>
+                        {% elseif locale == 'ar' %}
+                            <span class="mr-3 text-lg">🇸🇦</span>
+                        {% endif %}
+                        {{ locale_display_name(locale) }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+# Gedmo Doctrine Extensions Configuration
+doctrine:
+    orm:
+        mappings:
+            translatable:
+                type: attribute
+                alias: Gedmo
+                prefix: Gedmo\Translatable\Entity
+                dir: "%kernel.project_dir%/vendor/gedmo/doctrine-extensions/src/Translatable/Entity"

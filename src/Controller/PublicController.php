@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 class PublicController extends AbstractController
 {
@@ -51,9 +52,15 @@ class PublicController extends AbstractController
 //    }
 
     #[Route('/', name: 'public_home')]
-    public function home2(CategoriesRepository $categoriesRepository, BidsRepository $bidsRepository, \App\Repository\PurchaseRequestRepository $purchaseRequestRepository): Response
+    public function home2(Request $request, CategoriesRepository $categoriesRepository, BidsRepository $bidsRepository, \App\Repository\PurchaseRequestRepository $purchaseRequestRepository): Response
     {
-        $categories = $categoriesRepository->findBy(['parent' => null, 'isActive' => true], ['sortOrder' => 'ASC', 'name' => 'ASC'], 8);
+        // Mevcut locale'i al
+        $locale = $request->getLocale();
+        
+        // Kategorileri al (artık smart translation kullanıyoruz)
+        $categories = $categoriesRepository->findActiveRootCategories();
+        $categories = array_slice($categories, 0, 8); // İlk 8 kategori
+        
         $approvedBids = $bidsRepository->findApprovedBids(6);
         $purchaseRequests = $purchaseRequestRepository->findBy(['status' => 'approved'], ['date' => 'DESC'], 6);
 

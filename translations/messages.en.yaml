@@ -1,0 +1,143 @@
+# English Translation File
+nav:
+  home: 'Home'
+  products: 'Products'
+  companies: 'Companies'
+  categories: 'Categories'
+  bids: 'Bids'
+  login: 'Login'
+  register: 'Register'
+  logout: 'Logout'
+  admin: 'Admin'
+
+hero:
+  title: "Turkey's Largest Machinery Trading Platform"
+  subtitle: 'Thousands of reliable companies, tens of thousands of quality products. Everything you are looking for in the industrial sector is here.'
+  search_placeholder: 'Search for products, brands or companies...'
+  search_button: 'Search'
+  trusted_platform: "Turkey's Most Trusted Platform"
+
+stats:
+  title: "🏆 Turkey's Leading Platform"
+  subtitle: 'The platform trusted by thousands of companies and customers. Our numbers that make a difference in the industrial sector.'
+  companies: 'Reliable Companies'
+  products: 'Quality Products'
+  categories: 'Different Categories'
+  experience: 'Years of Experience'
+
+categories:
+  title: '🏭 Popular Categories'
+  subtitle: 'Thousands of quality products in the most searched industrial categories. Choose the category that suits your needs.'
+  discover_products: 'Discover Products'
+  all_categories: 'All Categories'
+  subcategories: 'subcategories'
+  no_categories: 'No categories found'
+
+products:
+  title: 'Featured Products'
+  subtitle: 'Latest and quality products'
+  all_products: 'All Products'
+  view_details: 'View Details'
+  product_detail: 'Product Detail'
+  new: 'New'
+  used: 'Used'
+  for_sale: 'For Sale'
+  for_rent: 'For Rent'
+
+companies:
+  title: 'Reliable Companies'
+  subtitle: 'Leading companies in their sector'
+  all_companies: 'All Companies'
+  details: 'Details'
+  founded: 'Founded'
+
+bids:
+  title: 'Bids'
+  subtitle: 'Approved and active bids'
+  active: 'Active Bid'
+  approved: 'Approved Bid'
+  starting_price: 'Starting Price'
+  end_date: 'End Date'
+  bid_date: 'Bid Date'
+  bid_detail: 'Bid Detail'
+  view_all: 'View All Bids'
+  no_bids: 'No Bids Yet'
+  no_bids_desc: 'There are currently no approved bids.'
+
+cta:
+  title: 'Ready to Grow Your Business?'
+  subtitle: 'Reach thousands of potential customers. Showcase your products and increase your sales.'
+  free_register: 'Free Registration'
+  discover_companies: 'Discover Companies'
+
+trust:
+  title: '✨ Reliability & Quality Guarantee'
+  ssl_security: 'SSL Security'
+  encryption: '256-bit Encryption'
+  support: '24/7 Support'
+  expert_team: 'Expert Team'
+  fast_process: 'Fast Processing'
+  instant_result: 'Instant Results'
+
+actions:
+  save: 'Save'
+  edit: 'Edit'
+  delete: 'Delete'
+  view: 'View'
+  back: 'Back'
+  next: 'Next'
+  previous: 'Previous'
+  close: 'Close'
+  send: 'Send'
+  update: 'Update'
+
+language:
+  switch: 'Change Language'
+  turkish: 'Türkçe'
+  english: 'English'
+  german: 'Deutsch'
+  arabic: 'العربية'
+
+user:
+  messages: 'My Messages'
+
+purchase_request:
+  create_new: 'Create Purchase Request'
+  title: 'Purchase Requests'
+  subtitle: 'Admin approved purchase requests'
+  contact: 'Contact'
+  no_requests: 'No purchase requests yet'
+
+bid:
+  create: 'Create Bid'
+  current: 'Current Bids'
+  all_bids: 'All bids'
+  approved_only: 'Only approved listings are displayed'
+  starting_price_short: 'Starting'
+  company: 'Company'
+  product: 'Product'
+
+table:
+  date: 'Date'
+  product_name: 'Product Name'
+  description: 'Description'
+  actions: 'Actions'
+  no_description: 'No description'
+
+footer:
+  contact: 'Contact'
+  pages: 'Our Pages'
+
+# Products page specific
+sort:
+  label: 'Sort'
+  price_asc: 'Price: Low to High'
+  price_desc: 'Price: High to Low'
+  name_asc: 'Name: A to Z'
+  name_desc: 'Name: Z to A'
+  newest: 'Newest First'
+
+search:
+  results_for: 'Search results for'
+  no_results: 'No products found'
+  showing_results: 'Showing results'

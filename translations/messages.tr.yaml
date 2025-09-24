@@ -1,0 +1,143 @@
+# Türkçe Çeviri Dosyası
+nav:
+  home: 'Ana Sayfa'
+  products: 'Ürünler'
+  companies: 'Firmalar'
+  categories: 'Kategoriler'
+  bids: 'İhaleler'
+  login: 'Giriş Yap'
+  register: 'Kayıt Ol'
+  logout: 'Çıkış Yap'
+  admin: 'Yönetim'
+
+hero:
+  title: "Türkiye'nin En Büyük Makine Ticaret Platformu"
+  subtitle: 'Binlerce güvenilir firma, on binlerce kaliteli ürün. Sanayi sektöründe aradığınız her şey burada.'
+  search_placeholder: 'Ürün, marka veya firma ara...'
+  search_button: 'Ara'
+  trusted_platform: "Türkiye'nin En Güvenilir Platformu"
+
+stats:
+  title: "🏆 Türkiye'nin Lider Platformu"
+  subtitle: 'Binlerce firma ve müşterimizin güvendiği platform. Sanayi sektöründe fark yaratan rakamlarımız.'
+  companies: 'Güvenilir Firma'
+  products: 'Kaliteli Ürün'
+  categories: 'Farklı Kategori'
+  experience: 'Yıl Deneyim'
+
+categories:
+  title: '🏭 Popüler Kategoriler'
+  subtitle: 'En çok aranan sanayi kategorilerinde binlerce kaliteli ürün. İhtiyacınıza uygun kategoriyi seçin.'
+  discover_products: 'Ürünleri Keşfet'
+  all_categories: 'Tüm Kategoriler'
+  subcategories: 'alt kategori'
+  no_categories: 'Kategori bulunamadı'
+
+products:
+  title: 'Öne Çıkan Ürünler'
+  subtitle: 'En yeni ve kaliteli ürünler'
+  all_products: 'Tüm Ürünler'
+  view_details: 'Detayları Görüntüle'
+  product_detail: 'Ürün Detayı'
+  new: 'Sıfır'
+  used: 'İkinci El'
+  for_sale: 'Satılık'
+  for_rent: 'Kiralık'
+
+companies:
+  title: 'Güvenilir Firmalar'
+  subtitle: 'Sektöründe öncü firmalar'
+  all_companies: 'Tüm Firmalar'
+  details: 'Detaylar'
+  founded: 'Kuruluş'
+
+bids:
+  title: 'İhaleler'
+  subtitle: 'Onaylanan ve aktif durumda olan ihaleler'
+  active: 'Aktif İhale'
+  approved: 'Onaylı İhale'
+  starting_price: 'Başlangıç Fiyatı'
+  end_date: 'Bitiş Tarihi'
+  bid_date: 'İhale Tarihi'
+  bid_detail: 'İhale Detayı'
+  view_all: 'Tüm İhaleleri Görüntüle'
+  no_bids: 'Henüz İhale Bulunmuyor'
+  no_bids_desc: 'Şu anda onaylanmış ihale bulunmamaktadır.'
+
+cta:
+  title: 'Firmanızı Büyütmek İçin Hazır mısınız?'
+  subtitle: 'Binlerce potansiyel müşteriye ulaşın. Ürünlerinizi sergileyip satışlarınızı artırın.'
+  free_register: 'Ücretsiz Kayıt Ol'
+  discover_companies: 'Firmaları Keşfet'
+
+trust:
+  title: '✨ Güvenilirlik & Kalite Garantisi'
+  ssl_security: 'SSL Güvenlik'
+  encryption: '256-bit Şifreleme'
+  support: '7/24 Destek'
+  expert_team: 'Uzman Ekip'
+  fast_process: 'Hızlı İşlem'
+  instant_result: 'Anında Sonuç'
+
+actions:
+  save: 'Kaydet'
+  edit: 'Düzenle'
+  delete: 'Sil'
+  view: 'Görüntüle'
+  back: 'Geri'
+  next: 'İleri'
+  previous: 'Önceki'
+  close: 'Kapat'
+  send: 'Gönder'
+  update: 'Güncelle'
+
+language:
+  switch: 'Dil Değiştir'
+  turkish: 'Türkçe'
+  english: 'English'
+  german: 'Deutsch'
+  arabic: 'العربية'
+
+user:
+  messages: 'Mesajlarım'
+
+purchase_request:
+  create_new: 'Alım Talebi Oluştur'
+  title: 'Alım Talepleri'
+  subtitle: 'Admin onaylı alım talepleri'
+  contact: 'İletişime Geç'
+  no_requests: 'Henüz alım talebi bulunmuyor'
+
+bid:
+  create: 'İhale Oluştur'
+  current: 'Güncel İhaleler'
+  all_bids: 'Tüm ihaleler'
+  approved_only: 'Sadece onaylanmış ilanlar listelenir'
+  starting_price_short: 'Başlangıç'
+  company: 'Firma'
+  product: 'Ürün'
+
+table:
+  date: 'Tarih'
+  product_name: 'Ürün Adı'
+  description: 'Açıklama'
+  actions: 'İşlemler'
+  no_description: 'Açıklama yok'
+
+footer:
+  contact: 'İletişim'
+  pages: 'Sayfalarımız'
+
+# Products page specific
+sort:
+  label: 'Sırala'
+  price_asc: 'Fiyata göre artan'
+  price_desc: 'Fiyata göre azalan'
+  name_asc: 'İsme göre A-Z'
+  name_desc: 'İsme göre Z-A'
+  newest: 'En yeniler'
+
+search:
+  results_for: 'için arama sonuçları'
+  no_results: 'Ürün bulunamadı'
+  showing_results: 'Sonuçları göster'

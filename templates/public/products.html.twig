@@ -1,7 +1,7 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}Ürünler{% if search %} - "{{ search }}" araması{% endif %}{% if selectedCategory %} - {{ selectedCategory.name }}{% endif %} | Makine Ticaret{% endblock %}
-{% block description %}{% if selectedCategory %}{{ selectedCategory.name }} kategorisindeki ürünler{% else %}Tüm makine ve sanayi ürünleri{% endif %}. Kaliteli ürünler, güvenilir firmalar.{% endblock %}
+{% block title %}{{ 'nav.products'|trans }}{% if search %} - "{{ search }}" {{ 'hero.search_button'|trans }}{% endif %}{% if selectedCategory %} - {{ selectedCategory|smart_translate('name', app.request.locale) }}{% endif %} | Makine Ticaret{% endblock %}
+{% block description %}{% if selectedCategory %}{{ selectedCategory|smart_translate('name', app.request.locale) }} {{ 'categories.subcategories'|trans }}{% else %}{{ 'products.subtitle'|trans }}{% endif %}. {{ 'products.subtitle'|trans }}.{% endblock %}
 
 {% block stylesheets %}
 <style>
@@ -26,11 +26,11 @@
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
-      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">Alım Talebi Oluştur</a>
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</a>
       {% if app.user %}
         <div style="position:relative;" id="userMenuRoot">
           <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
@@ -41,21 +41,21 @@
           <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
             <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
-              <span>Mesajlarım</span>
+              <span>{{ 'Mesajlarım'|auto_translate(app.request.locale) }}</span>
             </a>
             <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-              <span>Alım Talebi Oluştur</span>
+              <span>{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
             <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              <span>İhale Oluştur</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></rect></svg>
+              <span>{{ 'İhale Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% endif %}
             <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
-              <span>Çıkış Yap</span>
+              <span>{{ 'Çıkış Yap'|auto_translate(app.request.locale) }}</span>
             </a>
           </div>
         </div>
@@ -75,9 +75,14 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Giriş Yap'|auto_translate(app.request.locale) }}</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Kayıt Ol'|auto_translate(app.request.locale) }}</a>
       {% endif %}
+
+      <!-- Language Switcher -->
+      <div style="margin-left:10px;">
+        {% include 'components/language-switcher-dark.html.twig' %}
+      </div>
     </nav>
   </div>
 </header>
@@ -98,16 +103,16 @@
                 <nav class="flex mb-4" aria-label="Breadcrumb">
                     <ol class="flex items-center space-x-2 text-sm text-gray-500">
                         <li>
-                            <a href="{{ path('public_home') }}" class="hover:text-primary-600">Ana Sayfa</a>
+                            <a href="{{ path('public_home') }}" class="hover:text-primary-600">{{ 'Ana Sayfa'|auto_translate(app.request.locale) }}</a>
                         </li>
                         <li class="flex items-center">
                             <svg class="w-4 h-4 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
                             {% if selectedCategory %}
-                                <a href="{{ path('public_products') }}" class="hover:text-primary-600">Ürünler</a>
+                                <a href="{{ path('public_products') }}" class="hover:text-primary-600">{{ 'nav.products'|trans }}</a>
                             {% else %}
-                                <span class="text-gray-900">Ürünler</span>
+                                <span class="text-gray-900">{{ 'nav.products'|trans }}</span>
                             {% endif %}
                         </li>
                         {% if selectedCategory %}
@@ -123,11 +128,11 @@
 
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">
                     {% if selectedCategory %}
-                        {{ selectedCategory.name }}
+                        {{ selectedCategory|smart_translate('name', app.request.locale) }}
                     {% elseif search %}
-                        "{{ search }}" için Arama Sonuçları
+                        "{{ search }}" {{ 'hero.search_button'|trans|lower }} {{ 'table.actions'|trans|lower }}
                     {% else %}
-                        Tüm Ürünler
+                        {{ 'products.all_products'|trans }}
                     {% endif %}
                 </h1>
 
@@ -149,11 +154,11 @@
 
                     <div>
                         <select name="sort" class="px-3 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" onchange="this.form.submit()">
-                            <option value="" {% if not sort %}selected{% endif %}>Sırala</option>
-                            <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Fiyata göre artan</option>
-                            <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Fiyata göre azalan</option>
-                            <option value="name_asc" {% if sort == 'name_asc' %}selected{% endif %}>Ada göre A → Z</option>
-                            <option value="name_desc" {% if sort == 'name_desc' %}selected{% endif %}>Ada göre Z → A</option>
+                            <option value="" {% if not sort %}selected{% endif %}>{{ 'sort.label'|trans }}</option>
+                            <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>{{ 'sort.price_asc'|trans }}</option>
+                            <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>{{ 'sort.price_desc'|trans }}</option>
+                            <option value="name_asc" {% if sort == 'name_asc' %}selected{% endif %}>{{ 'sort.name_asc'|trans }}</option>
+                            <option value="name_desc" {% if sort == 'name_desc' %}selected{% endif %}>{{ 'sort.name_desc'|trans }}</option>
                         </select>
                     </div>
 
@@ -161,7 +166,7 @@
                         <input type="text"
                                name="search"
                                value="{{ search }}"
-                               placeholder="Ürün, marka veya firma ara..."
+                               placeholder="{{ 'Ürün, marka veya firma ara...'|auto_translate(app.request.locale) }}"
                                class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -171,7 +176,7 @@
                     </div>
 
                     <button type="submit" class="px-6 py-2.5 font-medium rounded-lg transition-colors shadow btn-neutral" onmouseover="this.style.background='#B8B8B8'" onmouseout="this.style.background='#C0C0C0'">
-                        Ara
+                        {{ 'Ara'|auto_translate(app.request.locale) }}
                     </button>
                 </form>
             </div>
@@ -189,7 +194,7 @@
                 {% if selectedCategory %}
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ selectedCategory.name }}</h3>
                     <div class="space-y-2">
-                        <a href="{{ path('public_products') }}" class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">Tüm Ürünler</a>
+                        <a href="{{ path('public_products') }}" class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:bg-gray-100">{{ 'products.all_products'|trans }}</a>
                         {% for child in selectedCategory.children %}
                             {% if child.isActive %}
                                 <div class="space-y-1">
@@ -220,13 +225,13 @@
                         {% endfor %}
                     </div>
                 {% else %}
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Kategoriler</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'nav.categories'|trans }}</h3>
                     <div class="space-y-2">
                         <a href="{{ path('public_products') }}"
-                           class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors {% if not selectedCategory %}bg-gray-100 text-gray-900{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Tüm Ürünler</a>
+                           class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors {% if not selectedCategory %}bg-gray-100 text-gray-900{% else %}text-gray-700 hover:bg-gray-100{% endif %}">{{ 'products.all_products'|trans }}</a>
                         {% for category in categories %}
                             {% if category.parent is null %}
-                                <a href="{{ path('public_products', {category: category.id}) }}" class="block w-full text-left px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100">{{ category.name }}</a>
+                                <a href="{{ path('public_products', {category: category.id}) }}" class="block w-full text-left px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100">{{ category|smart_translate('name', app.request.locale) }}</a>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -245,7 +250,7 @@
                             <div class="relative h-56 md:h-60 lg:h-56 xl:h-64 2xl:h-72 overflow-hidden bg-gray-50">
                                 {% if product.images|length > 0 %}
                                     <img src="{{ asset(product.images.first.imagePath) }}"
-                                         alt="{{ product.name }}"
+                                         alt="{{ product|smart_translate('name', app.request.locale) }}"
                                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                                 {% else %}
                                     <div class="flex items-center justify-center h-full">
@@ -260,11 +265,11 @@
                                 <!-- Status Badges -->
                                 <div class="absolute top-4 left-4 flex flex-col gap-2">
                                     <span class="px-3 py-1.5 text-xs font-semibold rounded-full backdrop-blur-sm {% if product.productStatus == 'satilik' %}bg-emerald-600 text-white shadow-emerald-500/25{% else %}bg-indigo-600 text-white shadow-indigo-500/25{% endif %} shadow-lg">
-                                        {{ product.productStatus == 'satilik' ? 'Satılık' : 'Kiralık' }}
+                                        {{ product.productStatus == 'satilik' ? ('Satılık'|auto_translate(app.request.locale)) : ('Kiralık'|auto_translate(app.request.locale)) }}
                                     </span>
                                     {% if product.productType %}
                                         <span class="px-3 py-1.5 text-xs font-semibold rounded-full backdrop-blur-sm {% if product.productType == 'sifir' %}bg-amber-600 text-white shadow-amber-500/25{% else %}bg-orange-600 text-white shadow-orange-500/25{% endif %} shadow-lg">
-                                            {{ product.productType == 'sifir' ? 'Sıfır' : 'İkinci El' }}
+                                            {{ product.productType == 'sifir' ? ('Sıfır'|auto_translate(app.request.locale)) : ('İkinci El'|auto_translate(app.request.locale)) }}
                                         </span>
                                     {% endif %}
                                 </div>
@@ -274,7 +279,7 @@
                                     <div class="absolute bottom-4 left-4 right-4">
                                         <a href="{{ path('public_product_detail', {id: product.id}) }}"
                                            class="block w-full bg-white text-gray-900 text-center py-2.5 px-4 rounded-lg font-medium text-sm shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-all duration-300 hover:bg-gray-50">
-                                            Detayları Görüntüle
+                                            {{ 'Detayları Görüntüle'|auto_translate(app.request.locale) }}
                                         </a>
                                     </div>
                                 </div>
@@ -285,7 +290,7 @@
                                 <!-- Product Name -->
                                 <h3 class="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-indigo-600 transition-colors">
                                     <a href="{{ path('public_product_detail', {id: product.id}) }}">
-                                        {{ product.name }}
+                                        {{ product|smart_translate('name', app.request.locale) }}
                                     </a>
                                 </h3>
 
@@ -333,7 +338,8 @@
                                 <!-- Description -->
                                 {% if product.description %}
                                     <p class="text-gray-600 text-sm mb-5 line-clamp-2 leading-relaxed">
-                                        {{ product.description|slice(0, 120) }}{% if product.description|length > 120 %}...{% endif %}
+                                        {% set translatedDesc = product|smart_translate('description', app.request.locale) %}
+                                        {{ translatedDesc|slice(0, 120) }}{% if translatedDesc|length > 120 %}...{% endif %}
                                     </p>
                                 {% endif %}
 
@@ -355,7 +361,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                         </svg>
-                                        Ürün Detayı
+                                        {{ 'Ürün Detayı'|auto_translate(app.request.locale) }}
                                     </a>
                                 </div>
                             </div>
@@ -442,14 +448,14 @@
                     <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
                     </svg>
-                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Ürün Bulunamadı</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">{{'Ürün Bulunamadı' |auto_translate(app.request.locale)}}</h3>
                     <p class="text-gray-600 mb-6">
                         {% if search %}
-                            "{{ search }}" aramanızla eşleşen ürün bulunamadı.
+                            {{ ('"' ~ search ~ '" aramanızla eşleşen ürün bulunamadı.') | auto_translate(app.request.locale) }}
                         {% elseif selectedCategory %}
-                            {{ selectedCategory.name }} kategorisinde henüz ürün bulunmuyor.
+                            {{ (selectedCategory.name ~ ' kategorisinde henüz ürün bulunmuyor.') | auto_translate(app.request.locale) }}
                         {% else %}
-                            Henüz hiç ürün eklenmemiş.
+                            {{ 'Henüz hiç ürün eklenmemiş.' | auto_translate(app.request.locale) }}
                         {% endif %}
                     </p>
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -458,14 +464,14 @@
                             <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                             </svg>
-                            Tüm Ürünler
+                            {{ 'products.all_products'|trans }}
                         </a>
                         <a href="{{ path('public_home') }}"
                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">
                             <svg class="w-4 h-4 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
                             </svg>
-                            Ana Sayfa
+                            {{ 'Ana Sayfa'|auto_translate(app.request.locale) }}
                         </a>
                     </div>
                 </div>
@@ -485,10 +491,10 @@
       <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
     </div>
     <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.products'|trans }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.categories'|trans }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.companies'|trans }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.bids'|trans }}</a>
     </nav>
   </div>
 </footer>

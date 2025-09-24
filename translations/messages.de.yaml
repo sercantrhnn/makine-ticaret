@@ -1,0 +1,128 @@
+# German Translation File
+nav:
+  home: 'Startseite'
+  products: 'Produkte'
+  companies: 'Unternehmen'
+  categories: 'Kategorien'
+  bids: 'Ausschreibungen'
+  login: 'Anmelden'
+  register: 'Registrieren'
+  logout: 'Abmelden'
+  admin: 'Administration'
+
+hero:
+  title: "Türkeis Größte Maschinenhändler-Plattform"
+  subtitle: 'Tausende zuverlässige Unternehmen, zehntausende Qualitätsprodukte. Alles was Sie im Industriesektor suchen, finden Sie hier.'
+  search_placeholder: '🔍 Nach Maschinen, Produkten, Unternehmen oder Kategorien suchen...'
+  search_button: 'Suchen'
+  trusted_platform: "Türkeis Vertrauenswürdigste Plattform"
+
+stats:
+  title: "🏆 Türkeis Führende Plattform"
+  subtitle: 'Die von tausenden Unternehmen und Kunden vertraute Plattform. Unsere Zahlen, die im Industriesektor einen Unterschied machen.'
+  companies: 'Zuverlässige Unternehmen'
+  products: 'Qualitätsprodukte'
+  categories: 'Verschiedene Kategorien'
+  experience: 'Jahre Erfahrung'
+
+categories:
+  title: '🏭 Beliebte Kategorien'
+  subtitle: 'Tausende Qualitätsprodukte in den meist gesuchten Industriekategorien. Wählen Sie die Kategorie, die Ihren Bedürfnissen entspricht.'
+  discover_products: 'Produkte Entdecken'
+  all_categories: 'Alle Kategorien'
+  subcategories: 'Unterkategorien'
+
+products:
+  title: 'Empfohlene Produkte'
+  subtitle: 'Neueste und qualitativ hochwertige Produkte'
+  all_products: 'Alle Produkte'
+  view_details: 'Details Anzeigen'
+  product_detail: 'Produktdetail'
+  new: 'Neu'
+  used: 'Gebraucht'
+  for_sale: 'Zu Verkaufen'
+  for_rent: 'Zu Vermieten'
+
+companies:
+  title: 'Zuverlässige Unternehmen'
+  subtitle: 'Branchenführende Unternehmen'
+  all_companies: 'Alle Unternehmen'
+  details: 'Details'
+  founded: 'Gegründet'
+
+bids:
+  title: 'Ausschreibungen'
+  subtitle: 'Genehmigte und aktive Ausschreibungen'
+  active: 'Aktive Ausschreibung'
+  approved: 'Genehmigte Ausschreibung'
+  starting_price: 'Startpreis'
+  end_date: 'Enddatum'
+  bid_date: 'Ausschreibungsdatum'
+  bid_detail: 'Ausschreibungsdetail'
+  view_all: 'Alle Ausschreibungen Anzeigen'
+  no_bids: 'Noch Keine Ausschreibungen'
+  no_bids_desc: 'Derzeit gibt es keine genehmigten Ausschreibungen.'
+
+cta:
+  title: 'Bereit, Ihr Unternehmen zu Vergrößern?'
+  subtitle: 'Erreichen Sie tausende potenzielle Kunden. Präsentieren Sie Ihre Produkte und steigern Sie Ihre Verkäufe.'
+  free_register: 'Kostenlose Registrierung'
+  discover_companies: 'Unternehmen Entdecken'
+
+trust:
+  title: '✨ Zuverlässigkeits- & Qualitätsgarantie'
+  ssl_security: 'SSL-Sicherheit'
+  encryption: '256-Bit-Verschlüsselung'
+  support: '24/7 Support'
+  expert_team: 'Expertenteam'
+  fast_process: 'Schnelle Bearbeitung'
+  instant_result: 'Sofortige Ergebnisse'
+
+actions:
+  save: 'Speichern'
+  edit: 'Bearbeiten'
+  delete: 'Löschen'
+  view: 'Anzeigen'
+  back: 'Zurück'
+  next: 'Weiter'
+  previous: 'Vorherige'
+  close: 'Schließen'
+  send: 'Senden'
+  update: 'Aktualisieren'
+
+language:
+  switch: 'Sprache Wechseln'
+  turkish: 'Türkçe'
+  english: 'English'
+  german: 'Deutsch'
+  arabic: 'العربية'
+
+user:
+  messages: 'Meine Nachrichten'
+
+purchase_request:
+  create_new: 'Kaufanfrage Erstellen'
+  title: 'Kaufanfragen'
+  subtitle: 'Admin genehmigte Kaufanfragen'
+  contact: 'Kontakt'
+  no_requests: 'Noch keine Kaufanfragen'
+
+bid:
+  create: 'Ausschreibung Erstellen'
+  current: 'Aktuelle Ausschreibungen'
+  all_bids: 'Alle Ausschreibungen'
+  approved_only: 'Nur genehmigte Anzeigen werden angezeigt'
+  starting_price_short: 'Startpreis'
+  company: 'Unternehmen'
+  product: 'Produkt'
+
+table:
+  date: 'Datum'
+  product_name: 'Produktname'
+  description: 'Beschreibung'
+  actions: 'Aktionen'
+  no_description: 'Keine Beschreibung'
+
+footer:
+  contact: 'Kontakt'
+  pages: 'Unsere Seiten'

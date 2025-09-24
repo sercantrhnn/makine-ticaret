@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="{{ current_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8 text-center">🌍 Çeviri Sistemi Test Sayfası</h1>
+        
+        <!-- Current Locale Info -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">📍 Mevcut Dil Bilgileri</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <strong>Aktif Locale:</strong> {{ current_locale() }}
+                </div>
+                <div>
+                    <strong>Dil Adı:</strong> {{ locale_display_name(current_locale()) }}
+                </div>
+                <div>
+                    <strong>Desteklenen Diller:</strong> {{ supported_locales()|join(', ') }}
+                </div>
+                <div>
+                    <strong>İstek IP:</strong> {{ app.request.clientIp }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Switcher Test -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">🔄 Dil Değiştirme Testi</h2>
+            <div class="flex gap-4">
+                {% for locale in supported_locales() %}
+                    <a href="?_locale={{ locale }}" 
+                       class="px-4 py-2 rounded-lg text-white transition-colors {{ locale == current_locale() ? 'bg-blue-600' : 'bg-gray-500 hover:bg-gray-600' }}">
+                        {{ locale_display_name(locale) }} ({{ locale }})
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Translation Examples -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">📝 Çeviri Örnekleri</h2>
+            <div class="space-y-4">
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <strong>Navigation:</strong><br>
+                    {{ 'nav.home'|trans }} | {{ 'nav.products'|trans }} | {{ 'nav.companies'|trans }} | {{ 'nav.categories'|trans }} | {{ 'nav.bids'|trans }}
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <strong>Hero Section:</strong><br>
+                    {{ 'hero.title'|trans }}<br>
+                    <small>{{ 'hero.subtitle'|trans }}</small>
+                </div>
+                
+                <div class="border-l-4 border-purple-500 pl-4">
+                    <strong>Actions:</strong><br>
+                    {{ 'actions.save'|trans }} | {{ 'actions.edit'|trans }} | {{ 'actions.delete'|trans }} | {{ 'actions.view'|trans }}
+                </div>
+                
+                <div class="border-l-4 border-orange-500 pl-4">
+                    <strong>Categories:</strong><br>
+                    {{ 'categories.title'|trans }}<br>
+                    <small>{{ 'categories.subtitle'|trans }}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Content Test -->
+        <div class="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 class="text-xl font-semibold mb-4">🔧 Dinamik İçerik Testi</h2>
+            <p class="text-gray-600 mb-4">Bu bölümde veritabanındaki kategoriler gösterilir (çevrili halleriyle):</p>
+            
+            {% if categories is defined and categories|length > 0 %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for category in categories|slice(0, 6) %}
+                        <div class="border rounded-lg p-4">
+                            <h3 class="font-semibold">{{ category.name }}</h3>
+                            {% if category.description %}
+                                <p class="text-sm text-gray-600 mt-2">{{ category.description|slice(0, 100) }}...</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-500 italic">Kategori bulunamadı</p>
+            {% endif %}
+        </div>
+
+        <!-- API Test Section -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">🧪 API Test Araçları</h2>
+            
+            <div x-data="{ 
+                result: '', 
+                loading: false,
+                testTranslation() {
+                    this.loading = true;
+                    fetch('/admin/translation-test/test-translate', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'text=Merhaba Dünya! Bu bir test mesajıdır.&target_locale={{ current_locale() == "tr" ? "en" : "tr" }}&source_locale={{ current_locale() }}'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.result = JSON.stringify(data, null, 2);
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        this.result = 'Hata: ' + error.message;
+                        this.loading = false;
+                    });
+                },
+                checkApiStatus() {
+                    this.loading = true;
+                    fetch('/admin/translation-test/api-status')
+                    .then(response => response.json())
+                    .then(data => {
+                        this.result = JSON.stringify(data, null, 2);
+                        this.loading = false;
+                    })
+                    .catch(error => {
+                        this.result = 'Hata: ' + error.message;
+                        this.loading = false;
+                    });
+                }
+            }">
+                <div class="space-y-4">
+                    <div class="flex gap-4">
+                        <button @click="checkApiStatus()" 
+                                :disabled="loading"
+                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+                            <span x-show="!loading">DeepL API Durumu</span>
+                            <span x-show="loading">Kontrol ediliyor...</span>
+                        </button>
+                        
+                        <button @click="testTranslation()" 
+                                :disabled="loading"
+                                class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50">
+                            <span x-show="!loading">Çeviri Testi ({{ current_locale() }} → {{ current_locale() == "tr" ? "en" : "tr" }})</span>
+                            <span x-show="loading">Çevriliyor...</span>
+                        </button>
+                    </div>
+                    
+                    <div x-show="result" class="bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm">
+                        <pre x-text="result"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Back to Site -->
+        <div class="text-center mt-8">
+            <a href="{{ path('public_home') }}" class="inline-flex items-center px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors">
+                ← Ana Sayfaya Dön
+            </a>
+        </div>
+    </div>
+</body>
+</html>

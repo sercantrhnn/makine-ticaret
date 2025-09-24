@@ -1,19 +1,25 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}Ana Sayfa{% endblock %}
+{% block title %}{{ 'nav.home'|trans }}{% endblock %}
 
 {% block header %}
+<!-- DEBUG TRANSLATION: nav.home = {{ 'nav.home'|trans }} | Current locale: {{ app.request.locale }} | Session locale: {{ app.session.get('_locale') }} -->
 <header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
   <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
     <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
     </a>
     <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Ürünler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Firmalar</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Kategoriler</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">İhaleler</a>
-      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">Alım Talebi Oluştur</a>
+      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'nav.products'|trans }}</a>
+      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.companies'|trans }}</a>
+      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.categories'|trans }}</a>
+      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.bids'|trans }}</a>
+      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">{{ 'purchase_request.create_new'|trans }}</a>
+      
+      <!-- Language Switcher -->
+      <div style="margin-left:10px;">
+        {% include 'components/language-switcher-dark.html.twig' %}
+      </div>
       {% if app.user %}
         <div style="position:relative;" id="userMenuRoot">
           <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
@@ -24,21 +30,21 @@
           <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
             <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
-              <span>Mesajlarım</span>
+              <span>{{ 'user.messages'|trans }}</span>
             </a>
             <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
-              <span>Alım Talebi Oluştur</span>
+              <span>{{ 'purchase_request.create_new'|trans }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
             <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              <span>İhale Oluştur</span>
+              <span>{{ 'bid.create'|trans }}</span>
             </a>
             {% endif %}
             <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
-              <span>Çıkış Yap</span>
+              <span>{{ 'nav.logout'|trans }}</span>
             </a>
           </div>
         </div>
@@ -58,8 +64,8 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">Giriş Yap</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">Kayıt Ol</a>
+        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.login'|trans }}</a>
+        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'nav.register'|trans }}</a>
       {% endif %}
     </nav>
   </div>
@@ -381,7 +387,7 @@
         '/Otomasyon ve Tekstil.mp4',
         '/Tarım.mp4'
       ] %}
-      {% for category in categories %}
+        {% for category in categories %}
         {% set v = demoVideos[loop.index0 % demoVideos|length] %}
         <a href="{{ path('public_products', {category: category.id}) }}" style="text-decoration:none;color:inherit;">
         <article class="model-card reveal {{ loop.index is odd ? 'from-left' : 'from-right' }}" data-title="{{ category.name }}">
@@ -391,7 +397,8 @@
             <div></div>
             <div>
 {#              <div class="badge">Benzin</div>#}
-              <div class="model-title">{{ category.name }}</div>
+              <div class="model-title">{{ category|smart_translate('name', app.request.locale) }}</div>
+              <!-- DEBUG: Locale: {{ app.request.locale }}, Session: {{ app.session.get('_locale') }} -->
 {#              <p class="model-desc">Bu bir örnek açıklamadır. Üzerine geldiğinizde video oynar.</p>#}
               <div class="arrow">→</div>
             </div>
@@ -399,7 +406,7 @@
         </article>
         </a>
       {% else %}
-        <p>Kategori bulunamadı.</p>
+        <p>{{ 'categories.no_categories'|trans }} - Current locale: {{ app.request.locale }}</p>
       {% endfor %}
     </div>
   </div>
@@ -412,33 +419,33 @@
   <div class="purchase-requests-shell">
     <div class="purchase-requests-head">
       <div>
-        <div class="purchase-requests-title">Alım Talepleri</div>
-        <div class="purchase-requests-sub">Admin onaylı alım talepleri</div>
+        <div class="purchase-requests-title">{{ 'purchase_request.title'|trans }}</div>
+        <div class="purchase-requests-sub">{{ 'purchase_request.subtitle'|trans }}</div>
       </div>
     </div>
     <div class="purchase-requests-table">
       <table class="min-w-full divide-y divide-gray-700">
         <thead class="bg-gray-800/50">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Tarih</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Ürün Adı</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Açıklama</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ 'table.date'|trans }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ 'table.product_name'|trans }}</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ 'table.description'|trans }}</th>
             
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">İşlemler</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">{{ 'table.actions'|trans }}</th>
           </tr>
         </thead>
         <tbody>
           {% for pr in purchaseRequests %}
             <tr class="reveal">
               <td class="date-cell">{{ pr.date|date('d.m.Y H:i') }}</td>
-              <td class="product-name">{{ pr.productName }}</td>
+              <td class="product-name">{{ pr|smart_translate('productName', app.request.locale) }}</td>
               <td class="description-cell max-w-xs">
-                <div class="line-clamp-2">{{ pr.description|default('Açıklama yok') }}</div>
+                <div class="line-clamp-2">{{ pr.description ? (pr|smart_translate('description', app.request.locale)) : ('table.no_description'|trans) }}</div>
               </td>
               
               <td>
                 <a href="#" onclick="handleContactClick({{ pr.id }})" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200 bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg">
-                  İletişime Geç
+                  {{ 'purchase_request.contact'|trans }}
                 </a>
               </td>
             </tr>
@@ -692,10 +699,10 @@
   <div class="bids-shell">
     <div class="bids-head">
       <div>
-        <div class="bids-title">Güncel İhaleler</div>
-        <div class="bids-sub">Sadece onaylanmış ilanlar listelenir</div>
+        <div class="bids-title">{{ 'bid.current'|trans }}</div>
+        <div class="bids-sub">{{ 'bid.approved_only'|trans }}</div>
       </div>
-      <a href="{{ path('public_bids') }}" style="color:#c9cdd2;text-decoration:none;font-weight:600;">Tüm ihaleler →</a>
+      <a href="{{ path('public_bids') }}" style="color:#c9cdd2;text-decoration:none;font-weight:600;">{{ 'bid.all_bids'|trans }} →</a>
     </div>
     <div class="bids-grid">
       {% for bid in approvedBids %}
@@ -719,15 +726,15 @@
                 </div>
               {% endif %}
               <span style="color:#fff;font-size:12px;font-weight:600;letter-spacing:.2px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                {{ bid.company and bid.company.name ? bid.company.name : 'Firma' }}
+                {{ bid.company and bid.company.name ? bid.company.name : ('bid.company'|trans) }}
               </span>
             </div>
           </div>
           <div class="bid-body">
-            <div class="bid-company">{{ bid.company.name ?? 'Firma' }}</div>
-            <div class="bid-name">{{ bid.product.name ?? 'Ürün' }}</div>
+            <div class="bid-company">{{ bid.company.name ?? ('bid.company'|trans) }}</div>
+            <div class="bid-name">{{ bid.product.name ?? ('bid.product'|trans) }}</div>
             <div class="bid-meta">
-              <span class="chip">Başlangıç: {{ bid.startingPrice ? (bid.startingPrice ~ ' ₺') : '-' }}</span>
+              <span class="chip">{{ 'bid.starting_price_short'|trans }}: {{ bid.startingPrice ? (bid.startingPrice ~ ' ₺') : '-' }}</span>
               <span>{{ bid.endTime ? bid.endTime|date('d.m.Y H:i') : '' }}</span>
             </div>
           </div>
@@ -755,7 +762,7 @@
 
       <!-- İletişim - Orta -->
       <div style="font-size:13px;line-height:1.7;">
-        <div style="font-weight:700;color:#e5e5e5;margin-bottom:8px;">İletişim</div>
+        <div style="font-weight:700;color:#e5e5e5;margin-bottom:8px;">{{ 'footer.contact'|trans }}</div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           <span>İstanbul, Türkiye</span>
@@ -772,12 +779,12 @@
 
       <!-- Sayfalar - Sağ -->
       <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
-        <div style="font-weight:700;color:#e5e5e5;margin-bottom:4px;">Sayfalarımız</div>
+        <div style="font-weight:700;color:#e5e5e5;margin-bottom:4px;">{{ 'footer.pages'|trans }}</div>
         <nav style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;font-size:13px;">
-          <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-          <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-          <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-          <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+          <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.products'|trans }}</a>
+          <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.categories'|trans }}</a>
+          <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.companies'|trans }}</a>
+          <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.bids'|trans }}</a>
         </nav>
       </div>
     </div>

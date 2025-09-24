@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="{{ current_locale() }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Debug</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h1>Translation Debug Test</h1>
+    
+    <div style="background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px;">
+        <h2>Locale Information</h2>
+        <p><strong>Current Locale:</strong> {{ app.request.locale }}</p>
+        <p><strong>Session Locale:</strong> {{ app.session.get('_locale') }}</p>
+        <p><strong>Current Locale Function:</strong> {{ current_locale() }}</p>
+    </div>
+
+    <div style="background: #e8f4f8; padding: 15px; margin: 10px 0; border-radius: 5px;">
+        <h2>Translation Tests</h2>
+        <p><strong>nav.home:</strong> "{{ 'nav.home'|trans }}"</p>
+        <p><strong>nav.products:</strong> "{{ 'nav.products'|trans }}"</p>
+        <p><strong>nav.companies:</strong> "{{ 'nav.companies'|trans }}"</p>
+        <p><strong>nav.categories:</strong> "{{ 'nav.categories'|trans }}"</p>
+        <p><strong>nav.login:</strong> "{{ 'nav.login'|trans }}"</p>
+        <p><strong>nav.logout:</strong> "{{ 'nav.logout'|trans }}"</p>
+    </div>
+
+    <div style="background: #ffe8e8; padding: 15px; margin: 10px 0; border-radius: 5px;">
+        <h2>Language Switcher Links</h2>
+        <p><a href="{{ locale_switch_url('tr') }}">Türkçe (TR)</a></p>
+        <p><a href="{{ locale_switch_url('en') }}">English (EN)</a></p>
+        <p><a href="{{ locale_switch_url('de') }}">Deutsch (DE)</a></p>
+        <p><a href="{{ locale_switch_url('ar') }}">العربية (AR)</a></p>
+    </div>
+
+    <div style="background: #f0ffe8; padding: 15px; margin: 10px 0; border-radius: 5px;">
+        <h2>Raw Translation Test</h2>
+        {% set testKey = 'nav.home' %}
+        {% set testTrans = testKey|trans %}
+        
+        <p><strong>Key:</strong> {{ testKey }}</p>
+        <p><strong>Translated:</strong> {{ testTrans }}</p>
+        <p><strong>Are they same?:</strong> {{ testKey == testTrans ? 'YES (translation missing)' : 'NO (translation working)' }}</p>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h2>Quick Links</h2>
+        <p><a href="{{ path('public_home') }}">Go to Home2 Page</a></p>
+        <p><a href="{{ path('public_home') }}?_locale=en">Go to Home2 Page (EN)</a></p>
+        <p><a href="{{ path('public_home') }}?_locale=tr">Go to Home2 Page (TR)</a></p>
+    </div>
+</body>
+</html>

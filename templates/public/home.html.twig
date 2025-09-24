@@ -59,15 +59,11 @@
                 </div>
 
                 <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                    <span class="block">Türkiye'nin En Büyük</span>
-                    <span class="block bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                        Makine Ticaret
-                    </span>
-                    <span class="block">Platformu</span>
+                    {{ 'hero.title'|trans }}
                 </h1>
 
                 <p class="text-xl md:text-2xl mb-12 text-gray-200 max-w-4xl mx-auto leading-relaxed">
-                    Binlerce güvenilir firma, on binlerce kaliteli ürün. Sanayi sektöründe aradığınız her şey burada.
+                    {{ 'hero.subtitle'|trans }}
                     <span class="block mt-2 text-lg">
                         🏭 Endüstri • 🚜 Tarım • 🏗️ İnşaat • ⚙️ Makine
                                     </span>
@@ -79,7 +75,7 @@
                         <div class="flex-1 relative">
                             <input type="text"
                                    name="search"
-                                   placeholder="🔍 Makine, ürün, firma veya kategori arayın..."
+                                   placeholder="{{ 'hero.search_placeholder'|trans }}"
                                    value="{{ search }}"
                                    class="w-full px-8 py-5 text-gray-900 text-lg rounded-xl border-0 focus:ring-4 focus:ring-yellow-300 shadow-2xl backdrop-blur-sm bg-white bg-opacity-95 placeholder-gray-500">
                             <div class="absolute inset-y-0 right-0 pr-6 flex items-center pointer-events-none">
@@ -93,7 +89,7 @@
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
-                                Ara
+                                {{ 'hero.search_button'|trans }}
                             </span>
                         </button>
                     </div>
@@ -106,21 +102,21 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                         </svg>
-                        Ürünler
+                        {{ 'nav.products'|trans }}
                     </a>
                     <a href="{{ path('public_companies') }}"
                        class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
-                        Firmalar
+                        {{ 'nav.companies'|trans }}
                     </a>
                     <a href="{{ path('public_categories') }}"
                        class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 text-white font-medium rounded-lg hover:bg-opacity-30 transition-all backdrop-blur-sm">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
                         </svg>
-                        Kategoriler
+                        {{ 'nav.categories'|trans }}
                     </a>
                 </div>
             </div>

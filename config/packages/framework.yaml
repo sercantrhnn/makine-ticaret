@@ -1,6 +1,14 @@
 # see https://symfony.com/doc/current/reference/configuration/framework.html
 framework:
     secret: '%env(APP_SECRET)%'
+    
+    # Translation Configuration
+    default_locale: tr
+    translator:
+        default_path: '%kernel.project_dir%/translations'
+        fallbacks:
+            - tr
+            - en
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true
