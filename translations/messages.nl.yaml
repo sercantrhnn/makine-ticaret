@@ -1,0 +1,149 @@
+# Dutch Translation File
+nav:
+  home: 'Home'
+  products: 'Producten'
+  companies: 'Bedrijven'
+  categories: 'Categorieën'
+  bids: 'Biedingen'
+  login: 'Inloggen'
+  register: 'Registreren'
+  logout: 'Uitloggen'
+  admin: 'Administratie'
+
+hero:
+  title: "Turkije's Grootste Machinehandel Platform"
+  subtitle: 'Duizenden betrouwbare bedrijven, tienduizenden kwaliteitsproducten. Alles wat je zoekt in de industriële sector is hier.'
+  search_placeholder: 'Zoek naar producten, merken of bedrijven...'
+  search_button: 'Zoeken'
+  trusted_platform: "Turkije's Meest Vertrouwde Platform"
+
+stats:
+  title: "🏆 Turkije's Leidende Platform"
+  subtitle: 'Het platform waar duizenden bedrijven en klanten op vertrouwen. Onze cijfers die het verschil maken in de industriële sector.'
+  companies: 'Betrouwbare Bedrijven'
+  products: 'Kwaliteitsproducten'
+  categories: 'Verschillende Categorieën'
+  experience: 'Jaar Ervaring'
+
+categories:
+  title: '🏭 Populaire Categorieën'
+  subtitle: 'Duizenden kwaliteitsproducten in de meest gezochte industriële categorieën. Kies de categorie die past bij uw behoeften.'
+  discover_products: 'Ontdek Producten'
+  all_categories: 'Alle Categorieën'
+  subcategories: 'subcategorieën'
+  no_categories: 'Geen categorieën gevonden'
+
+products:
+  title: 'Uitgelichte Producten'
+  subtitle: 'Nieuwste en kwaliteitsproducten'
+  all_products: 'Alle Producten'
+  view_details: 'Details Bekijken'
+  product_detail: 'Product Detail'
+  new: 'Nieuw'
+  used: 'Gebruikt'
+  for_sale: 'Te Koop'
+  for_rent: 'Te Huur'
+
+companies:
+  title: 'Betrouwbare Bedrijven'
+  subtitle: 'Pionier bedrijven in hun sector'
+  all_companies: 'Alle Bedrijven'
+  details: 'Details'
+  founded: 'Opgericht'
+
+bids:
+  title: 'Biedingen'
+  subtitle: 'Goedgekeurde en actieve biedingen'
+  active: 'Actieve Bieding'
+  approved: 'Goedgekeurde Bieding'
+  starting_price: 'Startprijs'
+  end_date: 'Einddatum'
+  bid_date: 'Biedingsdatum'
+  bid_detail: 'Biedingsdetail'
+  view_all: 'Alle Biedingen Bekijken'
+  no_bids: 'Nog Geen Biedingen'
+  no_bids_desc: 'Er zijn momenteel geen goedgekeurde biedingen.'
+
+cta:
+  title: 'Klaar om Uw Bedrijf te Laten Groeien?'
+  subtitle: 'Bereik duizenden potentiële klanten. Toon uw producten en verhoog uw verkoop.'
+  free_register: 'Gratis Registratie'
+  discover_companies: 'Ontdek Bedrijven'
+
+trust:
+  title: '✨ Betrouwbaarheid & Kwaliteitsgarantie'
+  ssl_security: 'SSL Beveiliging'
+  encryption: '256-bit Encryptie'
+  support: '24/7 Ondersteuning'
+  expert_team: 'Expert Team'
+  fast_process: 'Snelle Verwerking'
+  instant_result: 'Instant Resultaat'
+
+actions:
+  save: 'Opslaan'
+  edit: 'Bewerken'
+  delete: 'Verwijderen'
+  view: 'Bekijken'
+  back: 'Terug'
+  next: 'Volgende'
+  previous: 'Vorige'
+  close: 'Sluiten'
+  send: 'Verzenden'
+  update: 'Bijwerken'
+
+language:
+  switch: 'Taal Wijzigen'
+  turkish: 'Türkçe'
+  english: 'English'
+  german: 'Deutsch'
+  arabic: 'العربية'
+  japanese: '日本語'
+  spanish: 'Español'
+  italian: 'Italiano'
+  portuguese: 'Português'
+  russian: 'Русский'
+  dutch: 'Nederlands'
+
+user:
+  messages: 'Mijn Berichten'
+
+purchase_request:
+  create_new: 'Aankoopverzoek Aanmaken'
+  title: 'Aankoopverzoeken'
+  subtitle: 'Door beheerder goedgekeurde aankoopverzoeken'
+  contact: 'Contact Opnemen'
+  no_requests: 'Nog geen aankoopverzoeken'
+
+bid:
+  create: 'Bieding Aanmaken'
+  current: 'Huidige Biedingen'
+  all_bids: 'Alle biedingen'
+  approved_only: 'Alleen goedgekeurde advertenties worden getoond'
+  starting_price_short: 'Start'
+  company: 'Bedrijf'
+  product: 'Product'
+
+table:
+  date: 'Datum'
+  product_name: 'Productnaam'
+  description: 'Beschrijving'
+  actions: 'Acties'
+  no_description: 'Geen beschrijving'
+
+footer:
+  contact: 'Contact'
+  pages: "Onze Pagina's"
+
+# Products page specific
+sort:
+  label: 'Sorteren'
+  price_asc: 'Prijs oplopend'
+  price_desc: 'Prijs aflopend'
+  name_asc: 'Naam A-Z'
+  name_desc: 'Naam Z-A'
+  newest: 'Nieuwste eerst'
+
+search:
+  results_for: 'Zoekresultaten voor'
+  no_results: 'Geen producten gevonden'
+  showing_results: 'Resultaten tonen'

@@ -1,0 +1,149 @@
+# Japanese Translation File
+nav:
+  home: 'ホーム'
+  products: '製品'
+  companies: '企業'
+  categories: 'カテゴリー'
+  bids: '入札'
+  login: 'ログイン'
+  register: '登録'
+  logout: 'ログアウト'
+  admin: '管理'
+
+hero:
+  title: "トルコ最大の機械取引プラットフォーム"
+  subtitle: '何千もの信頼できる企業、何万もの高品質製品。産業部門で必要なものがすべてここにあります。'
+  search_placeholder: '製品、ブランド、企業を検索...'
+  search_button: '検索'
+  trusted_platform: "トルコで最も信頼されるプラットフォーム"
+
+stats:
+  title: "🏆 トルコのリーディングプラットフォーム"
+  subtitle: '何千もの企業とお客様に信頼されているプラットフォーム。産業部門で差をつける私たちの数字。'
+  companies: '信頼できる企業'
+  products: '高品質製品'
+  categories: '異なるカテゴリー'
+  experience: '年の経験'
+
+categories:
+  title: '🏭 人気カテゴリー'
+  subtitle: '最も検索される産業カテゴリーで何千もの高品質製品。ニーズに合ったカテゴリーを選択してください。'
+  discover_products: '製品を発見'
+  all_categories: 'すべてのカテゴリー'
+  subcategories: 'サブカテゴリー'
+  no_categories: 'カテゴリーが見つかりません'
+
+products:
+  title: '注目製品'
+  subtitle: '最新で高品質の製品'
+  all_products: 'すべての製品'
+  view_details: '詳細を表示'
+  product_detail: '製品詳細'
+  new: '新品'
+  used: '中古'
+  for_sale: '販売用'
+  for_rent: 'レンタル用'
+
+companies:
+  title: '信頼できる企業'
+  subtitle: 'その分野の先駆的企業'
+  all_companies: 'すべての企業'
+  details: '詳細'
+  founded: '設立'
+
+bids:
+  title: '入札'
+  subtitle: '承認され活動中の入札'
+  active: 'アクティブ入札'
+  approved: '承認済み入札'
+  starting_price: '開始価格'
+  end_date: '終了日'
+  bid_date: '入札日'
+  bid_detail: '入札詳細'
+  view_all: 'すべての入札を表示'
+  no_bids: 'まだ入札はありません'
+  no_bids_desc: '現在承認された入札はありません。'
+
+cta:
+  title: '会社を成長させる準備はできていますか？'
+  subtitle: '何千もの潜在顧客にリーチ。製品を展示し、売上を増やしましょう。'
+  free_register: '無料登録'
+  discover_companies: '企業を発見'
+
+trust:
+  title: '✨ 信頼性と品質保証'
+  ssl_security: 'SSL セキュリティ'
+  encryption: '256ビット暗号化'
+  support: '24/7 サポート'
+  expert_team: '専門チーム'
+  fast_process: '高速処理'
+  instant_result: '即座の結果'
+
+actions:
+  save: '保存'
+  edit: '編集'
+  delete: '削除'
+  view: '表示'
+  back: '戻る'
+  next: '次へ'
+  previous: '前へ'
+  close: '閉じる'
+  send: '送信'
+  update: '更新'
+
+language:
+  switch: '言語を変更'
+  turkish: 'Türkçe'
+  english: 'English'
+  german: 'Deutsch'
+  arabic: 'العربية'
+  japanese: '日本語'
+  spanish: 'Español'
+  italian: 'Italiano'
+  portuguese: 'Português'
+  russian: 'Русский'
+  dutch: 'Nederlands'
+
+user:
+  messages: 'マイメッセージ'
+
+purchase_request:
+  create_new: '購入リクエスト作成'
+  title: '購入リクエスト'
+  subtitle: '管理者承認済み購入リクエスト'
+  contact: 'お問い合わせ'
+  no_requests: 'まだ購入リクエストはありません'
+
+bid:
+  create: '入札作成'
+  current: '現在の入札'
+  all_bids: 'すべての入札'
+  approved_only: '承認済みリストのみ表示'
+  starting_price_short: '開始'
+  company: '企業'
+  product: '製品'
+
+table:
+  date: '日付'
+  product_name: '製品名'
+  description: '説明'
+  actions: 'アクション'
+  no_description: '説明なし'
+
+footer:
+  contact: 'お問い合わせ'
+  pages: '私たちのページ'
+
+# Products page specific
+sort:
+  label: '並び替え'
+  price_asc: '価格昇順'
+  price_desc: '価格降順'
+  name_asc: '名前 A-Z'
+  name_desc: '名前 Z-A'
+  newest: '最新順'
+
+search:
+  results_for: '検索結果'
+  no_results: '製品が見つかりません'
+  showing_results: '結果を表示中'

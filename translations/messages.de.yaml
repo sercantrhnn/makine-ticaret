@@ -96,6 +96,12 @@ language:
   english: 'English'
   german: 'Deutsch'
   arabic: 'العربية'
+  japanese: '日本語'
+  spanish: 'Español'
+  italian: 'Italiano'
+  portuguese: 'Português'
+  russian: 'Русский'
+  dutch: 'Nederlands'
 
 user:
   messages: 'Meine Nachrichten'

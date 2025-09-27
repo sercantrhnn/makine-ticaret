@@ -16,7 +16,13 @@ class TranslationService
         'tr' => 'TR',
         'en' => 'EN',
         'de' => 'DE',
-        'ar' => 'AR'
+        'ar' => 'AR',
+        'ja' => 'JA',
+        'es' => 'ES',
+        'it' => 'IT',
+        'pt' => 'PT',
+        'ru' => 'RU',
+        'nl' => 'NL'
     ];
 
     public function __construct(

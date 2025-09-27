@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 
 class LocaleDetectionService
 {
-    private const SUPPORTED_LOCALES = ['tr', 'en', 'de', 'ar'];
+    private const SUPPORTED_LOCALES = ['tr', 'en', 'de', 'ar', 'ja', 'es', 'it', 'pt', 'ru', 'nl'];
     private const DEFAULT_LOCALE = 'tr';
     
     // IP'ye göre ülke kodu eşleştirmesi
@@ -26,6 +26,14 @@ class LocaleDetectionService
         'QA' => 'ar',
         'KW' => 'ar',
         'EG' => 'ar',
+        'JP' => 'ja',
+        'ES' => 'es',
+        'IT' => 'it',
+        'PT' => 'pt',
+        'BR' => 'pt',
+        'RU' => 'ru',
+        'NL' => 'nl',
+        'BE' => 'nl',
     ];
 
     public function __construct(
@@ -149,7 +157,13 @@ class LocaleDetectionService
             'tr' => 'Türkçe',
             'en' => 'English',
             'de' => 'Deutsch',
-            'ar' => 'العربية'
+            'ar' => 'العربية',
+            'ja' => '日本語',
+            'es' => 'Español',
+            'it' => 'Italiano',
+            'pt' => 'Português',
+            'ru' => 'Русский',
+            'nl' => 'Nederlands'
         ];
 
         return $names[$locale] ?? $locale;

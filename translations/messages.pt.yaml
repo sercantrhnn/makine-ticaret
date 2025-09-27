@@ -1,0 +1,149 @@
+# Portuguese Translation File
+nav:
+  home: 'Início'
+  products: 'Produtos'
+  companies: 'Empresas'
+  categories: 'Categorias'
+  bids: 'Licitações'
+  login: 'Entrar'
+  register: 'Cadastrar'
+  logout: 'Sair'
+  admin: 'Administração'
+
+hero:
+  title: "A Maior Plataforma de Comércio de Máquinas da Turquia"
+  subtitle: 'Milhares de empresas confiáveis, dezenas de milhares de produtos de qualidade. Tudo o que você procura no setor industrial está aqui.'
+  search_placeholder: 'Pesquisar produtos, marcas ou empresas...'
+  search_button: 'Pesquisar'
+  trusted_platform: "A Plataforma Mais Confiável da Turquia"
+
+stats:
+  title: "🏆 Plataforma Líder da Turquia"
+  subtitle: 'A plataforma em que milhares de empresas e clientes confiam. Nossos números que fazem a diferença no setor industrial.'
+  companies: 'Empresas Confiáveis'
+  products: 'Produtos de Qualidade'
+  categories: 'Categorias Diferentes'
+  experience: 'Anos de Experiência'
+
+categories:
+  title: '🏭 Categorias Populares'
+  subtitle: 'Milhares de produtos de qualidade nas categorias industriais mais pesquisadas. Escolha a categoria que atende às suas necessidades.'
+  discover_products: 'Descobrir Produtos'
+  all_categories: 'Todas as Categorias'
+  subcategories: 'subcategorias'
+  no_categories: 'Nenhuma categoria encontrada'
+
+products:
+  title: 'Produtos em Destaque'
+  subtitle: 'Produtos mais novos e de qualidade'
+  all_products: 'Todos os Produtos'
+  view_details: 'Ver Detalhes'
+  product_detail: 'Detalhe do Produto'
+  new: 'Novo'
+  used: 'Usado'
+  for_sale: 'À Venda'
+  for_rent: 'Para Alugar'
+
+companies:
+  title: 'Empresas Confiáveis'
+  subtitle: 'Empresas pioneiras em seu setor'
+  all_companies: 'Todas as Empresas'
+  details: 'Detalhes'
+  founded: 'Fundada'
+
+bids:
+  title: 'Licitações'
+  subtitle: 'Licitações aprovadas e ativas'
+  active: 'Licitação Ativa'
+  approved: 'Licitação Aprovada'
+  starting_price: 'Preço Inicial'
+  end_date: 'Data de Término'
+  bid_date: 'Data da Licitação'
+  bid_detail: 'Detalhe da Licitação'
+  view_all: 'Ver Todas as Licitações'
+  no_bids: 'Ainda Não Há Licitações'
+  no_bids_desc: 'Atualmente não há licitações aprovadas.'
+
+cta:
+  title: 'Está Pronto para Fazer Sua Empresa Crescer?'
+  subtitle: 'Alcance milhares de clientes potenciais. Exiba seus produtos e aumente suas vendas.'
+  free_register: 'Cadastro Gratuito'
+  discover_companies: 'Descobrir Empresas'
+
+trust:
+  title: '✨ Garantia de Confiabilidade e Qualidade'
+  ssl_security: 'Segurança SSL'
+  encryption: 'Criptografia de 256 bits'
+  support: 'Suporte 24/7'
+  expert_team: 'Equipe Especializada'
+  fast_process: 'Processo Rápido'
+  instant_result: 'Resultado Instantâneo'
+
+actions:
+  save: 'Salvar'
+  edit: 'Editar'
+  delete: 'Excluir'
+  view: 'Visualizar'
+  back: 'Voltar'
+  next: 'Próximo'
+  previous: 'Anterior'
+  close: 'Fechar'
+  send: 'Enviar'
+  update: 'Atualizar'
+
+language:
+  switch: 'Mudar Idioma'
+  turkish: 'Türkçe'
+  english: 'English'
+  german: 'Deutsch'
+  arabic: 'العربية'
+  japanese: '日本語'
+  spanish: 'Español'
+  italian: 'Italiano'
+  portuguese: 'Português'
+  russian: 'Русский'
+  dutch: 'Nederlands'
+
+user:
+  messages: 'Minhas Mensagens'
+
+purchase_request:
+  create_new: 'Criar Solicitação de Compra'
+  title: 'Solicitações de Compra'
+  subtitle: 'Solicitações de compra aprovadas pelo administrador'
+  contact: 'Entrar em Contato'
+  no_requests: 'Ainda não há solicitações de compra'
+
+bid:
+  create: 'Criar Licitação'
+  current: 'Licitações Atuais'
+  all_bids: 'Todas as licitações'
+  approved_only: 'Apenas anúncios aprovados são exibidos'
+  starting_price_short: 'Inicial'
+  company: 'Empresa'
+  product: 'Produto'
+
+table:
+  date: 'Data'
+  product_name: 'Nome do Produto'
+  description: 'Descrição'
+  actions: 'Ações'
+  no_description: 'Sem descrição'
+
+footer:
+  contact: 'Contato'
+  pages: 'Nossas Páginas'
+
+# Products page specific
+sort:
+  label: 'Ordenar'
+  price_asc: 'Preço crescente'
+  price_desc: 'Preço decrescente'
+  name_asc: 'Nome A-Z'
+  name_desc: 'Nome Z-A'
+  newest: 'Mais recentes'
+
+search:
+  results_for: 'Resultados da pesquisa para'
+  no_results: 'Nenhum produto encontrado'
+  showing_results: 'Mostrando resultados'
