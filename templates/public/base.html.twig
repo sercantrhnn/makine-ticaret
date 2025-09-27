@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Makine Ticaret{% endblock %}</title>
-    <meta name="description" content="{% block description %}En kaliteli makine ve sanayi ürünleri için güvenilir adres{% endblock %}">
+    
+    {# SEO Meta Tags #}
+    {% include 'seo/meta_tags.html.twig' %}
+    
+    {# Favicon #}
+    <link rel="icon" type="image/png" href="{{ asset('mineindustries_logo_transparent_pad8.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('mineindustries_logo_transparent_pad8.png') }}">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -58,6 +64,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     {% block stylesheets %}{% endblock %}
+    
+    {# Structured Data #}
+    {% include 'seo/structured_data.html.twig' %}
 </head>
 <body class="bg-gradient-to-br from-slate-50 to-blue-50 font-sans">
     <!-- Header -->

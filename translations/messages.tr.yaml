@@ -147,3 +147,33 @@ search:
   results_for: 'için arama sonuçları'
   no_results: 'Ürün bulunamadı'
   showing_results: 'Sonuçları göster'
+
+# SEO specific translations
+seo:
+  default_description: 'Türkiye''nin en büyük makine ticaret platformu. Binlerce güvenilir firma, on binlerce kaliteli ürün. Sanayi sektöründe aradığınız her şey burada.'
+  default_keywords: 'makine ticaret, sanayi, ekipman, alım satım, ihale, firma rehberi'
+  website_description: 'Türkiye''nin en büyük makine ticaret platformu'
+  home_title: 'Türkiye''nin En Büyük Makine Ticaret Platformu | Makine Ticaret'
+  products_title: 'Makine ve Sanayi Ürünleri | Binlerce Kaliteli Ürün'
+  companies_title: 'Güvenilir Firmalar | Sanayi Firmaları Rehberi'
+  categories_title: 'Ürün Kategorileri | Makine ve Sanayi Kategorileri'
+  bids_title: 'Aktif İhaleler | Makine Ticaret İhaleleri'
+
+company:
+  name: 'Makine Ticaret'
+
+breadcrumb:
+  home: 'Ana Sayfa'
+  products: 'Ürünler'
+  companies: 'Firmalar'
+  categories: 'Kategoriler'
+  bids: 'İhaleler'
+
+# Gallery specific translations
+gallery:
+  enlarge: 'Büyüt'
+  view_more: 'Daha fazla'
+  image: 'Görsel'
+  click_to_enlarge: 'Büyütmek için tıklayın'
+  navigate_with_arrows: 'Ok tuşları ile gezin'
+  product_images: 'Ürün Görselleri'

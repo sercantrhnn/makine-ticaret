@@ -1,0 +1,76 @@
+{# Structured Data (JSON-LD) #}
+
+{# Organization Schema #}
+{% set organizationData = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": ('company.name'|trans|default('Makine Ticaret')),
+  "alternateName": "MineIndustries",
+  "url": app.request.schemeAndHttpHost,
+  "logo": absolute_url(asset('mineindustries_logo_transparent_pad8.png')),
+  "sameAs": [
+    "https://twitter.com/makineticaret",
+    "https://linkedin.com/company/makine-ticaret"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+90-XXX-XXX-XXXX",
+    "contactType": "customer service",
+    "availableLanguage": supported_locales()
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "TR",
+    "addressLocality": "İstanbul"
+  }
+} %}
+
+<script type="application/ld+json">
+{{ organizationData|json_encode|raw }}
+</script>
+
+{# Website Schema #}
+{% set websiteData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": ('company.name'|trans|default('Makine Ticaret')),
+  "url": app.request.schemeAndHttpHost,
+  "description": ('seo.website_description'|trans|default('Türkiyenin en büyük makine ticaret platformu')),
+  "inLanguage": supported_locales(),
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": url('public_products') ~ "?search={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+} %}
+
+<script type="application/ld+json">
+{{ websiteData|json_encode|raw }}
+</script>
+
+{# Breadcrumb Schema (if breadcrumbs are defined) #}
+{% if breadcrumbs is defined and breadcrumbs|length > 1 %}
+{% set breadcrumbData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": []
+} %}
+
+{% for item in breadcrumbs %}
+  {% set breadcrumbData = breadcrumbData|merge({
+    'itemListElement': breadcrumbData.itemListElement|merge([{
+      "@type": "ListItem",
+      "position": loop.index,
+      "name": item.title,
+      "item": item.url
+    }])
+  }) %}
+{% endfor %}
+
+<script type="application/ld+json">
+{{ breadcrumbData|json_encode|raw }}
+</script>
+{% endif %}

@@ -1,6 +1,9 @@
 {% extends 'public/base.html.twig' %}
 
-{% block title %}{{ 'nav.home'|trans }}{% endblock %}
+{% block title %}{{ 'seo.home_title'|trans }}{% endblock %}
+{% block meta_description %}{{ 'seo.default_description'|trans }}{% endblock %}
+{% block meta_keywords %}{{ 'seo.default_keywords'|trans }}{% endblock %}
+{% block og_image %}{{ absolute_url(asset('mineindustries_logo_transparent_pad8.png')) }}{% endblock %}
 
 {% block header %}
 <!-- DEBUG TRANSLATION: nav.home = {{ 'nav.home'|trans }} | Current locale: {{ app.request.locale }} | Session locale: {{ app.session.get('_locale') }} -->

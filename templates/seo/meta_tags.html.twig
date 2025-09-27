@@ -1,0 +1,44 @@
+{# SEO Meta Tags Component #}
+
+{# Basic Meta Tags #}
+<meta name="description" content="{% block meta_description %}{{ 'seo.default_description'|trans }}{% endblock %}">
+<meta name="keywords" content="{% block meta_keywords %}{{ 'seo.default_keywords'|trans }}{% endblock %}">
+<meta name="author" content="Makine Ticaret">
+<meta name="robots" content="{% block robots %}index, follow{% endblock %}">
+
+{# Canonical URL #}
+<link rel="canonical" href="{% block canonical %}{{ app.request.uri }}{% endblock %}">
+
+{# Open Graph Meta Tags #}
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:title" content="{% block og_title %}{% block title %}Makine Ticaret{% endblock %}{% endblock %}">
+<meta property="og:description" content="{% block og_description %}{{ block('meta_description') }}{% endblock %}">
+<meta property="og:url" content="{{ app.request.uri }}">
+<meta property="og:site_name" content="Makine Ticaret">
+<meta property="og:locale" content="{{ current_locale() == 'en' ? 'en_US' : (current_locale() == 'tr' ? 'tr_TR' : current_locale()) }}">
+<meta property="og:image" content="{% block og_image %}{{ absolute_url(asset('mineindustries_logo_transparent_pad8.png')) }}{% endblock %}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+{# Twitter Card Meta Tags #}
+<meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}">
+<meta name="twitter:title" content="{{ block('og_title') }}">
+<meta name="twitter:description" content="{{ block('og_description') }}">
+<meta name="twitter:image" content="{{ block('og_image') }}">
+
+{# Hreflang Tags for Multilingual SEO #}
+{% block hreflang %}
+{% set current_route = app.request.attributes.get('_route') %}
+{% set current_params = app.request.attributes.get('_route_params') %}
+{% for locale in supported_locales() %}
+    {% set params = current_params|merge({'_locale': locale}) %}
+    <link rel="alternate" hreflang="{{ locale }}" href="{{ url(current_route, params) }}">
+{% endfor %}
+<link rel="alternate" hreflang="x-default" href="{{ url(current_route, current_params|merge({'_locale': 'tr'})) }}">
+{% endblock %}
+
+{# Additional Meta Tags #}
+<meta name="theme-color" content="#3b82f6">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
