@@ -226,12 +226,89 @@
                     </div>
                 {% else %}
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ 'nav.categories'|trans }}</h3>
-                    <div class="space-y-2">
+                    <div class="space-y-2" id="categoryAccordion">
                         <a href="{{ path('public_products') }}"
                            class="block w-full text-left px-3 py-2 rounded-md text-sm font-medium transition-colors {% if not selectedCategory %}bg-gray-100 text-gray-900{% else %}text-gray-700 hover:bg-gray-100{% endif %}">{{ 'products.all_products'|trans }}</a>
                         {% for category in categories %}
-                            {% if category.parent is null %}
-                                <a href="{{ path('public_products', {category: category.id}) }}" class="block w-full text-left px-3 py-2 rounded-md text-sm text-gray-700 hover:bg-gray-100">{{ category|smart_translate('name', app.request.locale) }}</a>
+                            {% if category.parent is null and category.isActive %}
+                                <div class="category-item" data-category-id="{{ category.id }}">
+                                    <!-- Main Category Row -->
+                                    <div class="flex items-center">
+                                        <!-- Category Name (clickable for filtering) -->
+                                        <a href="{{ path('public_products', {category: category.id}) }}" 
+                                           class="flex-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors category-link">
+                                            {{ category|smart_translate('name', app.request.locale) }}
+                                        </a>
+                                        
+                                        <!-- Expand/Collapse Arrow (only if has children) -->
+                                        {% if category.children|length > 0 %}
+                                            <button type="button" 
+                                                    class="p-2 hover:bg-gray-100 rounded-md transition-colors category-toggle"
+                                                    data-target="category-{{ category.id }}"
+                                                    aria-expanded="false">
+                                                <svg class="w-4 h-4 text-gray-500 transform transition-transform duration-200" 
+                                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                </svg>
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Subcategories (collapsible) -->
+                                    {% if category.children|length > 0 %}
+                                        <div id="category-{{ category.id }}" 
+                                             class="category-children hidden ml-4 mt-1 space-y-1 transition-all duration-300">
+                                            {% for child in category.children %}
+                                                {% if child.isActive %}
+                                                    <div class="subcategory-item" data-category-id="{{ child.id }}">
+                                                        <!-- Subcategory Row -->
+                                                        <div class="flex items-center">
+                                                            <!-- Subcategory Name -->
+                                                            <a href="{{ path('public_products', {category: child.id}) }}" 
+                                                               class="flex-1 px-3 py-1.5 rounded-md text-xs text-gray-600 hover:bg-gray-100 transition-colors category-link {% if selectedCategory and selectedCategory.id == child.id %}bg-gray-100 text-gray-900 font-medium{% endif %}">
+                                                                <svg class="w-3 h-3 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                                </svg>
+                                                                {{ child|smart_translate('name', app.request.locale) }}
+                                                            </a>
+                                                            
+                                                            <!-- Sub-subcategory Arrow -->
+                                                            {% if child.children|length > 0 %}
+                                                                <button type="button" 
+                                                                        class="p-1.5 hover:bg-gray-100 rounded-md transition-colors category-toggle"
+                                                                        data-target="subcategory-{{ child.id }}"
+                                                                        aria-expanded="false">
+                                                                    <svg class="w-3 h-3 text-gray-400 transform transition-transform duration-200" 
+                                                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                                    </svg>
+                                                                </button>
+                                                            {% endif %}
+                                                        </div>
+                                                        
+                                                        <!-- Sub-subcategories -->
+                                                        {% if child.children|length > 0 %}
+                                                            <div id="subcategory-{{ child.id }}" 
+                                                                 class="category-children hidden ml-4 mt-1 space-y-1">
+                                                                {% for grandchild in child.children %}
+                                                                    {% if grandchild.isActive %}
+                                                                        <a href="{{ path('public_products', {category: grandchild.id}) }}" 
+                                                                           class="block px-3 py-1 rounded-md text-xs text-gray-500 hover:bg-gray-100 transition-colors category-link {% if selectedCategory and selectedCategory.id == grandchild.id %}bg-gray-100 text-gray-900 font-medium{% endif %}">
+                                                                            <svg class="w-2 h-2 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                                                            </svg>
+                                                                            {{ grandchild|smart_translate('name', app.request.locale) }}
+                                                                        </a>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -498,4 +575,79 @@
     </nav>
   </div>
 </footer>
+
+<!-- Category Accordion JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Category accordion functionality
+    const categoryToggles = document.querySelectorAll('.category-toggle');
+    
+    categoryToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetId = this.getAttribute('data-target');
+            const targetElement = document.getElementById(targetId);
+            const arrow = this.querySelector('svg');
+            const isExpanded = this.getAttribute('aria-expanded') === 'true';
+            
+            if (targetElement) {
+                if (isExpanded) {
+                    // Collapse
+                    targetElement.classList.add('hidden');
+                    this.setAttribute('aria-expanded', 'false');
+                    arrow.style.transform = 'rotate(0deg)';
+                } else {
+                    // Expand
+                    targetElement.classList.remove('hidden');
+                    this.setAttribute('aria-expanded', 'true');
+                    arrow.style.transform = 'rotate(90deg)';
+                }
+            }
+        });
+    });
+    
+    // Auto-expand if current category is selected
+    {% if selectedCategory %}
+        const selectedCategoryId = {{ selectedCategory.id }};
+        
+        // Find and expand parent categories
+        const selectedLinks = document.querySelectorAll('.category-link');
+        selectedLinks.forEach(link => {
+            if (link.href.includes('category=' + selectedCategoryId)) {
+                // Find parent category containers and expand them
+                let parent = link.closest('.category-item, .subcategory-item');
+                while (parent) {
+                    const toggle = parent.querySelector('.category-toggle');
+                    if (toggle) {
+                        const targetId = toggle.getAttribute('data-target');
+                        const targetElement = document.getElementById(targetId);
+                        const arrow = toggle.querySelector('svg');
+                        
+                        if (targetElement && targetElement.classList.contains('hidden')) {
+                            targetElement.classList.remove('hidden');
+                            toggle.setAttribute('aria-expanded', 'true');
+                            if (arrow) arrow.style.transform = 'rotate(90deg)';
+                        }
+                    }
+                    // Look for parent category
+                    parent = parent.parentElement.closest('.category-item, .subcategory-item');
+                }
+            }
+        });
+    {% endif %}
+    
+    // Smooth scrolling for category links
+    const categoryLinks = document.querySelectorAll('.category-link');
+    categoryLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Allow normal navigation (don't prevent default)
+            // Add loading state if needed
+            this.style.opacity = '0.7';
+        });
+    });
+});
+</script>
+
 {% endblock %}
