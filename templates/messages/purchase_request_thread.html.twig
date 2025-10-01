@@ -3,22 +3,73 @@
 {% block title %}{{ 'Alım Talebi Mesajları'|auto_translate(app.request.locale) }} - {{ pr|smart_translate('productName', app.request.locale) }}{% endblock %}
 
 {% block header %}
-<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
-    <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
-      <div style="width:36px;height:36px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-right:10px;">
-        <span style="color:#0a0a0a;font-weight:800;font-size:14px;letter-spacing:.5px;">MT</span>
-      </div>
-      <div>
-        <div style="font-weight:700;letter-spacing:.4px;">Makine Ticaret</div>
-        <div style="font-size:11px;color:#b3b3b3;">{{ 'Alım Talebi Mesajları'|auto_translate(app.request.locale) }}</div>
-      </div>
+<header class="main-header">
+  <div class="header-container">
+    <a href="{{ path('public_home') }}" class="logo-link">
+      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="logo-img"/>
     </a>
+    <button class="mobile-menu-btn" id="mobileMenuBtn"><span></span><span></span><span></span></button>
+    <nav class="main-nav" id="mainNav">
+      <a href="{{ path('public_products') }}" class="nav-link">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" class="nav-link">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" class="nav-link">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" class="nav-link">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
+    </nav>
   </div>
 </header>
 {% endblock %}
 
 {% block body %}
+<style>
+  .main-header { position: sticky; top: 0; z-index: 60; background: #0a0a0a; border-bottom: 1px solid #1a1a1a; }
+  .header-container { max-width: 80%; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
+  .logo-link { display: flex; align-items: center; text-decoration: none; color: #fff; z-index: 70; }
+  .logo-img { height: 44px; width: auto; border-radius: 6px; object-fit: contain; display: block; }
+  .mobile-menu-btn { display: none; flex-direction: column; justify-content: space-around; width: 30px; height: 30px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 70; }
+  .mobile-menu-btn span { width: 25px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s linear; position: relative; transform-origin: 1px; }
+  .main-nav { display: flex; gap: 22px; align-items: center; }
+  .nav-link { color: #bdbdbd; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+  .nav-link.active { color: #e5e5e5; font-weight: 600; }
+  @media (max-width: 1024px) { .header-container { max-width: 100%; padding: 10px 16px; } .mobile-menu-btn { display: flex; } .main-nav { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,0.98); padding: 20px; display: flex; flex-direction: column; gap: 14px; transform: translateX(100%); transition: transform 0.3s ease; z-index: 50; } .main-nav.active { transform: translateX(0); } .nav-link { font-size: 18px; padding: 10px 20px; } }
+  @media (max-width: 480px) { .header-container { padding: 8px 12px; } .logo-img { height: 36px; } .nav-link { font-size: 16px; } }
+
+  /* Footer Styles */
+  .main-footer { background: #0a0a0a; color: #bdbdbd; border-top: 1px solid #1a1a1a; }
+  .footer-container { max-width: 80%; margin: 0 auto; padding: 28px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .footer-brand { display: flex; align-items: center; gap: 10px; }
+  .footer-logo { display: inline-flex; align-items: center; }
+  .footer-logo-img { height: 46px; width: auto; border-radius: 6px; object-fit: contain; display: block; }
+  .footer-nav { display: flex; gap: 18px; align-items: center; font-size: 13px; }
+  .footer-link { color: #bdbdbd; text-decoration: none; transition: color 0.2s ease; }
+  .footer-link:hover { color: #ffffff; }
+  @media (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; gap: 20px; padding: 24px 16px; } .footer-brand { flex-direction: column; gap: 8px; } .footer-nav { flex-wrap: wrap; justify-content: center; gap: 16px; } }
+  @media (max-width: 480px) { .footer-container { padding: 20px 12px; } .footer-logo-img { height: 40px; } .footer-nav { gap: 12px; font-size: 12px; } }
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mainNav = document.getElementById('mainNav');
+  if (mobileMenuBtn && mainNav) {
+    mobileMenuBtn.addEventListener('click', function() {
+      mainNav.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
+    });
+    document.querySelectorAll('#mainNav .nav-link').forEach(function(link){
+      link.addEventListener('click', function(){
+        mainNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+      });
+    });
+    document.addEventListener('click', function(e){
+      if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        mainNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+      }
+    });
+  }
+});
+</script>
+
 <div style="min-height: calc(100vh - 120px);">
 <section class="py-8">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="max-width:80%;padding-left:16px;padding-right:16px;">
@@ -82,9 +133,9 @@
       </div>
       <div class="px-6 py-4 border-t border-gray-100">
         {{ form_start(form) }}
-        <div class="flex gap-2">
-          {{ form_widget(form.content, {'attr': {'class': 'flex-1 px-3 py-2 border border-gray-300 rounded-lg', 'rows': 2}}) }}
-          <button type="submit" class="px-4 py-2 rounded-lg text-white" style="background:#0a0a0a;">{{ 'Gönder'|auto_translate(app.request.locale) }}</button>
+        <div class="flex flex-col sm:flex-row gap-2">
+          {{ form_widget(form.content, {'attr': {'class': 'flex-1 px-3 py-2 border border-gray-300 rounded-lg min-h-[44px]', 'rows': 2}}) }}
+          <button type="submit" class="px-4 py-2 rounded-lg text-white w-full sm:w-auto" style="background:#0a0a0a;">{{ 'Gönder'|auto_translate(app.request.locale) }}</button>
         </div>
         {{ form_end(form) }}
       </div>
@@ -95,20 +146,19 @@
 {% endblock %}
 
 {% block footer %}
-<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div style="width:32px;height:32px;background:#ffffff;border-radius:6px;display:flex;align-items:center;justify-content:center;">
-        <span style="color:#0a0a0a;font-weight:800;font-size:12px;">MT</span>
-      </div>
-      <span style="font-weight:600;color:#e5e5e5;">Makine Ticaret</span>
-      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="{{ path('public_home') }}" class="footer-logo">
+        <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="footer-logo-img"/>
+      </a>
+      <span class="footeropyright">© {{ "now"|date("Y") }}</span>
     </div>
-    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">Ürünler</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">Kategoriler</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">Firmalar</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">İhaleler</a>
+    <nav class="footer-nav">
+      <a href="{{ path('public_products') }}" class="footer-link">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" class="footer-link">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" class="footer-link">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" class="footer-link">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
     </nav>
   </div>
 </footer>

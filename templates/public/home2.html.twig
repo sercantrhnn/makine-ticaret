@@ -7,45 +7,54 @@
 
 {% block header %}
 <!-- DEBUG TRANSLATION: nav.home = {{ 'nav.home'|trans }} | Current locale: {{ app.request.locale }} | Session locale: {{ app.session.get('_locale') }} -->
-<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
-    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
-      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+<header class="main-header">
+  <div class="header-container">
+    <a href="{{ path('public_home') }}" class="logo-link">
+      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="logo-img"/>
     </a>
-    <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'nav.products'|trans }}</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.companies'|trans }}</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.categories'|trans }}</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.bids'|trans }}</a>
-      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">{{ 'purchase_request.create_new'|trans }}</a>
+    
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav class="main-nav" id="mainNav">
+      <a href="{{ path('public_products') }}" class="nav-link active">{{ 'nav.products'|trans }}</a>
+      <a href="{{ path('public_companies') }}" class="nav-link">{{ 'nav.companies'|trans }}</a>
+      <a href="{{ path('public_categories') }}" class="nav-link">{{ 'nav.categories'|trans }}</a>
+      <a href="{{ path('public_bids') }}" class="nav-link">{{ 'nav.bids'|trans }}</a>
+      <a href="{{ path('purchase_request_new') }}" class="nav-link cta-link">{{ 'purchase_request.create_new'|trans }}</a>
 
       <!-- Language Switcher -->
-      <div style="margin-left:10px;">
+      <div class="language-switcher">
         {% include 'components/language-switcher-dark.html.twig' %}
       </div>
+      
       {% if app.user %}
-        <div style="position:relative;" id="userMenuRoot">
-          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+        <div class="user-menu" id="userMenuRoot">
+          <button id="userMenuButton" class="user-menu-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <span class="user-name">{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
-            <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+          <div id="userMenuDropdown" class="user-dropdown">
+            <a href="{{ path('user_messages_inbox') }}" class="dropdown-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
               <span>{{ 'user.messages'|trans }}</span>
             </a>
-            <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+            <a href="{{ path('purchase_request_new') }}" class="dropdown-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
               <span>{{ 'purchase_request.create_new'|trans }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
-            <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
+            <a href="{{ path('admin_dashboard') }}" class="dropdown-link admin-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
               <span>{{ 'bid.create'|trans }}</span>
             </a>
             {% endif %}
-            <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+            <a href="{{ path('app_logout') }}" class="dropdown-link logout-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
               <span>{{ 'nav.logout'|trans }}</span>
             </a>
@@ -67,12 +76,272 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'nav.login'|trans }}</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'nav.register'|trans }}</a>
+        <a href="{{ path('app_login') }}" class="nav-link">{{ 'nav.login'|trans }}</a>
+        <a href="{{ path('app_register') }}" class="nav-link register-link">{{ 'nav.register'|trans }}</a>
       {% endif %}
     </nav>
   </div>
 </header>
+
+<style>
+.main-header {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: #0a0a0a;
+  border-bottom: 1px solid #1a1a1a;
+}
+
+.header-container {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
+  z-index: 70;
+}
+
+.logo-img {
+  height: 44px;
+  width: auto;
+  border-radius: 6px;
+  object-fit: contain;
+  display: block;
+}
+
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 70;
+}
+
+.mobile-menu-btn span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.main-nav {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+}
+
+.nav-link {
+  color: #bdbdbd;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.nav-link.active {
+  color: #e5e5e5;
+  font-weight: 600;
+}
+
+.nav-link.cta-link {
+  color: #111111;
+  background: #C0C0C0;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.nav-link.register-link {
+  color: #e5e5e5;
+  font-weight: 600;
+}
+
+.language-switcher {
+  margin-left: 10px;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  color: #e5e5e5;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.user-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.user-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #111214;
+  border: 1px solid #222428;
+  border-radius: 8px;
+  min-width: 180px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+  z-index: 100;
+}
+
+.dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  color: #e5e5e5;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-link:hover {
+  background: #1a1a1a;
+}
+
+.dropdown-link.admin-link {
+  border-top: 1px solid #1e2024;
+}
+
+.dropdown-link.logout-link {
+  color: #ff7b7b;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .header-container {
+    max-width: 100%;
+    padding: 10px 16px;
+  }
+  
+  .mobile-menu-btn {
+    display: flex;
+  }
+  
+  .main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: #0a0a0a;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 50;
+  }
+  
+  .main-nav.active {
+    transform: translateX(0);
+  }
+  
+  .nav-link {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+  
+  .nav-link.cta-link {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+  
+  .user-name {
+    max-width: 150px;
+  }
+  
+  .user-dropdown {
+    right: -20px;
+    min-width: 200px;
+  }
+  
+  .language-switcher {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 8px 12px;
+  }
+  
+  .logo-img {
+    height: 36px;
+  }
+  
+  .nav-link {
+    font-size: 16px;
+  }
+  
+  .nav-link.cta-link {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mainNav = document.getElementById('mainNav');
+  
+  if (mobileMenuBtn && mainNav) {
+    mobileMenuBtn.addEventListener('click', function() {
+      mainNav.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
+    });
+    
+    // Close menu when clicking on a link
+    const navLinks = mainNav.querySelectorAll('.nav-link');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        mainNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+      });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        mainNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+      }
+    });
+  }
+});
+</script>
 {% endblock %}
 
 {% block body %}
@@ -81,6 +350,7 @@
     position: relative;
     width: 100%;
     height: 100vh;
+    min-height: 600px;
     overflow: hidden;
     background: #000;
   }
@@ -101,6 +371,36 @@
     background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 60%);
     color: #fff;
   }
+  
+  /* Hero responsive styles */
+  @media (max-width: 1024px) {
+    .hero-video {
+      height: 100vh;
+      min-height: 500px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-video {
+      height: 70vh;
+      min-height: 400px;
+    }
+    
+    .hero-overlay {
+      padding: 16px 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero-video {
+      height: 60vh;
+      min-height: 350px;
+    }
+    
+    .hero-overlay {
+      padding: 12px 16px;
+    }
+  }
   .category-section {
     background: #ffffff;
     color: #fff;
@@ -118,7 +418,48 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
   }
-  @media (max-width: 720px) { .cards-grid { grid-template-columns: 1fr; gap: 16px; } }
+  
+  /* Cards responsive styles */
+  @media (max-width: 1024px) {
+    .container {
+      max-width: 90%;
+      padding: 0 20px;
+    }
+    
+    .cards-grid {
+      gap: 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .category-section {
+      padding: 32px 0 60px;
+    }
+    
+    .container {
+      max-width: 100%;
+      padding: 0 16px;
+    }
+    
+    .cards-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .category-section {
+      padding: 24px 0 40px;
+    }
+    
+    .container {
+      padding: 0 12px;
+    }
+    
+    .cards-grid {
+      gap: 12px;
+    }
+  }
   .model-card {
     position: relative;
     background: #111;
@@ -135,17 +476,26 @@
     object-fit: cover;
     transition: opacity .35s ease;
   }
+  
+  /* Model card responsive heights */
   @media (max-width: 1280px) {
     .model-card img,
     .model-card video { height: 620px; }
   }
+  
   @media (max-width: 1024px) {
     .model-card img,
     .model-card video { height: 560px; }
   }
-  @media (max-width: 720px) {
+  
+  @media (max-width: 768px) {
     .model-card img,
-    .model-card video { height: 360px; }
+    .model-card video { height: 400px; }
+  }
+  
+  @media (max-width: 480px) {
+    .model-card img,
+    .model-card video { height: 300px; }
   }
   .model-card video { position: absolute; inset: 0; opacity: 0; }
   .model-card:hover video { opacity: 1; }
@@ -185,6 +535,46 @@
   }
   .arrow {
     font-size: 20px;
+  }
+  
+  /* Model info responsive styles */
+  @media (max-width: 768px) {
+    .model-info {
+      padding: 16px 20px;
+    }
+    
+    .model-title {
+      font-size: 32px;
+      letter-spacing: 1px;
+    }
+    
+    .model-desc {
+      font-size: 13px;
+      max-width: 100%;
+    }
+    
+    .arrow {
+      font-size: 18px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .model-info {
+      padding: 12px 16px;
+    }
+    
+    .model-title {
+      font-size: 24px;
+      letter-spacing: 0.5px;
+    }
+    
+    .model-desc {
+      font-size: 12px;
+    }
+    
+    .arrow {
+      font-size: 16px;
+    }
   }
 
   /* Reveal animations */
@@ -311,20 +701,39 @@
 
   @media (max-width: 480px) {
     .sliding-logos-section {
-      padding: 50px 0;
+      padding: 40px 0;
     }
 
     .sliding-logos-track {
-      gap: 50px;
+      gap: 40px;
     }
 
     .sliding-logos-group {
-      gap: 50px;
+      gap: 40px;
     }
 
     .sliding-logo {
-      height: 45px;
-      max-width: 110px;
+      height: 40px;
+      max-width: 100px;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    .sliding-logos-section {
+      padding: 30px 0;
+    }
+
+    .sliding-logos-track {
+      gap: 30px;
+    }
+
+    .sliding-logos-group {
+      gap: 30px;
+    }
+
+    .sliding-logo {
+      height: 35px;
+      max-width: 90px;
     }
   }
 </style>
@@ -573,15 +982,66 @@
 <!-- Bids Section -->
 <style>
   .bids-section { background:#121316; color:#e5e5e5; padding:56px 0 0; }
-  .bids-shell { max-width:1600px; margin:0 auto; padding:0 20px; }
   .bids-shell { max-width:80%; margin:0 auto; padding:0 16px; }
   .bids-head { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:18px; }
   .bids-title { font-weight:800; letter-spacing:.4px; font-size:22px; }
   .bids-sub { color:#9aa0a6; font-size:13px; }
   .bids-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:16px; }
-  @media (max-width: 1100px) { .bids-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
-  @media (max-width: 800px) { .bids-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
-  @media (max-width: 520px) { .bids-grid { grid-template-columns: 1fr; } }
+  
+  /* Bids responsive styles */
+  @media (max-width: 1100px) { 
+    .bids-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } 
+  }
+  
+  @media (max-width: 768px) {
+    .bids-section {
+      padding: 40px 0 0;
+    }
+    
+    .bids-shell {
+      max-width: 100%;
+      padding: 0 16px;
+    }
+    
+    .bids-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .bids-title {
+      font-size: 20px;
+    }
+    
+    .bids-grid { 
+      grid-template-columns: repeat(2, minmax(0,1fr)); 
+      gap: 12px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .bids-section {
+      padding: 32px 0 0;
+    }
+    
+    .bids-shell {
+      padding: 0 12px;
+    }
+    
+    .bids-title {
+      font-size: 18px;
+    }
+    
+    .bids-sub {
+      font-size: 12px;
+    }
+    
+    .bids-grid { 
+      grid-template-columns: 1fr; 
+      gap: 10px;
+    }
+  }
   .bid-card { position:relative; background:#141416; border:1px solid #1f2125; border-radius:12px; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease; }
   .bid-card:hover { transform: translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,.35); }
   .bid-media { position:relative; height:160px; background:#0a0a0a; }
@@ -592,6 +1052,59 @@
   .bid-meta { display:flex; align-items:center; justify-content:space-between; color:#9aa0a6; font-size:12px; margin-top:4px; }
   .chip { padding:2px 6px; border:1px solid #2a2d32; border-radius:999px; font-size:11px; color:#c9cdd2; }
   .fade-to-footer { height:42px; background: linear-gradient(to bottom, rgba(18,19,22,0), #0a0a0a); }
+  
+  /* Bid card responsive styles */
+  @media (max-width: 768px) {
+    .bid-media {
+      height: 140px;
+    }
+    
+    .bid-body {
+      padding: 10px 12px 12px;
+    }
+    
+    .bid-name {
+      font-size: 13px;
+    }
+    
+    .bid-company {
+      font-size: 11px;
+    }
+    
+    .bid-meta {
+      font-size: 11px;
+    }
+    
+    .chip {
+      font-size: 10px;
+      padding: 1px 4px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .bid-media {
+      height: 120px;
+    }
+    
+    .bid-body {
+      padding: 8px 10px 10px;
+    }
+    
+    .bid-name {
+      font-size: 12px;
+    }
+    
+    .bid-company {
+      font-size: 10px;
+    }
+    
+    .bid-meta {
+      font-size: 10px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+  }
 
   /* Purchase Requests Section */
   .purchase-requests-section {
@@ -695,6 +1208,94 @@
   .purchase-requests-table .contact-cell div:last-child {
     margin-bottom:0;
   }
+  
+  /* Purchase requests responsive styles */
+  @media (max-width: 1024px) {
+    .purchase-requests-shell {
+      max-width: 90%;
+      padding: 0 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .purchase-requests-section {
+      padding: 40px 0;
+    }
+    
+    .purchase-requests-shell {
+      max-width: 100%;
+      padding: 0 16px;
+    }
+    
+    .purchase-requests-head {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    
+    .purchase-requests-title {
+      font-size: 20px;
+    }
+    
+    .purchase-requests-table {
+      border-radius: 12px;
+      overflow-x: auto;
+    }
+    
+    .purchase-requests-table table {
+      min-width: 600px;
+    }
+    
+    .purchase-requests-table th,
+    .purchase-requests-table td {
+      padding: 12px 16px;
+    }
+    
+    .purchase-requests-table th {
+      font-size: 11px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .purchase-requests-section {
+      padding: 32px 0;
+    }
+    
+    .purchase-requests-shell {
+      padding: 0 12px;
+    }
+    
+    .purchase-requests-title {
+      font-size: 18px;
+    }
+    
+    .purchase-requests-sub {
+      font-size: 13px;
+    }
+    
+    .purchase-requests-table th,
+    .purchase-requests-table td {
+      padding: 10px 12px;
+    }
+    
+    .purchase-requests-table th {
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+    
+    .purchase-requests-table .product-name {
+      font-size: 13px;
+    }
+    
+    .purchase-requests-table .date-cell {
+      font-size: 12px;
+    }
+    
+    .purchase-requests-table .description-cell {
+      font-size: 12px;
+    }
+  }
 </style>
 
 {% if approvedBids is defined and approvedBids|length > 0 %}
@@ -752,63 +1353,248 @@
 {% endblock %}
 
 {% block footer %}
-<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:28px 16px;">
+<footer class="main-footer">
+  <div class="footer-container">
     <!-- Ana içerik -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;align-items:start;margin-bottom:20px;">
+    <div class="footer-content">
       <!-- Logo - Sol -->
-      <div>
-        <a href="{{ path('public_home') }}" style="display:inline-flex;align-items:center;">
-          <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:46px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+      <div class="footer-logo">
+        <a href="{{ path('public_home') }}" class="footer-logo-link">
+          <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="footer-logo-img"/>
         </a>
       </div>
 
       <!-- İletişim - Orta -->
-      <div style="font-size:13px;line-height:1.7;">
-        <div style="font-weight:700;color:#e5e5e5;margin-bottom:8px;">{{ 'footer.contact'|trans }}</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <div class="footer-contact">
+        <div class="footer-section-title">{{ 'footer.contact'|trans }}</div>
+        <div class="contact-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           <span>İstanbul, Türkiye</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <div class="contact-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2.08"/><path d="M16 3H8a2 2 0 0 0-2 2v5a6 6 0 1 0 12 0V5a2 2 0 0 0-2-2z"/></svg>
-          <a href="mailto:info@makineticaret.com" style="color:#bdbdbd;text-decoration:none;">info@makineticaret.com</a>
+          <a href="mailto:info@makineticaret.com" class="contact-link">info@makineticaret.com</a>
         </div>
-        <div style="display:flex;align-items:center;gap:8px;">
+        <div class="contact-item">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V21a2 2 0 0 1-2.18 2 19.86 19.86 0 0 1-8.63-3.07A19.5 19.5 0 0 1 3.07 12.81 19.86 19.86 0 0 1 0 4.18 A2 2 0 0 1 2 2h4.09a2 2 0 0 1 2 1.72c.12.86.32 1.7.6 2.5a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.29 6.29l1.27-1.27a2 2 0 0 1 2.11-.45c.8.28 1.64.48 2.5.6A2 2 0 0 1 22 16.92z"/></svg>
-          <a href="tel:+90XXXXXXXXXX" style="color:#bdbdbd;text-decoration:none;">+90 (___) ___ __ __</a>
+          <a href="tel:+90XXXXXXXXXX" class="contact-link">+90 (___) ___ __ __</a>
         </div>
       </div>
 
       <!-- Sayfalar - Sağ -->
-      <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;">
-        <div style="font-weight:700;color:#e5e5e5;margin-bottom:4px;">{{ 'footer.pages'|trans }}</div>
-        <nav style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;font-size:13px;">
-          <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.products'|trans }}</a>
-          <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.categories'|trans }}</a>
-          <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.companies'|trans }}</a>
-          <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'nav.bids'|trans }}</a>
+      <div class="footer-pages">
+        <div class="footer-section-title">{{ 'footer.pages'|trans }}</div>
+        <nav class="footer-nav">
+          <a href="{{ path('public_products') }}" class="footer-nav-link">{{ 'nav.products'|trans }}</a>
+          <a href="{{ path('public_categories') }}" class="footer-nav-link">{{ 'nav.categories'|trans }}</a>
+          <a href="{{ path('public_companies') }}" class="footer-nav-link">{{ 'nav.companies'|trans }}</a>
+          <a href="{{ path('public_bids') }}" class="footer-nav-link">{{ 'nav.bids'|trans }}</a>
         </nav>
       </div>
     </div>
 
     <!-- Alt kısım: Sosyal medya + Copyright -->
-    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #1a1a1a;">
-      <div style="display:flex;gap:12px;">
-        <a href="#" aria-label="Twitter" style="color:#bdbdbd;">
+    <div class="footer-bottom">
+      <div class="social-links">
+        <a href="#" aria-label="Twitter" class="social-link">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53A4.48 4.48 0 0 0 12 7.11v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg>
         </a>
-        <a href="#" aria-label="LinkedIn" style="color:#bdbdbd;">
+        <a href="#" aria-label="LinkedIn" class="social-link">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
-        <a href="#" aria-label="Instagram" style="color:#bdbdbd;">
+        <a href="#" aria-label="Instagram" class="social-link">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/></svg>
         </a>
       </div>
-      <div style="font-size:12px;color:#7a7a7a;text-align:center;">© {{ "now"|date("Y") }} MINEINDUSTRIES. Tüm hakları saklıdır.</div>
+      <div class="copyright">© {{ "now"|date("Y") }} MINEINDUSTRIES. Tüm hakları saklıdır.</div>
     </div>
   </div>
 </footer>
+
+<style>
+.main-footer {
+  background: #0a0a0a;
+  color: #bdbdbd;
+  border-top: 1px solid #1a1a1a;
+}
+
+.footer-container {
+  max-width: 80%;
+  margin: 0 auto;
+  padding: 28px 16px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 20px;
+}
+
+.footer-logo-link {
+  display: inline-flex;
+  align-items: center;
+}
+
+.footer-logo-img {
+  height: 46px;
+  width: auto;
+  border-radius: 6px;
+  object-fit: contain;
+  display: block;
+}
+
+.footer-contact {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.footer-section-title {
+  font-weight: 700;
+  color: #e5e5e5;
+  margin-bottom: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.contact-item:last-child {
+  margin-bottom: 0;
+}
+
+.contact-link {
+  color: #bdbdbd;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+  color: #e5e5e5;
+}
+
+.footer-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+  font-size: 13px;
+}
+
+.footer-nav-link {
+  color: #bdbdbd;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-nav-link:hover {
+  color: #e5e5e5;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #1a1a1a;
+}
+
+.social-links {
+  display: flex;
+  gap: 12px;
+}
+
+.social-link {
+  color: #bdbdbd;
+  transition: color 0.3s ease;
+}
+
+.social-link:hover {
+  color: #e5e5e5;
+}
+
+.copyright {
+  font-size: 12px;
+  color: #7a7a7a;
+  text-align: center;
+}
+
+/* Footer responsive styles */
+@media (max-width: 1024px) {
+  .footer-container {
+    max-width: 90%;
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    max-width: 100%;
+    padding: 20px 16px;
+  }
+  
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .footer-pages {
+    align-items: center;
+  }
+  
+  .footer-nav {
+    align-items: center;
+  }
+  
+  .footer-bottom {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .social-links {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-container {
+    padding: 16px 12px;
+  }
+  
+  .footer-content {
+    gap: 16px;
+  }
+  
+  .footer-logo-img {
+    height: 36px;
+  }
+  
+  .footer-contact {
+    font-size: 12px;
+  }
+  
+  .footer-nav {
+    font-size: 12px;
+  }
+  
+  .copyright {
+    font-size: 11px;
+  }
+}
+</style>
 {% endblock %}
 
 

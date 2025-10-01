@@ -4,6 +4,41 @@
 
 {% block stylesheets %}
 <style>
+/* Header Styles */
+.main-header { position: sticky; top: 0; z-index: 60; background: #0a0a0a; border-bottom: 1px solid #1a1a1a; }
+.header-container { max-width: 80%; margin: 0 auto; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; color: #fff; }
+.logo-link { display: flex; align-items: center; text-decoration: none; color: #fff; z-index: 70; }
+.logo-img { height: 44px; width: auto; border-radius: 6px; object-fit: contain; display: block; }
+.mobile-menu-btn { display: none; flex-direction: column; justify-content: space-around; width: 30px; height: 30px; background: transparent; border: none; cursor: pointer; padding: 0; z-index: 70; }
+.mobile-menu-btn span { width: 25px; height: 3px; background: #fff; border-radius: 3px; transition: all 0.3s linear; position: relative; transform-origin: 1px; }
+.main-nav { display: flex; gap: 22px; align-items: center; }
+.nav-link { color: #bdbdbd; text-decoration: none; font-size: 14px; transition: color 0.3s ease; }
+.nav-link.active { color: #e5e5e5; font-weight: 600; }
+.nav-link.cta-link { background: #C0C0C0; color: #111111; font-weight: 700; padding: 6px 10px; border-radius: 8px; }
+.nav-link.register-link { color: #e5e5e5; font-weight: 600; }
+.language-switcher { margin-left: 10px; }
+.user-menu { position: relative; }
+.user-menu-btn { display: flex; align-items: center; gap: 8px; background: transparent; border: 0; color: #e5e5e5; cursor: pointer; font-size: 14px; }
+.user-name { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: 120px; }
+.user-dropdown { display: none; position: absolute; right: 0; top: calc(100% + 8px); background: #111214; border: 1px solid #222428; border-radius: 8px; min-width: 180px; box-shadow: 0 8px 24px rgba(0,0,0,.35); z-index: 100; }
+.dropdown-link { display: flex; align-items: center; gap: 8px; padding: 10px 12px; color: #e5e5e5; text-decoration: none; font-size: 14px; transition: background-color 0.2s ease; }
+.dropdown-link:hover { background: #1a1a1a; }
+.dropdown-link.admin-link { border-top: 1px solid #1e2024; }
+.dropdown-link.logout-link { color: #ff7b7b; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+@media (max-width: 1024px) { .header-container { max-width: 100%; padding: 10px 16px; } .mobile-menu-btn { display: flex; } .main-nav { position: fixed; top: 56px; left: 0; right: 0; bottom: 0; background: rgba(10,10,10,0.98); padding: 20px; display: flex; flex-direction: column; gap: 14px; transform: translateX(100%); transition: transform 0.3s ease; z-index: 50; } .main-nav.active { transform: translateX(0); } .nav-link { font-size: 18px; padding: 10px 20px; } .nav-link.cta-link { font-size: 16px; padding: 12px 24px; } .user-name { max-width: 150px; } .user-dropdown { right: -20px; min-width: 200px; } .language-switcher { margin-left: 0; } }
+@media (max-width: 480px) { .header-container { padding: 8px 12px; } .logo-img { height: 36px; } .nav-link { font-size: 16px; } .nav-link.cta-link { font-size: 14px; padding: 10px 20px; } }
+
+/* Footer Styles */
+.main-footer { background: #0a0a0a; color: #bdbdbd; border-top: 1px solid #1a1a1a; }
+.footer-container { max-width: 80%; margin: 0 auto; padding: 28px 16px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-logo { display: inline-flex; align-items: center; }
+.footer-logo-img { height: 46px; width: auto; border-radius: 6px; object-fit: contain; display: block; }
+.footer-nav { display: flex; gap: 18px; align-items: center; font-size: 13px; }
+.footer-link { color: #bdbdbd; text-decoration: none; transition: color 0.2s ease; }
+.footer-link:hover { color: #ffffff; }
+@media (max-width: 768px) { .footer-container { flex-direction: column; text-align: center; gap: 20px; padding: 24px 16px; } .footer-brand { flex-direction: column; gap: 8px; } .footer-nav { flex-wrap: wrap; justify-content: center; gap: 16px; } }
+@media (max-width: 480px) { .footer-container { padding: 20px 12px; } .footer-logo-img { height: 40px; } .footer-nav { gap: 12px; font-size: 12px; } }
 /* Image Gallery Styles */
 .image-gallery-grid {
     display: grid;
@@ -127,40 +162,49 @@
 {% endblock %}
 
 {% block header %}
-<header style="position:sticky;top:0;z-index:60;background:#0a0a0a;border-bottom:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;color:#fff;">
-    <a href="{{ path('public_home') }}" style="display:flex;align-items:center;text-decoration:none;color:#fff;">
-      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:44px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+<header class="main-header">
+  <div class="header-container">
+    <a href="{{ path('public_home') }}" class="logo-link">
+      <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="logo-img"/>
     </a>
-    <nav style="display:flex;gap:22px;align-items:center;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('public_bids') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('purchase_request_new') }}" style="color:#111111;background:#C0C0C0;text-decoration:none;font-size:13px;font-weight:700;padding:6px 10px;border-radius:8px;">{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</a>
+    
+    <!-- Mobile menu button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav class="main-nav" id="mainNav">
+      <a href="{{ path('public_products') }}" class="nav-link">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" class="nav-link">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" class="nav-link">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" class="nav-link active">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('purchase_request_new') }}" class="nav-link cta-link">{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</a>
+      
       {% if app.user %}
-        <div style="position:relative;" id="userMenuRoot">
-          <button id="userMenuButton" style="display:flex;align-items:center;gap:8px;background:transparent;border:0;color:#e5e5e5;cursor:pointer;font-size:14px;">
+        <div class="user-menu" id="userMenuRoot">
+          <button id="userMenuButton" class="user-menu-btn">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
+            <span class="user-name">{{ (app.user.name ~ ' ' ~ app.user.surname)|trim ?: (app.user.username ?? app.user.email) }}</span>
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
           </button>
-          <div id="userMenuDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 8px);background:#111214;border:1px solid #222428;border-radius:8px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.35);">
-            <a href="{{ path('user_messages_inbox') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+          <div id="userMenuDropdown" class="user-dropdown">
+            <a href="{{ path('user_messages_inbox') }}" class="dropdown-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" fill="none"/><path d="M22 6l-10 7L2 6"/></svg>
               <span>{{ 'Mesajlarım'|auto_translate(app.request.locale) }}</span>
             </a>
-            <a href="{{ path('purchase_request_new') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;">
+            <a href="{{ path('purchase_request_new') }}" class="dropdown-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
               <span>{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% if 'ROLE_SUBSCRIBER' in app.user.roles %}
-            <a href="{{ path('admin_dashboard') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#e5e5e5;text-decoration:none;font-size:14px;border-top:1px solid #1e2024;">
+            <a href="{{ path('admin_dashboard') }}" class="dropdown-link admin-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
               <span>{{ 'İhale Oluştur'|auto_translate(app.request.locale) }}</span>
             </a>
             {% endif %}
-            <a href="{{ path('app_logout') }}" style="display:flex;align-items:center;gap:8px;padding:10px 12px;color:#ff7b7b;text-decoration:none;font-size:14px;border-bottom-left-radius:8px;border-bottom-right-radius:8px;">
+            <a href="{{ path('app_logout') }}" class="dropdown-link logout-link">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
               <span>{{ 'Çıkış Yap'|auto_translate(app.request.locale) }}</span>
             </a>
@@ -180,17 +224,44 @@
           })();
         </script>
       {% else %}
-        <a href="{{ path('app_login') }}" style="color:#bdbdbd;text-decoration:none;font-size:14px;">{{ 'Giriş Yap'|auto_translate(app.request.locale) }}</a>
-        <a href="{{ path('app_register') }}" style="color:#e5e5e5;text-decoration:none;font-weight:600;font-size:14px;">{{ 'Kayıt Ol'|auto_translate(app.request.locale) }}</a>
+        <a href="{{ path('app_login') }}" class="nav-link">{{ 'Giriş Yap'|auto_translate(app.request.locale) }}</a>
+        <a href="{{ path('app_register') }}" class="nav-link register-link">{{ 'Kayıt Ol'|auto_translate(app.request.locale) }}</a>
       {% endif %}
       
       <!-- Language Switcher -->
-      <div style="margin-left:10px;">
+      <div class="language-switcher">
         {% include 'components/language-switcher-dark.html.twig' %}
       </div>
     </nav>
   </div>
 </header>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+  const mainNav = document.getElementById('mainNav');
+  if (mobileMenuBtn && mainNav) {
+    mobileMenuBtn.addEventListener('click', function() {
+      mainNav.classList.toggle('active');
+      mobileMenuBtn.classList.toggle('active');
+    });
+    document.querySelectorAll('#mainNav .nav-link').forEach(function(link){
+      link.addEventListener('click', function(){
+        mainNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+      });
+    });
+    document.addEventListener('click', function(e){
+      if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        mainNav.classList.remove('active');
+        mobileMenuBtn.classList.remove('active');
+      }
+    });
+  }
+});
+</script>
 {% endblock %}
 
 {% block body %}
@@ -587,19 +658,19 @@
 {% endblock %}
 
 {% block footer %}
-<footer style="background:#0a0a0a;color:#bdbdbd;border-top:1px solid #1a1a1a;">
-  <div style="max-width:80%;margin:0 auto;padding:28px 16px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-    <div style="display:flex;align-items:center;gap:10px;">
-      <a href="{{ path('public_home') }}" style="display:inline-flex;align-items:center;">
-        <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" style="height:46px;width:auto;border-radius:6px;object-fit:contain;display:block;"/>
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="{{ path('public_home') }}" class="footer-logo">
+        <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="footer-logo-img"/>
       </a>
-      <span style="color:#6b6b6b;">© {{ "now"|date("Y") }}</span>
+      <span class="footer-copyright">© {{ "now"|date("Y") }}</span>
     </div>
-    <nav style="display:flex;gap:18px;align-items:center;font-size:13px;">
-      <a href="{{ path('public_products') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('public_companies') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('public_categories') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
-      <a href="{{ path('public_bids') }}" style="color:#bdbdbd;text-decoration:none;">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
+    <nav class="footer-nav">
+      <a href="{{ path('public_products') }}" class="footer-link">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_companies') }}" class="footer-link">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_categories') }}" class="footer-link">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
+      <a href="{{ path('public_bids') }}" class="footer-link">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
     </nav>
   </div>
 </footer>
