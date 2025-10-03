@@ -12,14 +12,14 @@
     <a href="{{ path('public_home') }}" class="logo-link">
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="logo-img"/>
     </a>
-    
+
     <!-- Mobile menu button -->
     <button class="mobile-menu-btn" id="mobileMenuBtn">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    
+
     <nav class="main-nav" id="mainNav">
       <a href="{{ path('public_products') }}" class="nav-link active">{{ 'nav.products'|trans }}</a>
       <a href="{{ path('public_companies') }}" class="nav-link">{{ 'nav.companies'|trans }}</a>
@@ -31,7 +31,7 @@
       <div class="language-switcher">
         {% include 'components/language-switcher-dark.html.twig' %}
       </div>
-      
+
       {% if app.user %}
         <div class="user-menu" id="userMenuRoot">
           <button id="userMenuButton" class="user-menu-btn">
@@ -243,11 +243,11 @@
     max-width: 100%;
     padding: 10px 16px;
   }
-  
+
   .mobile-menu-btn {
     display: flex;
   }
-  
+
   .main-nav {
     position: fixed;
     top: 0;
@@ -263,30 +263,30 @@
     transition: transform 0.3s ease;
     z-index: 50;
   }
-  
+
   .main-nav.active {
     transform: translateX(0);
   }
-  
+
   .nav-link {
     font-size: 18px;
     padding: 10px 20px;
   }
-  
+
   .nav-link.cta-link {
     font-size: 16px;
     padding: 12px 24px;
   }
-  
+
   .user-name {
     max-width: 150px;
   }
-  
+
   .user-dropdown {
     right: -20px;
     min-width: 200px;
   }
-  
+
   .language-switcher {
     margin-left: 0;
   }
@@ -296,15 +296,15 @@
   .header-container {
     padding: 8px 12px;
   }
-  
+
   .logo-img {
     height: 36px;
   }
-  
+
   .nav-link {
     font-size: 16px;
   }
-  
+
   .nav-link.cta-link {
     font-size: 14px;
     padding: 10px 20px;
@@ -316,13 +316,13 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mainNav = document.getElementById('mainNav');
-  
+
   if (mobileMenuBtn && mainNav) {
     mobileMenuBtn.addEventListener('click', function() {
       mainNav.classList.toggle('active');
       mobileMenuBtn.classList.toggle('active');
     });
-    
+
     // Close menu when clicking on a link
     const navLinks = mainNav.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileMenuBtn.classList.remove('active');
       });
     });
-    
+
     // Close menu when clicking outside
     document.addEventListener('click', function(e) {
       if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
@@ -371,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function() {
     background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 60%);
     color: #fff;
   }
-  
+
   /* Hero responsive styles */
   @media (max-width: 1024px) {
     .hero-video {
@@ -379,24 +379,24 @@ document.addEventListener('DOMContentLoaded', function() {
       min-height: 500px;
     }
   }
-  
+
   @media (max-width: 768px) {
     .hero-video {
       height: 70vh;
       min-height: 400px;
     }
-    
+
     .hero-overlay {
       padding: 16px 20px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .hero-video {
       height: 60vh;
       min-height: 350px;
     }
-    
+
     .hero-overlay {
       padding: 12px 16px;
     }
@@ -418,44 +418,44 @@ document.addEventListener('DOMContentLoaded', function() {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 24px;
   }
-  
+
   /* Cards responsive styles */
   @media (max-width: 1024px) {
     .container {
       max-width: 90%;
       padding: 0 20px;
     }
-    
+
     .cards-grid {
       gap: 20px;
     }
   }
-  
+
   @media (max-width: 768px) {
     .category-section {
       padding: 32px 0 60px;
     }
-    
+
     .container {
       max-width: 100%;
       padding: 0 16px;
     }
-    
+
     .cards-grid {
       grid-template-columns: 1fr;
       gap: 16px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .category-section {
       padding: 24px 0 40px;
     }
-    
+
     .container {
       padding: 0 12px;
     }
-    
+
     .cards-grid {
       gap: 12px;
     }
@@ -476,23 +476,23 @@ document.addEventListener('DOMContentLoaded', function() {
     object-fit: cover;
     transition: opacity .35s ease;
   }
-  
+
   /* Model card responsive heights */
   @media (max-width: 1280px) {
     .model-card img,
     .model-card video { height: 620px; }
   }
-  
+
   @media (max-width: 1024px) {
     .model-card img,
     .model-card video { height: 560px; }
   }
-  
+
   @media (max-width: 768px) {
     .model-card img,
     .model-card video { height: 400px; }
   }
-  
+
   @media (max-width: 480px) {
     .model-card img,
     .model-card video { height: 300px; }
@@ -536,42 +536,42 @@ document.addEventListener('DOMContentLoaded', function() {
   .arrow {
     font-size: 20px;
   }
-  
+
   /* Model info responsive styles */
   @media (max-width: 768px) {
     .model-info {
       padding: 16px 20px;
     }
-    
+
     .model-title {
       font-size: 32px;
       letter-spacing: 1px;
     }
-    
+
     .model-desc {
       font-size: 13px;
       max-width: 100%;
     }
-    
+
     .arrow {
       font-size: 18px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .model-info {
       padding: 12px 16px;
     }
-    
+
     .model-title {
       font-size: 24px;
       letter-spacing: 0.5px;
     }
-    
+
     .model-desc {
       font-size: 12px;
     }
-    
+
     .arrow {
       font-size: 16px;
     }
@@ -613,16 +613,16 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <!-- İkinci grup logolar (tekrar) -->
       <div class="sliding-logos-group">
-        <img src="{{ asset('FirmaPng/0284c1788a11165bd29a078c2ed15484.webp') }}" alt="Logo 1" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/34-346773_general-electric-hd-png-download.png') }}" alt="General Electric" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/avo4nfcls.webp') }}" alt="Logo 3" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/avtwd8flx.webp') }}" alt="Logo 4" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/images (1).png') }}" alt="Logo 5" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/komatsu-logo-kr0M2jTZ_t.jpg') }}" alt="Komatsu" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/nipponsteel.png') }}" alt="Nippon Steel" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/png-transparent-ab-volvo-volvo-cars-volvo-s60-car-trademark-logo-car.png') }}" alt="Volvo" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/png-transparent-hitachi-logo-thumbnail.png') }}" alt="Hitachi" class="sliding-logo">
-        <img src="{{ asset('FirmaPng/png-transparent-siemens-building-technologies-siemens-sector-industry-organization-siemens-corporation-saab-automobile-miscellaneous-blue-text-thumbnail.png') }}" alt="Siemens" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/arcelormittal.png') }}" alt="Logo 1" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/generalelectric.png') }}" alt="General Electric" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/liebherr.png') }}" alt="Logo 3" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/xcmg.png') }}" alt="Logo 4" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/thyssenk.png') }}" alt="Logo 5" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/komatsu.png') }}" alt="Komatsu" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/nipponsteel.png') }}" alt="Nippon Steel" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/volvo.png') }}" alt="Volvo" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/hitachi.png') }}" alt="Hitachi" class="sliding-logo">
+          <img src="{{ asset('FirmaPng/siemens.png') }}" alt="Siemens" class="sliding-logo">
       </div>
     </div>
   </div>
@@ -717,7 +717,7 @@ document.addEventListener('DOMContentLoaded', function() {
       max-width: 100px;
     }
   }
-  
+
   @media (max-width: 360px) {
     .sliding-logos-section {
       padding: 30px 0;
@@ -987,58 +987,58 @@ document.addEventListener('DOMContentLoaded', function() {
   .bids-title { font-weight:800; letter-spacing:.4px; font-size:22px; }
   .bids-sub { color:#9aa0a6; font-size:13px; }
   .bids-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap:16px; }
-  
+
   /* Bids responsive styles */
-  @media (max-width: 1100px) { 
-    .bids-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } 
+  @media (max-width: 1100px) {
+    .bids-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
   }
-  
+
   @media (max-width: 768px) {
     .bids-section {
       padding: 40px 0 0;
     }
-    
+
     .bids-shell {
       max-width: 100%;
       padding: 0 16px;
     }
-    
+
     .bids-head {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
       margin-bottom: 16px;
     }
-    
+
     .bids-title {
       font-size: 20px;
     }
-    
-    .bids-grid { 
-      grid-template-columns: repeat(2, minmax(0,1fr)); 
+
+    .bids-grid {
+      grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 12px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .bids-section {
       padding: 32px 0 0;
     }
-    
+
     .bids-shell {
       padding: 0 12px;
     }
-    
+
     .bids-title {
       font-size: 18px;
     }
-    
+
     .bids-sub {
       font-size: 12px;
     }
-    
-    .bids-grid { 
-      grid-template-columns: 1fr; 
+
+    .bids-grid {
+      grid-template-columns: 1fr;
       gap: 10px;
     }
   }
@@ -1052,52 +1052,52 @@ document.addEventListener('DOMContentLoaded', function() {
   .bid-meta { display:flex; align-items:center; justify-content:space-between; color:#9aa0a6; font-size:12px; margin-top:4px; }
   .chip { padding:2px 6px; border:1px solid #2a2d32; border-radius:999px; font-size:11px; color:#c9cdd2; }
   .fade-to-footer { height:42px; background: linear-gradient(to bottom, rgba(18,19,22,0), #0a0a0a); }
-  
+
   /* Bid card responsive styles */
   @media (max-width: 768px) {
     .bid-media {
       height: 140px;
     }
-    
+
     .bid-body {
       padding: 10px 12px 12px;
     }
-    
+
     .bid-name {
       font-size: 13px;
     }
-    
+
     .bid-company {
       font-size: 11px;
     }
-    
+
     .bid-meta {
       font-size: 11px;
     }
-    
+
     .chip {
       font-size: 10px;
       padding: 1px 4px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .bid-media {
       height: 120px;
     }
-    
+
     .bid-body {
       padding: 8px 10px 10px;
     }
-    
+
     .bid-name {
       font-size: 12px;
     }
-    
+
     .bid-company {
       font-size: 10px;
     }
-    
+
     .bid-meta {
       font-size: 10px;
       flex-direction: column;
@@ -1208,7 +1208,7 @@ document.addEventListener('DOMContentLoaded', function() {
   .purchase-requests-table .contact-cell div:last-child {
     margin-bottom:0;
   }
-  
+
   /* Purchase requests responsive styles */
   @media (max-width: 1024px) {
     .purchase-requests-shell {
@@ -1216,82 +1216,82 @@ document.addEventListener('DOMContentLoaded', function() {
       padding: 0 20px;
     }
   }
-  
+
   @media (max-width: 768px) {
     .purchase-requests-section {
       padding: 40px 0;
     }
-    
+
     .purchase-requests-shell {
       max-width: 100%;
       padding: 0 16px;
     }
-    
+
     .purchase-requests-head {
       flex-direction: column;
       align-items: flex-start;
       gap: 8px;
       margin-bottom: 20px;
     }
-    
+
     .purchase-requests-title {
       font-size: 20px;
     }
-    
+
     .purchase-requests-table {
       border-radius: 12px;
       overflow-x: auto;
     }
-    
+
     .purchase-requests-table table {
       min-width: 600px;
     }
-    
+
     .purchase-requests-table th,
     .purchase-requests-table td {
       padding: 12px 16px;
     }
-    
+
     .purchase-requests-table th {
       font-size: 11px;
     }
   }
-  
+
   @media (max-width: 480px) {
     .purchase-requests-section {
       padding: 32px 0;
     }
-    
+
     .purchase-requests-shell {
       padding: 0 12px;
     }
-    
+
     .purchase-requests-title {
       font-size: 18px;
     }
-    
+
     .purchase-requests-sub {
       font-size: 13px;
     }
-    
+
     .purchase-requests-table th,
     .purchase-requests-table td {
       padding: 10px 12px;
     }
-    
+
     .purchase-requests-table th {
       font-size: 10px;
       letter-spacing: 0.5px;
     }
-    
+
     .purchase-requests-table .product-name {
       font-size: 13px;
     }
-    
+
     .purchase-requests-table .date-cell {
       font-size: 12px;
     }
-    
+
     .purchase-requests-table .description-cell {
       font-size: 12px;
     }
@@ -1543,27 +1543,27 @@ document.addEventListener('DOMContentLoaded', function() {
     max-width: 100%;
     padding: 20px 16px;
   }
-  
+
   .footer-content {
     grid-template-columns: 1fr;
     gap: 20px;
     text-align: center;
   }
-  
+
   .footer-pages {
     align-items: center;
   }
-  
+
   .footer-nav {
     align-items: center;
   }
-  
+
   .footer-bottom {
     flex-direction: column;
     gap: 16px;
     text-align: center;
   }
-  
+
   .social-links {
     justify-content: center;
   }
@@ -1573,23 +1573,23 @@ document.addEventListener('DOMContentLoaded', function() {
   .footer-container {
     padding: 16px 12px;
   }
-  
+
   .footer-content {
     gap: 16px;
   }
-  
+
   .footer-logo-img {
     height: 36px;
   }
-  
+
   .footer-contact {
     font-size: 12px;
   }
-  
+
   .footer-nav {
     font-size: 12px;
   }
-  
+
   .copyright {
     font-size: 11px;
   }
