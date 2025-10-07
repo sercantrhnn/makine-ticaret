@@ -1,7 +1,7 @@
 <!-- Dark Theme Language Switcher Component -->
-<div class="relative" x-data="{ open: false }">
+<div class="language-switcher-container" x-data="{ open: false }">
     <button @click="open = !open" 
-            style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#e5e5e5;padding:6px 12px;border-radius:8px;font-size:13px;transition:all 0.2s ease;">
+            class="language-switcher-btn">
         <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
         </svg>
@@ -19,13 +19,13 @@
          x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100"
          x-transition:leave-end="transform opacity-0 scale-95"
-         style="position:absolute;right:0;z-index:60;margin-top:8px;width:200px;background:#111214;border:1px solid #222428;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+         class="language-switcher-dropdown">
         
         <div style="padding:4px 0;">
             {% for locale in supported_locales() %}
                 {% if locale != current_locale() %}
                     <a href="{{ locale_switch_url(locale) }}" 
-                       style="display:flex;align-items:center;padding:8px 12px;color:#e5e5e5;text-decoration:none;font-size:13px;transition:background-color 0.2s ease;"
+                       class="language-switcher-link"
                        onmouseover="this.style.background='rgba(255,255,255,0.1)'"
                        onmouseout="this.style.background='transparent'">
                         {% if locale == 'tr' %}
@@ -56,3 +56,84 @@
         </div>
     </div>
 </div>
+
+<style>
+.language-switcher-container {
+    position: relative;
+}
+
+.language-switcher-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #e5e5e5;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.language-switcher-dropdown {
+    position: absolute;
+    right: 0;
+    z-index: 70;
+    margin-top: 8px;
+    width: 200px;
+    background: #111214;
+    border: 1px solid #222428;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.language-switcher-link {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    color: #e5e5e5;
+    text-decoration: none;
+    font-size: 13px;
+    transition: background-color 0.2s ease;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+    .language-switcher-dropdown {
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        left: 20px;
+        width: auto;
+        max-width: calc(100vw - 40px);
+        transform: translateY(-50%);
+        z-index: 1000;
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+    
+    .language-switcher-link {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+    
+    .language-switcher-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .language-switcher-dropdown {
+        right: 16px;
+        left: 16px;
+        max-width: calc(100vw - 32px);
+    }
+    
+    .language-switcher-link {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}
+</style>
