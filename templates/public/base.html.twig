@@ -3,24 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Makine Ticaret{% endblock %}</title>
-    
+    <title>{% block title %}mineindustries{% endblock %}</title>
+
     {# SEO Meta Tags #}
     {% include 'seo/meta_tags.html.twig' %}
-    
+
     {# Favicon #}
     <link rel="icon" type="image/png" href="{{ asset('mineindustries_logo_transparent_pad8.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('mineindustries_logo_transparent_pad8.png') }}">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
+
     <!-- Heroicons -->
     <link rel="stylesheet" href="https://heroicons.com/outline.css">
-    
+
     <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
@@ -59,12 +59,12 @@
             }
         }
     </script>
-    
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     {% block stylesheets %}{% endblock %}
-    
+
     {# Structured Data #}
     {% include 'seo/structured_data.html.twig' %}
 </head>
@@ -117,7 +117,7 @@
                     {% endif %}
                 </div>
             </div>
-            
+
             <!-- Main header -->
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
@@ -129,12 +129,12 @@
                             </svg>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-gray-900">Makine Ticaret</h1>
+                            <h1 class="text-xl font-bold text-gray-900">mineindustries</h1>
                             <p class="text-xs text-gray-500">Güvenilir Sanayi Çözümleri</p>
                         </div>
                     </a>
                 </div>
-                
+
                 <!-- Navigation -->
                 <nav class="hidden md:flex items-center space-x-8">
                     <a href="{{ path('public_home') }}" class="text-gray-700 hover:text-primary-600 font-medium transition-colors">
@@ -153,14 +153,14 @@
                         {{ 'nav.categories'|trans }}
                     </a>
                 </nav>
-                
+
                 <!-- Search & Language Switcher -->
                 <div class="flex items-center space-x-4">
                     <form action="{{ path('public_products') }}" method="GET" class="hidden sm:block">
                         <div class="relative">
-                            <input type="text" 
-                                   name="search" 
-                                   placeholder="{{ 'hero.search_placeholder'|trans }}" 
+                            <input type="text"
+                                   name="search"
+                                   placeholder="{{ 'hero.search_placeholder'|trans }}"
                                    value="{{ app.request.query.get('search', '') }}"
                                    class="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -170,12 +170,12 @@
                             </div>
                         </div>
                     </form>
-                    
+
                     <!-- Language Switcher -->
                     {% include 'components/language-switcher.html.twig' %}
-                    
+
                     <!-- Mobile menu button -->
-                    <button type="button" 
+                    <button type="button"
                             class="md:hidden p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                             x-data
                             @click="$dispatch('toggle-mobile-menu')">
@@ -186,9 +186,9 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Mobile menu -->
-        <div class="md:hidden border-t border-gray-200" 
+        <div class="md:hidden border-t border-gray-200"
              x-data="{ open: false }"
              x-show="open"
              @toggle-mobile-menu.window="open = !open">
@@ -205,12 +205,12 @@
                 <a href="{{ path('public_categories') }}" class="block px-3 py-2 text-gray-700 hover:text-primary-600 font-medium">
                     Kategoriler
                 </a>
-                
+
                 <!-- Mobile search -->
                 <form action="{{ path('public_products') }}" method="GET" class="pt-2">
-                    <input type="text" 
-                           name="search" 
-                           placeholder="Ürün, firma ara..." 
+                    <input type="text"
+                           name="search"
+                           placeholder="Ürün, firma ara..."
                            value="{{ app.request.query.get('search', '') }}"
                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                 </form>
@@ -238,12 +238,12 @@
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-xl font-bold">Makine Ticaret</h2>
+                            <h2 class="text-xl font-bold">mineindustries</h2>
                             <p class="text-gray-400">Güvenilir Sanayi Çözümleri</p>
                         </div>
                     </div>
                     <p class="text-gray-400 mb-4">
-                        Türkiye'nin önde gelen makine ve sanayi ürünleri platformu. 
+                        Türkiye'nin önde gelen makine ve sanayi ürünleri platformu.
                         Kaliteli ürünler, güvenilir firmalar ve profesyonel hizmet anlayışımızla yanınızdayız.
                     </p>
                     <div class="flex space-x-4">
@@ -264,7 +264,7 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <!-- Quick Links -->
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Hızlı Erişim</h3>
@@ -275,7 +275,7 @@
                         <li><a href="{{ path('public_categories') }}" class="text-gray-400 hover:text-white transition-colors">Kategoriler</a></li>
                     </ul>
                 </div>
-                
+
                 <!-- Contact -->
                 <div>
                     <h3 class="text-lg font-semibold mb-4">İletişim</h3>
@@ -302,9 +302,9 @@
                     </ul>
                 </div>
             </div>
-            
+
             <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Makine Ticaret. Tüm hakları saklıdır.</p>
+                <p>&copy; 2024 mineindustries. Tüm hakları saklıdır.</p>
             </div>
         </div>
     </footer>
