@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://makineticaret.com/sitemap.xml
+Sitemap: https://mineindustries.com/sitemap.xml
 
 # Disallow admin and private areas
 Disallow: /admin/
@@ -13,7 +13,7 @@ Disallow: /uploads/
 
 # Allow important pages
 Allow: /products
-Allow: /companies  
+Allow: /companies
 Allow: /categories
 Allow: /bids
 
