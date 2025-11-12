@@ -56,13 +56,13 @@ class PublicController extends AbstractController
     {
         // Mevcut locale'i al
         $locale = $request->getLocale();
-        
+
         // Kategorileri al (artık smart translation kullanıyoruz)
         $categories = $categoriesRepository->findActiveRootCategories();
         $categories = array_slice($categories, 0, 8); // İlk 8 kategori
-        
-        $approvedBids = $bidsRepository->findApprovedBids(6);
-        $purchaseRequests = $purchaseRequestRepository->findBy(['status' => 'approved'], ['date' => 'DESC'], 6);
+
+        $approvedBids = $bidsRepository->findApprovedBids(8);
+        $purchaseRequests = $purchaseRequestRepository->findBy(['status' => 'approved'], ['date' => 'DESC'], 8);
 
         return $this->render('public/home2.html.twig', [
             'categories' => $categories,
