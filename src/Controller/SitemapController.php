@@ -53,8 +53,8 @@ class SitemapController extends AbstractController
             ]
         ];
 
-        // Products
-        $products = $productsRepo->findBy(['isActive' => true], null, 1000);
+        // Products (SoftDeleteableEntity kullanıldığı için silinenler otomatik filtrelenir)
+        $products = $productsRepo->findBy([], ['id' => 'DESC'], 1000);
         foreach ($products as $product) {
             $urls[] = [
                 'loc' => $this->generateUrl('public_product_detail', ['id' => $product->getId()]),
@@ -64,8 +64,8 @@ class SitemapController extends AbstractController
             ];
         }
 
-        // Companies
-        $companies = $companiesRepo->findBy(['isActive' => true], null, 1000);
+        // Companies (SoftDeleteableEntity kullanıldığı için silinenler otomatik filtrelenir)
+        $companies = $companiesRepo->findBy([], ['id' => 'DESC'], 1000);
         foreach ($companies as $company) {
             $urls[] = [
                 'loc' => $this->generateUrl('public_company_detail', ['id' => $company->getId()]),
