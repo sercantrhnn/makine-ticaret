@@ -25,21 +25,21 @@
     <a href="{{ path('public_home') }}" class="logo-link">
       <img src="{{ asset('mineindustries_logo_transparent_pad8.png') }}" alt="Makine Ticaret" class="logo-img"/>
     </a>
-    
+
     <!-- Mobile menu button -->
     <button class="mobile-menu-btn" id="mobileMenuBtn">
       <span></span>
       <span></span>
       <span></span>
     </button>
-    
+
     <nav class="main-nav" id="mainNav">
       <a href="{{ path('public_products') }}" class="nav-link active">{{ 'Ürünler'|auto_translate(app.request.locale) }}</a>
       <a href="{{ path('public_companies') }}" class="nav-link">{{ 'Firmalar'|auto_translate(app.request.locale) }}</a>
       <a href="{{ path('public_categories') }}" class="nav-link">{{ 'Kategoriler'|auto_translate(app.request.locale) }}</a>
       <a href="{{ path('public_bids') }}" class="nav-link">{{ 'İhaleler'|auto_translate(app.request.locale) }}</a>
       <a href="{{ path('purchase_request_new') }}" class="nav-link cta-link">{{ 'Alım Talebi Oluştur'|auto_translate(app.request.locale) }}</a>
-      
+
       {% if app.user %}
         <div class="user-menu" id="userMenuRoot">
           <button id="userMenuButton" class="user-menu-btn">
@@ -256,11 +256,11 @@
     max-width: 100%;
     padding: 10px 16px;
   }
-  
+
   .mobile-menu-btn {
     display: flex;
   }
-  
+
   .main-nav {
     position: fixed;
     top: 0;
@@ -276,30 +276,30 @@
     transition: transform 0.3s ease;
     z-index: 50;
   }
-  
+
   .main-nav.active {
     transform: translateX(0);
   }
-  
+
   .nav-link {
     font-size: 18px;
     padding: 10px 20px;
   }
-  
+
   .nav-link.cta-link {
     font-size: 16px;
     padding: 12px 24px;
   }
-  
+
   .user-name {
     max-width: 150px;
   }
-  
+
   .user-dropdown {
     right: -20px;
     min-width: 200px;
   }
-  
+
   .language-switcher {
     margin-left: 0;
   }
@@ -309,15 +309,15 @@
   .header-container {
     padding: 8px 12px;
   }
-  
+
   .logo-img {
     height: 36px;
   }
-  
+
   .nav-link {
     font-size: 16px;
   }
-  
+
   .nav-link.cta-link {
     font-size: 14px;
     padding: 10px 20px;
@@ -329,13 +329,13 @@
 document.addEventListener('DOMContentLoaded', function() {
   const mobileMenuBtn = document.getElementById('mobileMenuBtn');
   const mainNav = document.getElementById('mainNav');
-  
+
   if (mobileMenuBtn && mainNav) {
     mobileMenuBtn.addEventListener('click', function() {
       mainNav.classList.toggle('active');
       mobileMenuBtn.classList.toggle('active');
     });
-    
+
     // Close menu when clicking on a link
     const navLinks = mainNav.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
         mobileMenuBtn.classList.remove('active');
       });
     });
-    
+
     // Close menu when clicking outside
     document.addEventListener('click', function(e) {
       if (!mainNav.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
@@ -615,17 +615,17 @@ document.addEventListener('DOMContentLoaded', function() {
     flex-direction: row;
     align-items: center;
   }
-  
+
   .sort-select-container {
     width: auto;
     min-width: 150px;
   }
-  
+
   .search-input-container {
     flex: 1;
     min-width: 200px;
   }
-  
+
   .search-button {
     width: auto;
     min-width: 100px;
@@ -638,12 +638,12 @@ document.addEventListener('DOMContentLoaded', function() {
     align-items: flex-end;
     justify-content: space-between;
   }
-  
+
   .search-form-container {
     width: auto;
     margin-left: 32px;
   }
-  
+
   .search-form {
     gap: 12px;
   }
@@ -654,15 +654,15 @@ document.addEventListener('DOMContentLoaded', function() {
     max-width: 100%;
     padding: 24px 16px;
   }
-  
+
   .page-title {
     font-size: 24px;
   }
-  
+
   .breadcrumb-list {
     font-size: 13px;
   }
-  
+
   .breadcrumb-icon {
     width: 14px;
     height: 14px;
@@ -674,15 +674,15 @@ document.addEventListener('DOMContentLoaded', function() {
   .page-header-container {
     padding: 20px 12px;
   }
-  
+
   .page-title {
     font-size: 20px;
   }
-  
+
   .page-subtitle {
     font-size: 14px;
   }
-  
+
   .search-input {
     font-size: 16px; /* Prevents zoom on iOS */
   }
@@ -748,11 +748,11 @@ document.addEventListener('DOMContentLoaded', function() {
     flex-direction: row;
     gap: 32px;
   }
-  
+
   .sidebar {
     width: 256px;
   }
-  
+
   .main-content {
     flex: 1;
   }
@@ -763,11 +763,11 @@ document.addEventListener('DOMContentLoaded', function() {
     max-width: 100%;
     padding: 24px 16px;
   }
-  
+
   .mobile-sidebar-toggle {
     display: flex;
   }
-  
+
   .sidebar {
     position: fixed;
     top: 0;
@@ -779,11 +779,11 @@ document.addEventListener('DOMContentLoaded', function() {
     transition: left 0.3s ease;
     overflow-y: auto;
   }
-  
+
   .sidebar.active {
     left: 0;
   }
-  
+
   .sidebar-content {
     position: static;
     border: none;
@@ -798,16 +798,16 @@ document.addEventListener('DOMContentLoaded', function() {
   .main-content-container {
     padding: 20px 12px;
   }
-  
+
   .main-content-layout {
     gap: 20px;
   }
-  
+
   .mobile-sidebar-toggle {
     padding: 10px 12px;
     font-size: 13px;
   }
-  
+
   .sidebar-content {
     padding: 20px;
   }
@@ -1048,7 +1048,7 @@ document.addEventListener('DOMContentLoaded', function() {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
-  
+
   .product-image-container {
     height: 180px;
   }
@@ -1059,7 +1059,7 @@ document.addEventListener('DOMContentLoaded', function() {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
-  
+
   .product-image-container {
     height: 200px;
   }
@@ -1070,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function() {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
-  
+
   .product-image-container {
     height: 220px;
   }
@@ -1081,25 +1081,25 @@ document.addEventListener('DOMContentLoaded', function() {
     gap: 16px;
     margin-bottom: 24px;
   }
-  
+
   .product-image-container {
     height: 160px;
   }
-  
+
   .product-info {
     padding: 20px;
   }
-  
+
   .product-title {
     font-size: 18px;
   }
-  
+
   .product-footer {
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
   }
-  
+
   .product-detail-button {
     width: 100%;
     justify-content: center;
@@ -1110,25 +1110,25 @@ document.addEventListener('DOMContentLoaded', function() {
   .products-grid {
     gap: 12px;
   }
-  
+
   .product-image-container {
     height: 140px;
   }
-  
+
   .product-info {
     padding: 16px;
   }
-  
+
   .product-title {
     font-size: 16px;
   }
-  
+
   .product-badges {
     top: 12px;
     left: 12px;
     gap: 6px;
   }
-  
+
   .product-badge {
     padding: 4px 8px;
     font-size: 11px;
@@ -1271,7 +1271,7 @@ document.addEventListener('DOMContentLoaded', function() {
   .pagination-mobile {
     display: none;
   }
-  
+
   .pagination-desktop {
     display: flex;
   }
@@ -1281,7 +1281,7 @@ document.addEventListener('DOMContentLoaded', function() {
   .pagination-container {
     padding: 12px 16px;
   }
-  
+
   .pagination-mobile-btn {
     padding: 6px 12px;
     font-size: 13px;
@@ -1292,7 +1292,7 @@ document.addEventListener('DOMContentLoaded', function() {
   .pagination-container {
     padding: 10px 12px;
   }
-  
+
   .pagination-mobile-btn {
     padding: 6px 10px;
     font-size: 12px;
@@ -1451,28 +1451,28 @@ document.addEventListener('DOMContentLoaded', function() {
                                     <!-- Main Category Row -->
                                     <div class="flex items-center">
                                         <!-- Category Name (clickable for filtering) -->
-                                        <a href="{{ path('public_products', {category: category.id}) }}" 
+                                        <a href="{{ path('public_products', {category: category.id}) }}"
                                            class="flex-1 px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors category-link">
                                             {{ category|smart_translate('name', app.request.locale) }}
                                         </a>
-                                        
+
                                         <!-- Expand/Collapse Arrow (only if has children) -->
                                         {% if category.children|length > 0 %}
-                                            <button type="button" 
+                                            <button type="button"
                                                     class="p-2 hover:bg-gray-100 rounded-md transition-colors category-toggle"
                                                     data-target="category-{{ category.id }}"
                                                     aria-expanded="false">
-                                                <svg class="w-4 h-4 text-gray-500 transform transition-transform duration-200" 
+                                                <svg class="w-4 h-4 text-gray-500 transform transition-transform duration-200"
                                                      fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                                 </svg>
                                             </button>
                                         {% endif %}
                                     </div>
-                                    
+
                                     <!-- Subcategories (collapsible) -->
                                     {% if category.children|length > 0 %}
-                                        <div id="category-{{ category.id }}" 
+                                        <div id="category-{{ category.id }}"
                                              class="category-children hidden ml-4 mt-1 space-y-1 transition-all duration-300">
                                             {% for child in category.children %}
                                                 {% if child.isActive %}
@@ -1480,35 +1480,35 @@ document.addEventListener('DOMContentLoaded', function() {
                                                         <!-- Subcategory Row -->
                                                         <div class="flex items-center">
                                                             <!-- Subcategory Name -->
-                                                            <a href="{{ path('public_products', {category: child.id}) }}" 
+                                                            <a href="{{ path('public_products', {category: child.id}) }}"
                                                                class="flex-1 px-3 py-1.5 rounded-md text-xs text-gray-600 hover:bg-gray-100 transition-colors category-link {% if selectedCategory and selectedCategory.id == child.id %}bg-gray-100 text-gray-900 font-medium{% endif %}">
                                                                 <svg class="w-3 h-3 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                                                 </svg>
                                                                 {{ child|smart_translate('name', app.request.locale) }}
                                                             </a>
-                                                            
+
                                                             <!-- Sub-subcategory Arrow -->
                                                             {% if child.children|length > 0 %}
-                                                                <button type="button" 
+                                                                <button type="button"
                                                                         class="p-1.5 hover:bg-gray-100 rounded-md transition-colors category-toggle"
                                                                         data-target="subcategory-{{ child.id }}"
                                                                         aria-expanded="false">
-                                                                    <svg class="w-3 h-3 text-gray-400 transform transition-transform duration-200" 
+                                                                    <svg class="w-3 h-3 text-gray-400 transform transition-transform duration-200"
                                                                          fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                                                                     </svg>
                                                                 </button>
                                                             {% endif %}
                                                         </div>
-                                                        
+
                                                         <!-- Sub-subcategories -->
                                                         {% if child.children|length > 0 %}
-                                                            <div id="subcategory-{{ child.id }}" 
+                                                            <div id="subcategory-{{ child.id }}"
                                                                  class="category-children hidden ml-4 mt-1 space-y-1">
                                                                 {% for grandchild in child.children %}
                                                                     {% if grandchild.isActive %}
-                                                                        <a href="{{ path('public_products', {category: grandchild.id}) }}" 
+                                                                        <a href="{{ path('public_products', {category: grandchild.id}) }}"
                                                                            class="block px-3 py-1 rounded-md text-xs text-gray-500 hover:bg-gray-100 transition-colors category-link {% if selectedCategory and selectedCategory.id == grandchild.id %}bg-gray-100 text-gray-900 font-medium{% endif %}">
                                                                             <svg class="w-2 h-2 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
@@ -1556,7 +1556,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 {% endif %}
 
                                 <!-- Status Badges -->
-                                <div class="product-badges">
+                                {#<div class="product-badges">
                                     <span class="product-badge {% if product.productStatus == 'satilik' %}badge-sale{% else %}badge-rent{% endif %}">
                                         {{ product.productStatus == 'satilik' ? ('Satılık'|auto_translate(app.request.locale)) : ('Kiralık'|auto_translate(app.request.locale)) }}
                                     </span>
@@ -1565,7 +1565,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             {{ product.productType == 'sifir' ? ('Sıfır'|auto_translate(app.request.locale)) : ('İkinci El'|auto_translate(app.request.locale)) }}
                                         </span>
                                     {% endif %}
-                                </div>
+                                </div>#}
 
                                 <!-- Quick View Overlay -->
                                 <div class="product-quick-view">
@@ -1675,7 +1675,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 </a>
                             {% endif %}
                         </div>
-                        
+
                         <!-- Desktop Pagination -->
                         <div class="pagination-desktop">
                             <div class="pagination-info">
@@ -1784,17 +1784,17 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     // Category accordion functionality
     const categoryToggles = document.querySelectorAll('.category-toggle');
-    
+
     categoryToggles.forEach(toggle => {
         toggle.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
+
             const targetId = this.getAttribute('data-target');
             const targetElement = document.getElementById(targetId);
             const arrow = this.querySelector('svg');
             const isExpanded = this.getAttribute('aria-expanded') === 'true';
-            
+
             if (targetElement) {
                 if (isExpanded) {
                     // Collapse
@@ -1810,11 +1810,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // Auto-expand if current category is selected
     {% if selectedCategory %}
         const selectedCategoryId = {{ selectedCategory.id }};
-        
+
         // Find and expand parent categories
         const selectedLinks = document.querySelectorAll('.category-link');
         selectedLinks.forEach(link => {
@@ -1827,7 +1827,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const targetId = toggle.getAttribute('data-target');
                         const targetElement = document.getElementById(targetId);
                         const arrow = toggle.querySelector('svg');
-                        
+
                         if (targetElement && targetElement.classList.contains('hidden')) {
                             targetElement.classList.remove('hidden');
                             toggle.setAttribute('aria-expanded', 'true');
@@ -1840,7 +1840,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     {% endif %}
-    
+
     // Smooth scrolling for category links
     const categoryLinks = document.querySelectorAll('.category-link');
     categoryLinks.forEach(link => {
@@ -1850,23 +1850,23 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.opacity = '0.7';
         });
     });
-    
+
     // Mobile sidebar toggle
     const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
     const sidebar = document.getElementById('sidebar');
-    
+
     if (mobileSidebarToggle && sidebar) {
         mobileSidebarToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
         });
-        
+
         // Close sidebar when clicking outside
         document.addEventListener('click', function(e) {
             if (!sidebar.contains(e.target) && !mobileSidebarToggle.contains(e.target)) {
                 sidebar.classList.remove('active');
             }
         });
-        
+
         // Close sidebar when clicking on a category link
         const categoryLinks = sidebar.querySelectorAll('a');
         categoryLinks.forEach(link => {
