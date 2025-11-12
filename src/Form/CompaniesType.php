@@ -6,6 +6,7 @@ use App\Entity\Companies;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -138,6 +139,30 @@ class CompaniesType extends AbstractType
                     ])
                 ],
                 'attr' => ['class' => 'mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm']
+            ])
+            ->add('removeLogo', CheckboxType::class, [
+                'label' => false,
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['class' => 'rounded border-gray-300 text-red-600 focus:ring-red-500']
+            ])
+            ->add('removeBackgroundPhoto', CheckboxType::class, [
+                'label' => false,
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['class' => 'rounded border-gray-300 text-red-600 focus:ring-red-500']
+            ])
+            ->add('removeCatalog', CheckboxType::class, [
+                'label' => false,
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['class' => 'rounded border-gray-300 text-red-600 focus:ring-red-500']
+            ])
+            ->add('removeCertificate', CheckboxType::class, [
+                'label' => false,
+                'required' => false,
+                'mapped' => false,
+                'attr' => ['class' => 'rounded border-gray-300 text-red-600 focus:ring-red-500']
             ])
         ;
     }

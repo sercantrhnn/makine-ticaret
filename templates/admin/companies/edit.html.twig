@@ -194,6 +194,13 @@
                                                 ✅ Yüklü
                                             </span>
                                         </div>
+                                        <div class="flex-shrink-0 ml-4">
+                                            <label class="inline-flex items-center text-sm font-medium text-red-600 cursor-pointer">
+                                                {{ form_widget(form.removeLogo) }}
+                                                <span class="ml-2">Sil</span>
+                                            </label>
+                                            {{ form_errors(form.removeLogo) }}
+                                        </div>
                                     </div>
                                 {% endif %}
                                 
@@ -214,6 +221,13 @@
                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 ✅ Yüklü
                                             </span>
+                                        </div>
+                                        <div class="flex-shrink-0 ml-4">
+                                            <label class="inline-flex items-center text-sm font-medium text-red-600 cursor-pointer">
+                                                {{ form_widget(form.removeBackgroundPhoto) }}
+                                                <span class="ml-2">Sil</span>
+                                            </label>
+                                            {{ form_errors(form.removeBackgroundPhoto) }}
                                         </div>
                                     </div>
                                 {% endif %}
@@ -236,6 +250,13 @@
                                                 ✅ Yüklü
                                             </span>
                                         </div>
+                                        <div class="flex-shrink-0 ml-4">
+                                            <label class="inline-flex items-center text-sm font-medium text-red-600 cursor-pointer">
+                                                {{ form_widget(form.removeCatalog) }}
+                                                <span class="ml-2">Sil</span>
+                                            </label>
+                                            {{ form_errors(form.removeCatalog) }}
+                                        </div>
                                     </div>
                                 {% endif %}
 
@@ -256,6 +277,13 @@
                                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                                 ✅ Yüklü
                                             </span>
+                                        </div>
+                                        <div class="flex-shrink-0 ml-4">
+                                            <label class="inline-flex items-center text-sm font-medium text-red-600 cursor-pointer">
+                                                {{ form_widget(form.removeCertificate) }}
+                                                <span class="ml-2">Sil</span>
+                                            </label>
+                                            {{ form_errors(form.removeCertificate) }}
                                         </div>
                                     </div>
                                 {% endif %}
@@ -363,6 +391,7 @@
                 
                 <!-- Form Actions -->
                 <div class="flex items-center justify-end space-x-4 pt-6 border-t border-gray-200">
+                    {{ form_widget(form._token) }}
                     <a href="{{ path('companies_show', {'id': company.id}) }}" 
                        class="inline-flex items-center px-6 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -378,7 +407,7 @@
                         Güncelle
                     </button>
                 </div>
-            {{ form_end(form) }}
+            {{ form_end(form, {'render_rest': false}) }}
         </div>
     </div>
 {% endblock %}
