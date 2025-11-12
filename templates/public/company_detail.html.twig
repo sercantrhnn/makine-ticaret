@@ -143,6 +143,41 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
+
+  // Ürün yükleme fonksiyonu
+  const loadMoreBtn = document.getElementById('loadMoreProducts');
+  if (loadMoreBtn) {
+    let visibleCount = 3;
+    const totalProducts = {{ products|length }};
+    const productItems = document.querySelectorAll('.product-item');
+    const loadMoreText = '{{ 'Daha Fazla Göster'|auto_translate(app.request.locale) }}';
+    const moreProductsText = '{{ 'ürün daha'|auto_translate(app.request.locale) }}';
+    
+    loadMoreBtn.addEventListener('click', function() {
+      // 3 ürün daha göster
+      const nextCount = visibleCount + 3;
+      
+      for (let i = visibleCount; i < nextCount && i < productItems.length; i++) {
+        productItems[i].classList.remove('hidden');
+      }
+      
+      visibleCount = Math.min(nextCount, productItems.length);
+      
+      // Eğer tüm ürünler gösterildiyse butonu gizle
+      if (visibleCount >= totalProducts) {
+        loadMoreBtn.style.display = 'none';
+      } else {
+        // Buton metnini güncelle
+        const remaining = totalProducts - visibleCount;
+        loadMoreBtn.innerHTML = `
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+          ${loadMoreText} (${remaining} ${moreProductsText})
+        `;
+      }
+    });
+  }
 });
 </script>
 {% endblock %}
@@ -434,9 +469,9 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
 
         {% if products|length > 0 %}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" style="gap:24px;">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="productsGrid" style="gap:24px;">
                 {% for product in products %}
-                    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group">
+                    <div class="product-item bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow group {% if loop.index > 3 %}hidden{% endif %}" data-index="{{ loop.index }}">
                         <!-- Product Image -->
                         <div class="relative h-72 bg-gray-100 overflow-hidden">
                             {% if product.images|length > 0 %}
@@ -513,6 +548,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 {% endfor %}
             </div>
+            
+            {% if products|length > 3 %}
+                <div class="mt-8 text-center">
+                    <button id="loadMoreProducts" class="inline-flex items-center px-6 py-3 text-sm font-medium rounded-lg transition-colors" style="background:#0a0a0a;color:#ffffff;">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        {{ 'Daha Fazla Göster'|auto_translate(app.request.locale) }} ({{ products|length - 3 }} {{ 'ürün daha'|auto_translate(app.request.locale) }})
+                    </button>
+                </div>
+            {% endif %}
         {% else %}
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
                 <svg class="mx-auto h-16 w-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
