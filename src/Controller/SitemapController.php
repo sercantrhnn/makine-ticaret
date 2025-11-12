@@ -9,6 +9,7 @@ use App\Repository\BidsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapController extends AbstractController
 {
@@ -22,31 +23,31 @@ class SitemapController extends AbstractController
         // Static pages
         $urls = [
             [
-                'loc' => $this->generateUrl('public_home'),
+                'loc' => $this->generateUrl('public_home', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'daily',
                 'priority' => '1.0',
                 'lastmod' => (new \DateTime())->format('Y-m-d')
             ],
             [
-                'loc' => $this->generateUrl('public_products'),
+                'loc' => $this->generateUrl('public_products', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'daily', 
                 'priority' => '0.9',
                 'lastmod' => (new \DateTime())->format('Y-m-d')
             ],
             [
-                'loc' => $this->generateUrl('public_companies'),
+                'loc' => $this->generateUrl('public_companies', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'weekly',
                 'priority' => '0.8',
                 'lastmod' => (new \DateTime())->format('Y-m-d')
             ],
             [
-                'loc' => $this->generateUrl('public_categories'),
+                'loc' => $this->generateUrl('public_categories', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'weekly',
                 'priority' => '0.8',
                 'lastmod' => (new \DateTime())->format('Y-m-d')
             ],
             [
-                'loc' => $this->generateUrl('public_bids'),
+                'loc' => $this->generateUrl('public_bids', [], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'daily',
                 'priority' => '0.7',
                 'lastmod' => (new \DateTime())->format('Y-m-d')
@@ -57,7 +58,7 @@ class SitemapController extends AbstractController
         $products = $productsRepo->findBy([], ['id' => 'DESC'], 1000);
         foreach ($products as $product) {
             $urls[] = [
-                'loc' => $this->generateUrl('public_product_detail', ['id' => $product->getId()]),
+                'loc' => $this->generateUrl('public_product_detail', ['id' => $product->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'weekly',
                 'priority' => '0.6',
                 'lastmod' => $product->getUpdatedAt() ? $product->getUpdatedAt()->format('Y-m-d') : (new \DateTime())->format('Y-m-d')
@@ -68,7 +69,7 @@ class SitemapController extends AbstractController
         $companies = $companiesRepo->findBy([], ['id' => 'DESC'], 1000);
         foreach ($companies as $company) {
             $urls[] = [
-                'loc' => $this->generateUrl('public_company_detail', ['id' => $company->getId()]),
+                'loc' => $this->generateUrl('public_company_detail', ['id' => $company->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'monthly',
                 'priority' => '0.5',
                 'lastmod' => $company->getUpdatedAt() ? $company->getUpdatedAt()->format('Y-m-d') : (new \DateTime())->format('Y-m-d')
@@ -79,7 +80,7 @@ class SitemapController extends AbstractController
         $categories = $categoriesRepo->findBy(['isActive' => true]);
         foreach ($categories as $category) {
             $urls[] = [
-                'loc' => $this->generateUrl('public_products', ['category' => $category->getId()]),
+                'loc' => $this->generateUrl('public_products', ['category' => $category->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'weekly',
                 'priority' => '0.7'
             ];
@@ -89,7 +90,7 @@ class SitemapController extends AbstractController
         $bids = $bidsRepo->findBy(['status' => 'approved'], null, 500);
         foreach ($bids as $bid) {
             $urls[] = [
-                'loc' => $this->generateUrl('public_bid_detail', ['id' => $bid->getId()]),
+                'loc' => $this->generateUrl('public_bid_detail', ['id' => $bid->getId()], UrlGeneratorInterface::ABSOLUTE_URL),
                 'changefreq' => 'daily',
                 'priority' => '0.6',
                 'lastmod' => $bid->getUpdatedAt() ? $bid->getUpdatedAt()->format('Y-m-d') : (new \DateTime())->format('Y-m-d')
