@@ -62,7 +62,7 @@ class PublicController extends AbstractController
         $categories = array_slice($categories, 0, 8); // İlk 8 kategori
 
         $approvedBids = $bidsRepository->findApprovedBids(8);
-        $purchaseRequests = $purchaseRequestRepository->findBy(['status' => 'approved'], ['date' => 'DESC'], 8);
+        $purchaseRequests = $purchaseRequestRepository->findBy(['status' => 'approved'], ['date' => 'DESC'], 10);
 
         return $this->render('public/home2.html.twig', [
             'categories' => $categories,
