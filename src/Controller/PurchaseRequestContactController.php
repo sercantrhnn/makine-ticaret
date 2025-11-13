@@ -36,10 +36,17 @@ class PurchaseRequestContactController extends AbstractController
             return $this->redirectToRoute('purchase_request_contact', ['id' => $pr->getId()]);
         }
 
-        $messages = $this->em->getRepository(PurchaseRequestMessage::class)->findBy(
-            ['purchaseRequest' => $pr],
-            ['createdAt' => 'ASC']
-        );
+        // Sadece mevcut kullanıcının gönderdiği mesajları göster
+        // Her kullanıcı kendi mesajlaşma thread'ini görmeli
+        $currentUser = $this->getUser();
+        $messages = $this->em->getRepository(PurchaseRequestMessage::class)->createQueryBuilder('m')
+            ->where('m.purchaseRequest = :pr')
+            ->andWhere('m.sender = :user')
+            ->setParameter('pr', $pr)
+            ->setParameter('user', $currentUser)
+            ->orderBy('m.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
 
         return $this->render('public/purchase_request/contact.html.twig', [
             'pr' => $pr,

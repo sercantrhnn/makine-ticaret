@@ -75,14 +75,39 @@ class BidMessageController extends AbstractController
             ->orderBy('o.updatedAt', 'DESC')
             ->getQuery()->getResult();
 
-        // Kullanıcının alım talepleri (e-posta adresine göre)
-        $purchaseRequests = $this->purchaseRequestRepo->createQueryBuilder('pr')
+        // Kullanıcının alım talepleri:
+        // 1. E-posta adresine göre (alım talebi sahibi)
+        // 2. Mesaj gönderdiği alım talepleri (subscriber olarak)
+        $purchaseRequestsByEmail = $this->purchaseRequestRepo->createQueryBuilder('pr')
             ->andWhere('pr.email = :email')
             ->andWhere('pr.status = :status')
             ->setParameter('email', $user->getEmail())
             ->setParameter('status', 'approved')
-            ->orderBy('pr.date', 'DESC')
             ->getQuery()->getResult();
+
+        // Kullanıcının mesaj gönderdiği alım talepleri
+        $purchaseRequestsByMessages = $this->purchaseRequestRepo->createQueryBuilder('pr')
+            ->innerJoin('App\Entity\PurchaseRequestMessage', 'm', 'WITH', 'm.purchaseRequest = pr')
+            ->andWhere('m.sender = :user')
+            ->andWhere('pr.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('status', 'approved')
+            ->getQuery()->getResult();
+
+        // İki listeyi birleştir ve tekrarları ID'ye göre kaldır
+        $purchaseRequestsMap = [];
+        foreach ($purchaseRequestsByEmail as $pr) {
+            $purchaseRequestsMap[$pr->getId()] = $pr;
+        }
+        foreach ($purchaseRequestsByMessages as $pr) {
+            $purchaseRequestsMap[$pr->getId()] = $pr;
+        }
+        $purchaseRequests = array_values($purchaseRequestsMap);
+
+        // Tarihe göre sırala
+        usort($purchaseRequests, function($a, $b) {
+            return $b->getDate() <=> $a->getDate();
+        });
 
         return $this->render('messages/inbox.html.twig', [
             'offers' => $offers,
@@ -124,15 +149,42 @@ class BidMessageController extends AbstractController
     {
         $user = $this->getUser();
         
-        // Kullanıcının e-posta adresi ile alım talebi e-posta adresi eşleşmeli
-        if ($pr->getEmail() !== $user->getEmail()) {
+        // Kullanıcı alım talebi sahibi mi kontrol et
+        $isOwner = $pr->getEmail() === $user->getEmail();
+        
+        // Kullanıcı bu alım talebine mesaj göndermiş mi kontrol et
+        $hasSentMessage = $this->purchaseRequestMessageRepo->createQueryBuilder('m')
+            ->select('COUNT(m.id)')
+            ->where('m.purchaseRequest = :pr')
+            ->andWhere('m.sender = :user')
+            ->setParameter('pr', $pr)
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getSingleScalarResult() > 0;
+        
+        // Erişim kontrolü: Alım talebi sahibi veya mesaj gönderen subscriber olmalı
+        if (!$isOwner && !$hasSentMessage) {
             throw $this->createAccessDeniedException();
         }
 
-        $messages = $this->purchaseRequestMessageRepo->findBy(
-            ['purchaseRequest' => $pr], 
-            ['createdAt' => 'ASC']
-        );
+        // Mesajları filtrele:
+        // - Alım talebi sahibi ise: Tüm mesajları göster
+        // - Subscriber ise: Sadece kendi gönderdiği mesajları göster
+        if ($isOwner) {
+            $messages = $this->purchaseRequestMessageRepo->findBy(
+                ['purchaseRequest' => $pr], 
+                ['createdAt' => 'ASC']
+            );
+        } else {
+            $messages = $this->purchaseRequestMessageRepo->createQueryBuilder('m')
+                ->where('m.purchaseRequest = :pr')
+                ->andWhere('m.sender = :user')
+                ->setParameter('pr', $pr)
+                ->setParameter('user', $user)
+                ->orderBy('m.createdAt', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
 
         $message = new PurchaseRequestMessage();
         $message->setPurchaseRequest($pr);
